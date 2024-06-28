@@ -17,7 +17,7 @@
                         <path d="M22 8.5H9v7h13v-7z" opacity=".6"></path>
                     </svg>
                     <span class="ml-4">
-                        OVERVIEW
+                        Overview
                     </span>
                 </a>
             </li>
@@ -27,8 +27,8 @@
         </p>
         <ul>
             <li>
-                <a class="inline-flex items-center w-full px-4 py-2 mt-1 text-sm font-medium text-gray-600 transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-orange-500/80 hover:scale-95 hover:text-white"
-                    href="#">
+                <a class="{{ request()->routeIs('admin.enrollee') ? 'bg-orange-500/80 text-white scale-95' : '' }}  inline-flex items-center w-full px-4 py-2 mt-1 text-sm font-medium text-gray-600 transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-orange-500/80 hover:scale-95 hover:text-white"
+                    href="{{ route('admin.enrollee') }}">
                     <svg class="w-5 h-5 md hydrated" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                         fill="currentColor" aria-hidden="true">
                         <path
@@ -39,13 +39,13 @@
                         </path>
                     </svg>
                     <span class="ml-4">
-                        ENROLLEES
+                        Enrollees
                     </span>
                 </a>
             </li>
             <li>
-                <a class="inline-flex items-center w-full px-4 py-2 mt-1 text-sm font-medium text-gray-600 transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-orange-500/80 hover:scale-95 hover:text-white"
-                    href="#">
+                <a class="{{ request()->routeIs('admin.soa') ? 'bg-orange-500/80 text-white scale-95' : '' }}  inline-flex items-center w-full px-4 py-2 mt-1 text-sm font-medium text-gray-600 transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-orange-500/80 hover:scale-95 hover:text-white"
+                    href="{{ route('admin.soa') }}">
                     <svg class="w-5 h-5 md hydrated" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                         fill="currentColor" aria-hidden="true">
                         <path
@@ -70,8 +70,8 @@
         <ul>
 
             <li>
-                <a class="inline-flex items-center w-full px-4 py-2 mt-1 text-sm font-medium text-gray-600 transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-orange-500/80 hover:scale-95 hover:text-white"
-                    href="#">
+                <a class="{{ request()->routeIs('admin.students') ? 'bg-orange-500/80 text-white scale-95' : '' }}  inline-flex items-center w-full px-4 py-2 mt-1 text-sm font-medium text-gray-600 transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-orange-500/80 hover:scale-95 hover:text-white"
+                    href="{{ route('admin.students') }}">
                     <svg class="w-5 h-5 md hydrated" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                         fill="currentColor" aria-hidden="true">
                         <path d="M12 12a5 5 0 100-10 5 5 0 000 10z"></path>
@@ -83,7 +83,7 @@
                         </path>
                     </svg>
                     <span class="ml-4">
-                        STUDENTS
+                        Students
                     </span>
                 </a>
             </li>
@@ -101,7 +101,7 @@
                         </path>
                     </svg>
                     <span class="ml-4">
-                        TEACHERS
+                        Teachers
                     </span>
                 </a>
             </li>
@@ -123,7 +123,7 @@
                                 </path>
                             </svg>
                             <span class="ml-4">
-                                GRADE & SECTION
+                                Grade & Section
                             </span>
                         </span>
                         <svg fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': open, 'rotate-0': !open }"
@@ -136,7 +136,7 @@
                     <div class="p-2 pl-6 -px-px" x-show="open" @click.outside="open = false" style="display: none;">
                         <ul>
                             <li>
-                                <a href="#" title="#"
+                                <a href="{{ route('admin.grade_level') }}" title=""
                                     class="inline-flex items-center w-full p-2 pl-3 text-sm font-medium text-gray-500 rounded-lg hover:text-orange-500 group hover:border hover:border-orange-500 hover:bg-gray-50">
                                     <span class="inline-flex items-center w-full">
                                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -149,7 +149,7 @@
                                             </path>
                                         </svg>
                                         <span class="ml-4">
-                                            GRADE LIST
+                                            Grade Levels
                                         </span>
                                     </span>
                                 </a>
@@ -168,7 +168,7 @@
                                             </path>
                                         </svg>
                                         <span class="ml-4">
-                                            SECTION LIST
+                                            Sections
                                         </span>
                                     </span>
                                 </a>
@@ -179,8 +179,8 @@
                 </div>
             </li>
             <li>
-                <a class="inline-flex items-center w-full px-4 py-2 mt-1 text-sm font-medium text-gray-600 transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-orange-500/80 hover:scale-95 hover:text-white"
-                    href="#">
+                <a class="{{ request()->routeIs('admin.school_fees') ? 'bg-orange-500/80 text-white scale-95' : '' }}  inline-flex items-center w-full px-4 py-2 mt-1 text-sm font-medium text-gray-600 transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-orange-500/80 hover:scale-95 hover:text-white"
+                    href="{{ route('admin.school_fees') }}">
                     <svg class="w-5 h-5 md hydrated" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                         fill="currentColor" aria-hidden="true">
                         <path d="M21 7v10c0 3-1.5 5-5 5H8c-3.5 0-5-2-5-5V7c0-3 1.5-5 5-5h8c3.5 0 5 2 5 5z"
@@ -190,7 +190,7 @@
                         </path>
                     </svg>
                     <span class="ml-4">
-                        SCHOOL FEES
+                        School Fees
                     </span>
                 </a>
             </li>
@@ -206,101 +206,11 @@
                         </path>
                     </svg>
                     <span class="ml-4">
-                        SHS STRANDS
+                        SHS Strands
                     </span>
                 </a>
             </li>
-            <li>
-                <div x-data="{ open: false }">
-                    <button
-                        class="inline-flex items-center w-full px-4 py-2 mt-1 text-xs font-medium text-gray-600 transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-orange-500/80 hover:scale-95 hover:text-white group"
-                        @click="open = ! open">
-                        <span class="inline-flex items-center">
-                            <svg class="w-5 h-5 md hydrated" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                fill="currentColor" aria-hidden="true">
-                                <path
-                                    d="M20.5 10.19h-2.89c-2.37 0-4.3-1.93-4.3-4.3V3c0-.55-.45-1-1-1H8.07C4.99 2 2.5 4 2.5 7.57v8.86C2.5 20 4.99 22 8.07 22h7.86c3.08 0 5.57-2 5.57-5.57v-5.24c0-.55-.45-1-1-1z"
-                                    opacity=".4"></path>
-                                <path
-                                    d="M15.8 2.21c-.41-.41-1.12-.13-1.12.44v3.49c0 1.46 1.24 2.67 2.75 2.67.95.01 2.27.01 3.4.01.57 0 .87-.67.47-1.07-1.44-1.45-4.02-4.06-5.5-5.54z">
-                                </path>
-                            </svg>
-                            <span class="ml-4">
-                                DISCOUNT/SUBSIDIES
-                            </span>
-                        </span>
-                        <svg fill="currentColor" viewBox="0 0 20 20"
-                            :class="{ 'rotate-180': open, 'rotate-0': !open }"
-                            class="inline w-5 h-5 ml-auto transition-transform duration-200 transform group-hover:text-accent rotate-0">
-                            <path fill-rule="evenodd"
-                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </button>
-                    <div class="p-2 pl-6 -px-px" x-show="open" @click.outside="open = false"
-                        style="display: none;">
-                        <ul>
-                            <li>
-                                <a href="#" title="#"
-                                    class="inline-flex items-center w-full p-2 pl-3 text-sm font-medium text-gray-500 rounded-lg hover:text-orange-500 group hover:border hover:border-orange-500 hover:bg-gray-50">
-                                    <span class="inline-flex items-center w-full">
-                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                            fill="currentColor" aria-hidden="true">
-                                            <path
-                                                d="M16 2H8C4 2 2 4 2 8v13c0 .55.45 1 1 1h13c4 0 6-2 6-6V8c0-4-2-6-6-6z"
-                                                opacity=".4"></path>
-                                            <path
-                                                d="M17 8.75H7c-.41 0-.75.34-.75.75s.34.75.75.75h10c.41 0 .75-.34.75-.75s-.34-.75-.75-.75zM14 13.75H7c-.41 0-.75.34-.75.75s.34.75.75.75h7c.41 0 .75-.34.75-.75s-.34-.75-.75-.75z">
-                                            </path>
-                                        </svg>
-                                        <span class="ml-4">
-                                            DISCOUNT
-                                        </span>
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" title="#"
-                                    class="inline-flex items-center w-full p-2 pl-3 text-sm font-medium text-gray-500 rounded-lg hover:text-orange-500 group hover:border hover:border-orange-500 hover:bg-gray-50">
-                                    <span class="inline-flex items-center w-full">
-                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                            fill="currentColor" aria-hidden="true">
-                                            <path
-                                                d="M16 2H8C4 2 2 4 2 8v13c0 .55.45 1 1 1h13c4 0 6-2 6-6V8c0-4-2-6-6-6z"
-                                                opacity=".4"></path>
-                                            <path
-                                                d="M17 8.75H7c-.41 0-.75.34-.75.75s.34.75.75.75h10c.41 0 .75-.34.75-.75s-.34-.75-.75-.75zM14 13.75H7c-.41 0-.75.34-.75.75s.34.75.75.75h7c.41 0 .75-.34.75-.75s-.34-.75-.75-.75z">
-                                            </path>
-                                        </svg>
-                                        <span class="ml-4">
-                                            TUITION SUBSIDIES
-                                        </span>
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" title="#"
-                                    class="inline-flex items-center w-full p-2 pl-3 text-sm font-medium text-gray-500 rounded-lg hover:text-orange-500 group hover:border hover:border-orange-500 hover:bg-gray-50">
-                                    <span class="inline-flex items-center w-full">
-                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                            fill="currentColor" aria-hidden="true">
-                                            <path
-                                                d="M16 2H8C4 2 2 4 2 8v13c0 .55.45 1 1 1h13c4 0 6-2 6-6V8c0-4-2-6-6-6z"
-                                                opacity=".4"></path>
-                                            <path
-                                                d="M17 8.75H7c-.41 0-.75.34-.75.75s.34.75.75.75h10c.41 0 .75-.34.75-.75s-.34-.75-.75-.75zM14 13.75H7c-.41 0-.75.34-.75.75s.34.75.75.75h7c.41 0 .75-.34.75-.75s-.34-.75-.75-.75z">
-                                            </path>
-                                        </svg>
-                                        <span class="ml-4">
-                                            MISC SUBSIDIES
-                                        </span>
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </li>
+
         </ul>
     </nav>
     <div class="mb-5">
@@ -324,7 +234,7 @@
                                 </path>
                             </svg>
                             <span class="ml-4">
-                                SALES
+                                Sales
                             </span>
                         </span>
                         <svg fill="currentColor" viewBox="0 0 20 20"
@@ -339,7 +249,7 @@
                         style="display: none;">
                         <ul>
                             <li>
-                                <a href="#" title="#"
+                                <a href="{{ route('admin.sales-transaction') }}" title="#"
                                     class="inline-flex items-center w-full p-2 pl-3 text-xs font-medium text-gray-500 rounded-lg hover:text-orange-500 group hover:border hover:border-orange-500 hover:bg-gray-50">
                                     <span class="inline-flex items-center w-full">
                                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -352,13 +262,13 @@
                                             </path>
                                         </svg>
                                         <span class="ml-4">
-                                            TRANSACTION
+                                            Transactions
                                         </span>
                                     </span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#" title="#"
+                                <a href="{{ route('admin.sale-category') }}" title="#"
                                     class="inline-flex items-center w-full p-2 pl-3 text-xs font-medium text-gray-500 rounded-lg hover:text-orange-500 group hover:border hover:border-orange-500 hover:bg-gray-50">
                                     <span class="inline-flex items-center w-full">
                                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -371,7 +281,7 @@
                                             </path>
                                         </svg>
                                         <span class="ml-4">
-                                            CATEGORY
+                                            Categories
                                         </span>
                                     </span>
                                 </a>
@@ -396,7 +306,7 @@
                                 </path>
                             </svg>
                             <span class="ml-4">
-                                EXPENSES
+                                Expenses
                             </span>
                         </span>
                         <svg fill="currentColor" viewBox="0 0 20 20"
@@ -411,7 +321,7 @@
                         style="display: none;">
                         <ul>
                             <li>
-                                <a href="#" title="#"
+                                <a href="{{ route('admin.expenses-transaction') }}" title="#"
                                     class="inline-flex items-center w-full p-2 pl-3 text-xs font-medium text-gray-500 rounded-lg hover:text-orange-500 group hover:border hover:border-orange-500 hover:bg-gray-50">
                                     <span class="inline-flex items-center w-full">
                                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -424,13 +334,13 @@
                                             </path>
                                         </svg>
                                         <span class="ml-4">
-                                            TRANSACTION
+                                            Transactions
                                         </span>
                                     </span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#" title="#"
+                                <a href="{{ route('admin.expenses-category') }}" title="#"
                                     class="inline-flex items-center w-full p-2 pl-3 text-xs font-medium text-gray-500 rounded-lg hover:text-orange-500 group hover:border hover:border-orange-500 hover:bg-gray-50">
                                     <span class="inline-flex items-center w-full">
                                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -443,7 +353,7 @@
                                             </path>
                                         </svg>
                                         <span class="ml-4">
-                                            CATEGORY
+                                            Categories
                                         </span>
                                     </span>
                                 </a>
@@ -458,8 +368,8 @@
         </p>
         <ul>
             <li>
-                <a class="inline-flex items-center w-full px-4 py-2 mt-1 text-sm font-medium text-gray-600 transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-orange-500/80 hover:scale-95 hover:text-white"
-                    href="#">
+                <a class="{{ request()->routeIs('admin.reports') ? 'bg-orange-500/80 text-white scale-95' : '' }}  inline-flex items-center w-full px-4 py-2 mt-1 text-sm font-medium text-gray-600 transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-orange-500/80 hover:scale-95 hover:text-white"
+                    href="{{ route('admin.reports') }}">
                     <svg class="w-5 h-5 md hydrated" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                         fill="currentColor" aria-hidden="true">
                         <path d="M21 7v10c0 3-1.5 5-5 5H8c-3.5 0-5-2-5-5V7c0-3 1.5-5 5-5h8c3.5 0 5 2 5 5z"
@@ -469,7 +379,7 @@
                         </path>
                     </svg>
                     <span class="ml-4">
-                        REPORTS
+                        Reports
                     </span>
                 </a>
             </li>
@@ -493,7 +403,7 @@
                                 <path d="M12 15.25a3.25 3.25 0 100-6.5 3.25 3.25 0 000 6.5z"></path>
                             </svg>
                             <span class="ml-4">
-                                SETTINGS
+                                Settings
                             </span>
                         </span>
                         <svg fill="currentColor" viewBox="0 0 20 20"
@@ -522,7 +432,7 @@
                                             <path d="M12 12a5 5 0 100-10 5 5 0 000 10z"></path>
                                         </svg>
                                         <span class="ml-4">
-                                            USERS
+                                            Users
                                         </span>
                                     </span>
                                 </a>
@@ -540,7 +450,7 @@
                                             </path>
                                         </svg>
                                         <span class="ml-4">
-                                            ROLES
+                                            Roles
                                         </span>
                                     </span>
                                 </a>
@@ -562,7 +472,29 @@
                                             </path>
                                         </svg>
                                         <span class="ml-4">
-                                            SCHOOL YEAR
+                                            School Years
+                                        </span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.active-semester') }}" title="#"
+                                    class="inline-flex items-center w-full p-2 pl-3 text-xs font-medium text-gray-500 rounded-lg hover:text-orange-500 group hover:border hover:border-orange-500 hover:bg-gray-50">
+                                    <span class="inline-flex items-center w-full">
+                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                            fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd"
+                                                d="M8 1.25a.75.75 0 01.75.75v3a.75.75 0 01-1.5 0V2A.75.75 0 018 1.25zM16 1.25a.75.75 0 01.75.75v3a.75.75 0 01-1.5 0V2a.75.75 0 01.75-.75z"
+                                                clip-rule="evenodd"></path>
+                                            <path
+                                                d="M21.5 8.37v8.76c0 .16-.01.32-.02.47H2.52c-.01-.15-.02-.31-.02-.47V8.37A4.87 4.87 0 017.37 3.5h9.26a4.87 4.87 0 014.87 4.87z"
+                                                opacity=".4"></path>
+                                            <path
+                                                d="M21.48 17.6a4.876 4.876 0 01-4.85 4.4H7.37c-2.53 0-4.61-1.93-4.85-4.4h18.96zM13.53 11.62c.45-.31.73-.77.73-1.39 0-1.3-1.04-1.97-2.26-1.97-1.22 0-2.27.67-2.27 1.97 0 .62.29 1.09.73 1.39-.61.36-.96.94-.96 1.62 0 1.24.95 2.01 2.5 2.01 1.54 0 2.5-.77 2.5-2.01 0-.68-.35-1.27-.97-1.62zM12 9.5c.52 0 .9.29.9.79 0 .49-.38.8-.9.8s-.9-.31-.9-.8c0-.5.38-.79.9-.79zm0 4.5c-.66 0-1.14-.33-1.14-.93 0-.6.48-.92 1.14-.92.66 0 1.14.33 1.14.92 0 .6-.48.93-1.14.93z">
+                                            </path>
+                                        </svg>
+                                        <span class="ml-4">
+                                            Active Semester
                                         </span>
                                     </span>
                                 </a>
