@@ -32,18 +32,7 @@
                             <th class="border text-left px-1 text-xs text-gray-700 py-2">GRADE</th>
                             @foreach ($categories as $category)
                                 <th class="border text-left px-1 text-xs uppercase text-gray-700 py-2">
-                                    {{-- @php
-                                        $name = '';
-                                        switch ($category->name) {
-                                            case 'Tuition':
-                                                $name = 'TF';
-                                                break;
 
-                                            default:
-                                                # code...
-                                                break;
-                                        }
-                                    @endphp --}}
                                     {{ $category->name }}
                                 </th>
                             @endforeach
@@ -103,6 +92,88 @@
                                 <td class="border text-xs bg-gray-100 text-gray-700 px-3 py-1">{{ $categoryTotal }}</td>
                             @endforeach
                             <td class="border text-xs bg-gray-100 text-gray-700 px-3 py-1">{{ $grandTotal }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </div>
+    <div class="mt-10 mx-auto">
+        @if ($selected_report == 'Expenses')
+            <div class="overflow-x-auto">
+                <table id="example" x-ref="printContainer" class="min-w-full mt-5" style="width:100%">
+                    <thead class="">
+                        <tr>
+                            <th class="border text-left px-1 text-xs text-gray-700 py-2 whitespace-nowrap">VOUCHER NO.
+                            </th>
+                            <th class="border text-left px-1 text-xs text-gray-700 py-2">NAME</th>
+                            @foreach ($expense_categories as $category)
+                                <th class="border text-left px-1 text-xs uppercase text-gray-700 py-2">
+                                    {{ $category->name }}</th>
+                            @endforeach
+                            <th class="border text-left px-1 text-xs text-gray-700 py-2">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody class="">
+                        @php
+                            $category_totals = [];
+                            $grand_total = 0;
+                        @endphp
+
+                        @foreach ($report as $item)
+                            @php
+                                $item_total = 0;
+                            @endphp
+                            <tr>
+                                <td class="border text-xs text-gray-700 px-3 py-1 whitespace-nowrap">
+                                    {{ $item->voucher_number }}</td>
+                                <td class="border text-xs text-gray-700 uppercase px-3 py-1 whitespace-nowrap">
+                                    {{ $item->name }}</td>
+                                @foreach ($expense_categories as $category)
+                                    <td class="border text-xs text-gray-700 px-3 py-1 whitespace-nowrap">
+                                        @php
+                                            $sale = \App\Models\ExpenseCategoryTransaction::where(
+                                                'expense_id',
+                                                $item->id,
+                                            )
+                                                ->where('expense_category_id', $category->id)
+                                                ->sum('amount');
+                                            $item_total += $sale;
+                                            if (!isset($category_totals[$category->id])) {
+                                                $category_totals[$category->id] = 0;
+                                            }
+                                            $category_totals[$category->id] += $sale;
+                                        @endphp
+                                        @if ($sale > 0)
+                                            {{ number_format($sale, 2) }}
+                                        @else
+                                        @endif
+                                    </td>
+                                @endforeach
+                                <td class="border text-xs text-gray-700 px-3 py-1">
+                                    @if ($item_total > 0)
+                                        {{ number_format($item_total, 2) }}
+                                    @else
+                                    @endif
+                                </td>
+                            </tr>
+                            @php
+                                $grand_total += $item_total;
+                            @endphp
+                        @endforeach
+
+                        <tr>
+                            <td class="border bg-gray-100 text-xs text-gray-700 px-3 py-1 whitespace-nowrap"></td>
+                            <td class="border bg-gray-100 text-xs text-gray-700 uppercase px-3 py-1 whitespace-nowrap">
+                                TOTAL</td>
+                            @foreach ($expense_categories as $category)
+                                <td class="border bg-gray-100 text-xs text-gray-700 px-3 py-1 whitespace-nowrap">
+                                    {{ number_format($category_totals[$category->id], 2) }}
+                                </td>
+                            @endforeach
+                            <td class="border bg-gray-100 text-xs text-gray-700 px-3 py-1">
+                                {{ number_format($grand_total, 2) }}
+                            </td>
                         </tr>
                     </tbody>
                 </table>

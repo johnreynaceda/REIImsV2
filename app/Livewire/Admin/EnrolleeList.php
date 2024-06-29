@@ -44,7 +44,7 @@ class EnrolleeList extends Component implements HasForms, HasTable
     {
         return $table
             ->query(Enrollee::query()->orderBy('created_at', 'DESC')->whereStatus('false'))->headerActions([
-            Action::make('enrollee')->label(auth()->user()->role_id == 1 ? 'New Enrollee' : 'New Student')->icon('heroicon-s-user-plus')->url(fn (): string => auth()->user()->role_id == 1 ? route('admin.enrollee-add') : route('teacher.enrollment'))
+            Action::make('enrollee')->hidden(auth()->user()->role_id == 2)->label(auth()->user()->role_id == 1 && auth()->user()->role_id == 2 ? 'New Enrollee' : 'New Student')->icon('heroicon-s-user-plus')->url(fn (): string => auth()->user()->role_id == 1 ? route('admin.enrollee-add') : route('teacher.enrollment'))
         ], position: HeaderActionsPosition::Bottom)
             ->columns([
                 TextColumn::make('studentInformation.firstname')->label('FULLNAME')->formatStateUsing(
@@ -64,11 +64,11 @@ class EnrolleeList extends Component implements HasForms, HasTable
             ->actions([
                 ActionGroup::make([
                     Action::make('enroll')->label('ENROLL STUDENT')->icon("heroicon-c-academic-cap")->color('success')->url(
-                        fn ($record) => route('admin.enrollee.enroll', $record->id)
+                        fn ($record) => auth()->user()->role_id == 1 ? route('admin.enrollee.enroll', $record->id) : route('business-office.enroll-student', $record->id)
                     ),
                     EditAction::make('edit')->color('warning'),
                     DeleteAction::make('delete'),
-                ])->hidden(auth()->user()->role_id != 1)
+                ])->hidden(auth()->user()->role_id == 3)
             ])
             ->bulkActions([
             ])->emptyStateHeading('No Enrollee yet!')->emptyStateIcon('heroicon-s-user-plus')->emptyStateDescription('Once you write your first data, it will appear here.');

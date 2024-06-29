@@ -57,6 +57,8 @@ class EnrollStudent extends Component implements HasForms
 
     public $default_payments;
 
+    public $discount;
+
     public $active_sem;
 
     public function mount(){
@@ -146,6 +148,7 @@ class EnrollStudent extends Component implements HasForms
                 'id_number' => $this->id_number,
                 'department' => $gradelevel,
                 'strand_id' => $this->strand_id ? $this->strand_id : null,
+                'grant_as' => $this->discount ? $this->discount : null,
             ]);
 
             $student_payment = StudentPayment::create([
@@ -236,8 +239,12 @@ class EnrollStudent extends Component implements HasForms
 
         DB::commit();
         $this->enroll_modal = false;
-        sweetalert()->success('Studet successfully enrolled.');
-        return redirect()->route('admin.enrollee');
+        sweetalert()->success('Student successfully enrolled.');
+        if (auth()->user()->role_id == 2) {
+            return redirect()->route('business-office.enrollee');
+        }else{
+            return redirect()->route('admin.enrollee');
+        }
     }
 
     public function render()

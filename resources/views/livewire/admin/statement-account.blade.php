@@ -831,7 +831,7 @@
                                 <tr>
                                     <td
                                         class="border text-gray-700 text-xs font-semibold text-left border-gray-700 px-3 ">
-                                        BOOKS <span class="text-[0.5rem]">(&#8369;{{ number_format(6550, 2) }})</span>
+                                        BOOKS <span class="text-[0.5rem]">(&#8369; )</span>
                                     </td>
 
                                     <td

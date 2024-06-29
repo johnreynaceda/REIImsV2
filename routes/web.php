@@ -21,11 +21,34 @@ Route::get('/dashboard', function () {
     if (auth()->user()->role_id == 1) {
         return redirect()->route('admin.dashboard');
     }elseif (auth()->user()->role_id == 2) {
-        dd('business office');
+        return redirect()->route('business-office.dashboard');
     }else{
         return redirect()->route('teacher.dashboard');
     }
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+//business_office
+Route::prefix('business-office')->middleware(['auth', 'verified'])->group(
+    function(){
+        Route::get('/dashboard', function(){
+            return view('business-office.index');
+        })->name('business-office.dashboard');
+        Route::get('/enrollee', function(){
+            return view('business-office.enrollee');
+        })->name('business-office.enrollee');
+        Route::get('/enrollee/{id}', function(){
+            return view('business-office.enroll-student');
+        })->name('business-office.enroll-student');
+        Route::get('/students', function(){
+            return view('business-office.students');
+        })->name('business-office.students');
+        Route::get('/statement-of-account', function(){
+            return view('business-office.soa');
+        })->name('business-office.soa');
+
+    }
+);
+
 
 
 //teacher routes
@@ -76,6 +99,9 @@ Route::prefix('administrator')->middleware('check_session')->group(
         Route::get('/active-semester', function() {
             return view('admin.active-semester');
         })->name('admin.active-semester');
+        Route::get('/subsidies', function() {
+            return view('admin.subsidies');
+        })->name('admin.subsidies');
 
         //SOA
         Route::get('/SOA', function() {

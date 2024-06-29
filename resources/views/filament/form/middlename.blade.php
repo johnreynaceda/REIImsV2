@@ -2,9 +2,9 @@
     <div class="col-span-2 ">
         <label for="" class="text-sm text-gray-700  font-medium">Middlename</label>
         @if ($this->no_middlename)
-            <x-input class="mt-1 h-10" disabled />
+            <x-input class="mt-1 h-10" wire:model.live="middlename" disabled />
         @else
-            <x-input class="mt-1 h-10" />
+            <x-input class="mt-1 h-10" wire:model.live="middlename" />
         @endif
     </div>
     <div class="flex items-end">

@@ -66,6 +66,12 @@
                 <div class=" grid grid-cols-3 gap-5 rounded-b-xl p-2 py-3">
                     <x-input label="Tuition Discount" placeholder="" suffix="%" wire:model.live="tuition_sub" />
                     <x-input label="Miscellaneous Discount" placeholder="" suffix="%" wire:model.live="misc_sub" />
+                    <x-native-select label="Discount" wire:model.live="discount">
+                        <option>Select an Option</option>
+                        <option>JHS-ESC</option>
+                        <option>SHS-VP</option>
+                        <option>Rockfort Scholarhip</option>
+                    </x-native-select>
                 </div>
                 <div class="bg-gray-200 p-2 rounded-t-xl flex space-x-2 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5 text-gray-500"

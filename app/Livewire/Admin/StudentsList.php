@@ -47,7 +47,8 @@ class StudentsList extends Component implements HasForms, HasTable
                 )->label('MIDDLENAME')->searchable(),
                 TextColumn::make('id_number')->label('ID NUMBER')->searchable(),
                 TextColumn::make('studentInformation.educationalInformation.lrn')->label('LRN')->searchable(),
-                TextColumn::make('studentInformation.educationalInformation.gradeLevel.name')->label('GRADE LEVEL')->searchable()
+                TextColumn::make('studentInformation.educationalInformation.gradeLevel.name')->label('GRADE LEVEL')->searchable(),
+                TextColumn::make('grant_as')->label('')->searchable(),
             ])
             ->filters([
 

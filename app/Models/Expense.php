@@ -9,4 +9,8 @@ class Expense extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function expenseCategoryTransactions(){
+        $this->hasMany(ExpenseCategoryTransaction::class);
+    }
 }

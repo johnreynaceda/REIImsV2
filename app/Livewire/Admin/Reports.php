@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Expense;
+use App\Models\ExpenseCategory;
+use App\Models\ExpenseCategoryTransaction;
 use App\Models\PaymentTransaction;
 use App\Models\SaleCategory;
 use App\Models\StudentTransaction;
@@ -12,6 +15,7 @@ class Reports extends Component
     public $selected_report;
     public $date_from, $date_to;
     public $categories = [];
+    PUBLIC $expense_categories = [];
     public function render()
     {
         return view('livewire.admin.reports',[
@@ -36,7 +40,13 @@ class Reports extends Component
                 break;
 
             default:
-                return [];
+                $data = Expense::when($this->date_from && $this->date_to, function($record){
+                    return $record->whereDate('date_of_transaction', '<=', $this->date_from)->whereDate('date_of_transaction', '>=', $this->date_to);
+                })->get();
+                $records = $data->pluck('id');
+                $this->expense_categories = ExpenseCategory::whereIn('id', ExpenseCategoryTransaction::whereIn('expense_id', $records)->distinct()
+                ->pluck('expense_category_id'))->get();
+                return $data;
                 break;
         }
     }

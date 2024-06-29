@@ -185,6 +185,14 @@ class NewEnrollee extends Component implements HasForms
 
     }
 
+    public function updatedNoMiddlename(){
+        if ($this->no_middlename == true) {
+            $this->middlename = '';
+        }else{
+
+        }
+    }
+
     public function submitEnrollee(){
 
         DB::beginTransaction();

@@ -210,6 +210,22 @@
                     </span>
                 </a>
             </li>
+            <li>
+                <a class="inline-flex items-center w-full px-4 py-2 mt-1 text-sm font-medium text-gray-600 transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-orange-500/80 hover:scale-95 hover:text-white"
+                    href="{{ route('admin.subsidies') }}">
+                    <svg class="w-5 h-5 md hydrated" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        fill="currentColor" aria-hidden="true">
+                        <path d="M21 7v10c0 3-1.5 5-5 5H8c-3.5 0-5-2-5-5V7c0-3 1.5-5 5-5h8c3.5 0 5 2 5 5z"
+                            opacity=".4"></path>
+                        <path
+                            d="M18.5 9.25h-2c-1.52 0-2.75-1.23-2.75-2.75v-2c0-.41.34-.75.75-.75s.75.34.75.75v2c0 .69.56 1.25 1.25 1.25h2c.41 0 .75.34.75.75s-.34.75-.75.75zM12 13.75H8c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h4c.41 0 .75.34.75.75s-.34.75-.75.75zM16 17.75H8c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h8c.41 0 .75.34.75.75s-.34.75-.75.75z">
+                        </path>
+                    </svg>
+                    <span class="ml-4">
+                        Subsidies
+                    </span>
+                </a>
+            </li>
 
         </ul>
     </nav>

@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('subsidies', function (Blueprint $table) {
             $table->id();
-            $table->string('id_number');
-            $table->foreignId('student_information_id');
-            $table->string('department')->default('K-10');
-            $table->foreignId('strand_id')->nullable();
-            $table->string('grant_as')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('subsidies');
     }
 };

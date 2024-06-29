@@ -4,8 +4,10 @@ namespace App\Livewire\Admin;
 
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
+use App\Models\ExpenseCategoryTransaction;
 use App\Models\Shop\Product;
 use App\Models\User;
+use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
@@ -14,9 +16,13 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ViewField;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -33,7 +39,35 @@ class ExpenseTransactionList extends Component implements HasForms, HasTable
     {
         return $table
             ->query(Expense::query())->headerActions([
-                CreateAction::make('create')->icon('heroicon-o-plus')->form([
+                CreateAction::make('create')->icon('heroicon-o-plus')->action(
+                    function($record, $data){
+
+
+                        $total_expenses = 0;
+                        $expense = Expense::create([
+                            'voucher_number' => $data['voucher_number'],
+                            'name' => $data['name'],
+                            'note' => $data['note'],
+                            'date_of_transaction' => $data['date_of_transaction'],
+
+                        ]);
+
+                         foreach($data['category'] as $category){
+                             ExpenseCategoryTransaction::create([
+                                'expense_id' => $expense->id,
+                                'expense_category_id' => $category['expense_category'],
+                                'amount' => $category['amount'],
+                            ]);
+                            $total_expenses += $category['amount'];
+
+                         }
+
+                         $expense->update([
+                            'total_payment' => $total_expenses,
+                         ]);
+
+                    }
+                )->form([
                     Grid::make(3)->schema([
                         TextInput::make('voucher_number')->required()->prefix('#'),
                         DatePicker::make('date_of_transaction')->required(),
@@ -53,13 +87,21 @@ class ExpenseTransactionList extends Component implements HasForms, HasTable
                 ])
             ])
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('voucher_number')->label('VOUCHER NUMBER')->searchable(),
+                TextColumn::make('name')->label('NAME')->searchable(),
+                TextColumn::make('note')->label('NOTE')->searchable(),
+                TextColumn::make('total_payment')->label('TOTAL AMOUNT')->searchable()->formatStateUsing(
+                    fn($record) => '₱'.number_format($record->total_payment,2)),
             ])
             ->filters([
                 // ...
             ])
             ->actions([
-                // ...
+                ViewAction::make('view')->label('VIEW TRANSACTION')->color('warning')->form([
+                    ViewField::make('rating')
+                    ->view('filament.form.expense_transactions')
+                ])->modalWidth('xl')->modalHeading('TRANSACTION DETAILS'),
+                DeleteAction::make('delete')
             ])
             ->bulkActions([
                 // ...
