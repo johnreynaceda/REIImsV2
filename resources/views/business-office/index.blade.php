@@ -1,6 +1,6 @@
 @section('title', 'Dashboard')
 <x-business-office-layout>
     <div>
-        sdsdsd
+        Coming Soon...
     </div>
 </x-business-office-layout>

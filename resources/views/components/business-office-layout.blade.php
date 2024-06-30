@@ -31,7 +31,7 @@
         <div>
 
             <!-- Navigation starts -->
-            <nav class="w-full mx-auto bg-white sticky top-0 shadow relative z-20">
+            <nav class="w-full mx-auto bg-white   shadow relative z-10">
                 <div class="justify-between container px-6 h-16 flex items-center lg:items-stretch mx-auto">
                     <div class="flex items-center">
                         <div aria-label="Home" role="img" class="mr-10 flex items-center">
@@ -74,17 +74,19 @@
                                         x-transition:leave="transition ease-in duration-75"
                                         x-transition:leave-start="transform opacity-100 scale-100"
                                         x-transition:leave-end="transform opacity-0 scale-95"
-                                        class="absolute z-10 w-40  px-2 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0"
+                                        class="absolute z-50 w-40  px-2 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0"
                                         style="display: none;">
                                         <div
                                             class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                                             <div class="relative p-2 bg-white ">
                                                 <ul class="space-y-2">
                                                     <li class="text-gray-600 hover:text-orange-500">
-                                                        <a href="">Sales Transaction</a>
+                                                        <a href="{{ route('business-office.sales-transaction') }}">Sales
+                                                            Transaction</a>
                                                     </li>
                                                     <li class="text-gray-600 hover:text-orange-500">
-                                                        <a href="">Sales Category</a>
+                                                        <a href="{{ route('business-office.sales-category') }}">Sales
+                                                            Category</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -112,17 +114,19 @@
                                         x-transition:leave="transition ease-in duration-75"
                                         x-transition:leave-start="transform opacity-100 scale-100"
                                         x-transition:leave-end="transform opacity-0 scale-95"
-                                        class="absolute z-10 w-40  px-2 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0"
+                                        class="absolute z-10 w-48  px-2 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0"
                                         style="display: none;">
                                         <div
                                             class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                                             <div class="relative p-2 bg-white ">
                                                 <ul class="space-y-2">
                                                     <li class="text-gray-600 hover:text-orange-500">
-                                                        <a href="">Expense Transaction</a>
+                                                        <a href="{{ route('business-office.expense-transaction') }}">Expense
+                                                            Transaction</a>
                                                     </li>
                                                     <li class="text-gray-600 hover:text-orange-500">
-                                                        <a href="">Expense Category</a>
+                                                        <a href="{{ route('business-office.expense-category') }}">Expense
+                                                            Category</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -155,7 +159,7 @@
             </nav>
             <!-- Navigation ends -->
             <!-- Page title starts -->
-            <div class="bg-gradient-to-tr from-orange-600 to-orange-500 bg-opacity-60 pt-8 pb-16 relative z-10">
+            <div class="bg-gradient-to-tr from-orange-600 to-orange-500 bg-opacity-60 pt-8 pb-16 relative">
                 <div
                     class="container relative px-6 mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between">
                     <div class="flex-col flex lg:flex-row items-start lg:items-center">

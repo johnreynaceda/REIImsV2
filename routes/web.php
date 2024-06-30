@@ -45,6 +45,18 @@ Route::prefix('business-office')->middleware(['auth', 'verified'])->group(
         Route::get('/statement-of-account', function(){
             return view('business-office.soa');
         })->name('business-office.soa');
+        Route::get('/sales/transaction', function(){
+            return view('business-office.sales-transaction');
+        })->name('business-office.sales-transaction');
+        Route::get('/sales/category', function(){
+            return view('business-office.sales-category');
+        })->name('business-office.sales-category');
+        Route::get('/expense/transaction', function(){
+            return view('business-office.expense-transaction');
+        })->name('business-office.expense-transaction');
+        Route::get('/expense/category', function(){
+            return view('business-office.expense-category');
+        })->name('business-office.expense-category');
 
     }
 );
