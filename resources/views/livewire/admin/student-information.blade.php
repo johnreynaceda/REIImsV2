@@ -28,6 +28,7 @@
                     </h1>
                 </div>
                 <div class="p-5 space-y-2 ">
+
                     <button
                         class="border w-full flex space-x-2 justify-center text-gray-700 p-2 shadow hover:bg-gray-500 hover:text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -229,16 +230,16 @@
                                     <span
                                         class="border-b border-gray-600 uppercase  flex  flex-1 pl-1  justify-between items-start font-bold  text-sm">
                                         <div>
-                                            {{ $student->studentGuardian->where('relationship', 'Mother')->first()->lastname ?? '' }}
+                                            {{ \App\Models\StudentGuardian::where('student_information_id', $student->id)->where('relationship', 'Mother')->first()->lastname ?? '' }}
                                         </div>
                                         <div>
-                                            {{ $student->studentGuardian->where('relationship', 'Mother')->first()->firstname ?? '' }}
+                                            {{ \App\Models\StudentGuardian::where('student_information_id', $student->id)->where('relationship', 'Mother')->first()->firstname ?? '' }}
                                         </div>
                                         <div>
-                                            {{ $student->studentGuardian->where('relationship', 'Mother')->first()->middlename ?? '' }}
+                                            {{ \App\Models\StudentGuardian::where('student_information_id', $student->id)->where('relationship', 'Mother')->first()->middlename ?? '' }}
                                         </div>
                                         <div>
-                                            {{ $student->studentGuardian->where('relationship', 'Mother')->first()->suffix ?? '' }}
+                                            {{ \App\Models\StudentGuardian::where('student_information_id', $student->id)->where('relationship', 'Mother')->first()->suffix ?? '' }}
                                         </div>
                                     </span>
                                 </div>
@@ -258,12 +259,12 @@
                                 <div class="flex">
                                     <span>OCCUPATION:</span>
                                     <span
-                                        class="border-b border-gray-600 flex-1 pl-1">{{ $student->studentGuardian->where('relationship', 'Mother')->first()->occupation ?? '' }}</span>
+                                        class="border-b border-gray-600 flex-1 pl-1">{{ \App\Models\StudentGuardian::where('student_information_id', $student->id)->where('relationship', 'Mother')->first()->occupation ?? '' }}</span>
                                 </div>
                                 <div class="flex">
                                     <span>CONTACT NO.:</span>
                                     <span
-                                        class="border-b border-gray-600 flex-1 pl-1">{{ $student->studentGuardian->where('relationship', 'Mother')->first()->contact_number ?? '' }}</span>
+                                        class="border-b border-gray-600 flex-1 pl-1">{{ \App\Models\StudentGuardian::where('student_information_id', $student->id)->where('relationship', 'Mother')->first()->contact ?? '' }}</span>
                                 </div>
                             </div>
                             <div class="mt-4">
@@ -271,10 +272,10 @@
                                     <span>NAME OF FATHER:</span>
                                     <span
                                         class="border-b border-gray-600 uppercase  flex  flex-1 pl-1 justify-between items-start font-bold  text-sm">
-                                        <span>{{ $student->studentGuardian->where('relationship', 'Father')->first()->lastname ?? '' }}</span>
-                                        <span>{{ $student->studentGuardian->where('relationship', 'Father')->first()->firstname ?? '' }}</span>
-                                        <span>{{ $student->studentGuardian->where('relationship', 'Father')->first()->middlename ?? '' }}</span>
-                                        <span>{{ $student->studentGuardian->where('relationship', 'Father')->first()->suffix ?? '' }}</span>
+                                        <span>{{ \App\Models\StudentGuardian::where('student_information_id', $student->id)->where('relationship', 'Father')->first()->lastname ?? '' }}</span>
+                                        <span>{{ \App\Models\StudentGuardian::where('student_information_id', $student->id)->where('relationship', 'Father')->first()->firstname ?? '' }}</span>
+                                        <span>{{ \App\Models\StudentGuardian::where('student_information_id', $student->id)->where('relationship', 'Father')->first()->middlename ?? '' }}</span>
+                                        <span>{{ \App\Models\StudentGuardian::where('student_information_id', $student->id)->where('relationship', 'Father')->first()->suffix ?? '' }}</span>
                                     </span>
                                 </div>
                             </div>
@@ -293,12 +294,12 @@
                                 <div class="flex">
                                     <span>OCCUPATION:</span>
                                     <span
-                                        class="border-b border-gray-600 flex-1 pl-1">{{ $student->studentGuardian->where('relationship', 'Father')->first()->occupation ?? '' }}</span>
+                                        class="border-b border-gray-600 flex-1 pl-1">{{ \App\Models\StudentGuardian::where('student_information_id', $student->id)->where('relationship', 'Father')->first()->occupation ?? '' }}</span>
                                 </div>
                                 <div class="flex">
                                     <span>CONTACT NO.:</span>
                                     <span
-                                        class="border-b border-gray-600 flex-1 pl-1">{{ $student->studentGuardian->where('relationship', 'Father')->first()->contact_number ?? '' }}</span>
+                                        class="border-b border-gray-600 flex-1 pl-1">{{ \App\Models\StudentGuardian::where('student_information_id', $student->id)->where('relationship', 'Father')->first()->contact_number ?? '' }}</span>
                                 </div>
                             </div>
                             <div class="mt-4 ml-10 flex flex-col">
