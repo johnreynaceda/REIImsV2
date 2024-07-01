@@ -4,6 +4,8 @@ namespace App\Livewire\Admin\Settings;
 
 use App\Models\Shop\Product;
 use App\Models\User;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\Action;
@@ -26,7 +28,25 @@ class UserList extends Component implements HasForms, HasTable
     {
         return $table
             ->query(User::query())->headerActions([
-                Action::make('user')->label('New User')->icon('heroicon-s-user-plus'),
+                Action::make('user')->label('New User')->icon('heroicon-s-user-plus')->action(
+                    function($record,$data){
+                        User::create([
+                            'name' => $data['name'],
+                            'email' => $data['email'],
+                            'password' => bcrypt($data['password']),
+                            'role_id' => $data['role_id'],
+                        ]);
+                    }
+                )->form([
+                    TextInput::make('name'),
+                    TextInput::make('email')->email(),
+                    TextInput::make('password')->password(),
+                    Select::make('role_id')->label('Role')->options([
+                        2 => 'Business Office',
+                        3 => 'Teacher'
+                    ]),
+
+                ])->modalWidth('xl'),
             ], position: HeaderActionsPosition::Bottom)
             ->columns([
                 TextColumn::make('name')->label('NAME')->searchable(),
