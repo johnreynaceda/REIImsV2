@@ -4,8 +4,15 @@
             {{ __('Enrolled Student') }}
         </h2>
     </x-slot>
-    <div class="relative">
-        <table id="example" class="table-auto mt-5" style="width:100%">
+    <div class="relative bg-white rounded-2xl shadow-xl p-5">
+        <div class="flex space-x-3 items-center">
+            <img src="{{ asset('images/reii_logo.png') }}" class="h-14" alt="">
+            <div>
+                <h1 class="text-xl font-bold text-gray-700">ROCKFORT EDUCATIONAL INSTITUTE INC. </h1>
+                <h1 class="text-sm">National Highway, Brgy. San Pablo, Tacurong City S.K</h1>
+            </div>
+        </div>
+        <table id="example" class="table-auto  mt-5" style="width:100%">
             <thead class="font-normal">
                 <tr>
                     <th class="border text-center border-gray-600 w-64 px-2 font-bold">GRADE LEVEL</th>
