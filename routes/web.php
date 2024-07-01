@@ -57,6 +57,9 @@ Route::prefix('business-office')->middleware(['auth', 'verified'])->group(
         Route::get('/expense/category', function(){
             return view('business-office.expense-category');
         })->name('business-office.expense-category');
+        Route::get('/reports', function(){
+            return view('business-office.reports');
+        })->name('business-office.reports');
 
     }
 );

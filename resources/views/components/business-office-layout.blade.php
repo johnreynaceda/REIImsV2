@@ -136,7 +136,7 @@
                             </li>
                             <li
                                 class="cursor-pointer h-full flex items-center text-sm text-gray-600 hover:text-orange-500 font-medium">
-                                <a href="javascript:void(0)"> Reports</a>
+                                <a href="{{ route('business-office.reports') }}"> Reports</a>
                             </li>
                         </ul>
                     </div>
