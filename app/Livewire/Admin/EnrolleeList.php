@@ -62,13 +62,20 @@ class EnrolleeList extends Component implements HasForms, HasTable
 
             ])
             ->actions([
+
                 ActionGroup::make([
                     Action::make('enroll')->label('ENROLL STUDENT')->icon("heroicon-c-academic-cap")->color('success')->url(
                         fn ($record) => auth()->user()->role_id == 1 ? route('admin.enrollee.enroll', $record->id) : route('business-office.enroll-student', $record->id)
                     ),
                     EditAction::make('edit')->color('warning'),
                     DeleteAction::make('delete'),
-                ])->hidden(auth()->user()->role_id == 3)
+                ])->hidden(auth()->user()->role_id == 3),
+                ActionGroup::make([
+                   Action::make('view_profile')->icon('heroicon-o-eye')->color('warning'),
+                   EditAction::make('edit')->label('Edit Record')->color('success')->form([
+
+                   ])->modalWidth('3xl'),
+                ])->hidden(auth()->user()->role_id != 3),
             ])
             ->bulkActions([
             ])->emptyStateHeading('No Enrollee yet!')->emptyStateIcon('heroicon-s-user-plus')->emptyStateDescription('Once you write your first data, it will appear here.');
