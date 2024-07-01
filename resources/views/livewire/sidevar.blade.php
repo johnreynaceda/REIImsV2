@@ -6,7 +6,7 @@
         <ul>
             <li>
                 <a class="inline-flex items-center w-full px-4 py-2 mt-1 text-sm font-medium text-gray-600 transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-orange-500/80 hover:scale-95 hover:text-white"
-                    href="#">
+                    href="{{ route('admin.dashboard') }}">
                     <svg class="w-5 h-5 md hydrated" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                         fill="currentColor" aria-hidden="true">
                         <path

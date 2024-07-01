@@ -40,7 +40,7 @@
                             </div>
                             <div class="mt-1 flex items-center gap-x-2">
                                 <h3 class="text-xl sm:text-2xl font-medium text-gray-800">
-                                    72,540
+                                    {{ \App\Models\Enrollee::where('status', false)->count() }}
                                 </h3>
 
                             </div>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="mt-1 flex items-center gap-x-2">
                                 <h3 class="text-xl sm:text-2xl font-medium text-gray-800">
-                                    72,540
+                                    {{ \App\Models\Student::count() }}
                                 </h3>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                             </div>
                             <div class="mt-1 flex items-center gap-x-2">
                                 <h3 class="text-xl sm:text-2xl font-medium text-gray-800">
-                                    72,540
+                                    0
                                 </h3>
                             </div>
                         </div>
