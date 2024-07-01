@@ -101,7 +101,7 @@ class ExpenseTransactionList extends Component implements HasForms, HasTable
                     ViewField::make('rating')
                     ->view('filament.form.expense_transactions')
                 ])->modalWidth('xl')->modalHeading('TRANSACTION DETAILS'),
-                DeleteAction::make('delete')
+                DeleteAction::make('delete')->visible(auth()->user()->role_id == 1)
             ])
             ->bulkActions([
                 // ...

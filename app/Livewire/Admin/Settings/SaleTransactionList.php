@@ -118,10 +118,16 @@ class SaleTransactionList extends Component implements HasForms, HasTable
                     ViewField::make('rating')
                     ->view('filament.form.transactions')
                 ])->modalWidth('xl')->modalHeading('TRANSACTION DETAILS'),
-                EditAction::make('edit')->color('success')->form([
-                TextInput::make('name')->required(),
-               ])->modalWidth('xl'),
-               DeleteAction::make('delete'),
+                EditAction::make('edit')->color('success')->action(
+                    function($record, $data){
+                        $record->update([
+                            'or_number' => $data['or_number'],
+                        ]);
+                    }
+                )->form([
+                TextInput::make('or_number')->required(),
+               ])->modalWidth('xl')->visible(auth()->user()->role_id == 1),
+               DeleteAction::make('delete')->visible(auth()->user()->role_id == 1),
             ])
             ->bulkActions([
                 // ...
