@@ -13,6 +13,7 @@
             <livewire:shs-enrollee />
         </div>
     @endif
+
     <x-modal wire:model.defer="record_modal" max-width="4xl">
         <x-card title="Edit Records">
             <div class="space-y-4">
