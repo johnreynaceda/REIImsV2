@@ -17,6 +17,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.4",
+        "maatwebsite/excel": "^3.1",
         "php-flasher/flasher-sweetalert-laravel": "^1.15",
         "wireui/wireui": "^1.18",
         "yaza/laravel-google-drive-storage": "^2.0"

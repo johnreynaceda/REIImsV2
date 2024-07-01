@@ -107,7 +107,7 @@ class SaleTransactionList extends Component implements HasForms, HasTable
                     function($record){
                         return '₱'.number_format($record->total_amount,2);
                     }
-                )->label('OR NUMBER'),
+                )->label('TOTAL PAYMENT'),
                 TextColumn::make('created_at')->date()->label('DOP'),
             ])
             ->filters([

@@ -32,7 +32,7 @@ class Reports extends Component
             case 'Income':
                 $data = StudentTransaction::when($this->date_from && $this->date_to, function($record){
                     $record->whereDate('created_at', '<=', $this->date_from)->whereDate('created_at', '>=', $this->date_to);
-                })->get();
+                })->orderBy('or_number', 'DESC')->get();
                 $records = $data->pluck('id');
                 $this->categories = SaleCategory::whereIn('id', PaymentTransaction::whereIn('student_transaction_id', $records)->distinct()
                 ->pluck('sale_category_id'))->get();
@@ -42,7 +42,7 @@ class Reports extends Component
             default:
                 $data = Expense::when($this->date_from && $this->date_to, function($record){
                     return $record->whereDate('date_of_transaction', '<=', $this->date_from)->whereDate('date_of_transaction', '>=', $this->date_to);
-                })->get();
+                })->orderBy('voucher_number', 'DESC')->get();
                 $records = $data->pluck('id');
                 $this->expense_categories = ExpenseCategory::whereIn('id', ExpenseCategoryTransaction::whereIn('expense_id', $records)->distinct()
                 ->pluck('expense_category_id'))->get();
