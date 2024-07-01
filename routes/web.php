@@ -75,6 +75,9 @@ Route::prefix('teacher')->middleware(['auth', 'verified'])->group(
         Route::get('/enrollment/record/{id}', function(){
             return view('teacher.record');
         })->name('teacher.record');
+        Route::get('/enrolled-student', function(){
+            return view('teacher.enrolled-student');
+        })->name('teacher.enrolled-student');
     }
 );
 
