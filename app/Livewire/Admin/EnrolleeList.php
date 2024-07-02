@@ -88,7 +88,12 @@ class EnrolleeList extends Component implements HasForms, HasTable
                         fn ($record) => auth()->user()->role_id == 1 ? route('admin.enrollee.enroll', $record->id) : route('business-office.enroll-student', $record->id)
                     ),
                     EditAction::make('edit')->color('warning'),
-                    DeleteAction::make('delete'),
+                    DeleteAction::make('delete')->action(
+                        function($record){
+                            StudentInformation::where('id', $record->student_information_id)->first()->delete();
+                            $record->delete();
+                        }
+                    ),
                 ])->hidden(auth()->user()->role_id == 3),
                 ActionGroup::make([
                    Action::make('view_profile')->icon('heroicon-o-eye')->color('warning')->url(
