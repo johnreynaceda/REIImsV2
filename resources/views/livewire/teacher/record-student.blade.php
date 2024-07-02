@@ -164,7 +164,7 @@
                     <div class="flex">
                         <span>CONTACT NO.:</span>
                         <span
-                            class="border-b border-gray-600 flex-1 pl-1">{{ \App\Models\StudentGuardian::where('student_information_id', $student->id)->where('relationship', 'Mother')->first()->contact ?? '' }}</span>
+                            class="border-b border-gray-600 flex-1 pl-1">{{ \App\Models\StudentGuardian::where('student_information_id', $student->id)->where('relationship', 'Mother')->first()->contact_number ?? '' }}</span>
                     </div>
                 </div>
                 <div class="mt-4">
