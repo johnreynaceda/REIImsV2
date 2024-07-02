@@ -13,4 +13,8 @@ class Expense extends Model
     public function expenseCategoryTransactions(){
         $this->hasMany(ExpenseCategoryTransaction::class);
     }
+
+    public function transactionLog(){
+        return $this->hasOne(TransactionLog::class);
+    }
 }

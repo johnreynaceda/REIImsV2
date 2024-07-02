@@ -21,4 +21,8 @@ class StudentTransaction extends Model
     public function studentInformation(){
         return $this->belongsTo(StudentInformation::class);
     }
+
+    public function transactionLog(){
+        return $this->hasOne(TransactionLog::class);
+    }
 }

@@ -11,6 +11,7 @@ use App\Models\Strand;
 use App\Models\Student;
 use App\Models\StudentPayment;
 use App\Models\StudentTransaction;
+use App\Models\TransactionLog;
 use Carbon\Carbon;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\TextInput;
@@ -170,6 +171,11 @@ class EnrollStudent extends Component implements HasForms
                 'transaction_number' => 'TR'. Carbon::parse(now())->format('Ymd'). '000'. StudentTransaction::count() + 1,
                 'or_number' => $this->or_number,
                 'total_amount' => $this->cash_receive,
+            ]);
+
+            TransactionLog::create([
+                'student_transaction_id' => $student_transaction->id,
+                'user_name' => auth()->user()->name,
             ]);
 
             foreach (SaleCategory::whereIn('name',  ['Tuition', 'Miscellaneous','Developmental Fee','Enrolment Fee', 'Medical/Dental','School ID', 'Books'])->get() as $key => $value) {

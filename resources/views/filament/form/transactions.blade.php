@@ -33,4 +33,10 @@
         </h1>
 
     </div>
+    <div class="mt-10 flex justify-end">
+        <h1 class="font-semibold underline text-gray-600">BY: <span
+                class="text-red-600 font-poppins">{{ $getRecord()->transactionLog->user_name ?? '' }}</span>
+        </h1>
+
+    </div>
 </div>

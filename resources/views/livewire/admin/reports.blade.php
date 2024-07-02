@@ -71,11 +71,14 @@
                                             $studentTotal += $amount;
                                             $categoryTotals[$index] += $amount;
                                         @endphp
-                                        {{ $sale ? $sale->paid_amount : '' }}
+                                        @if ($sale)
+                                            {{ number_format($sale->paid_amount, 2) }}
+                                        @else
+                                        @endif
                                     </td>
                                 @endforeach
                                 <td class="border text-xs text-gray-700 px-3 py-1">
-                                    {{ $studentTotal }}
+                                    {{ number_format($studentTotal, 2) }}
                                 </td>
                                 @php
                                     $grandTotal += $studentTotal;
@@ -89,9 +92,11 @@
                             </td>
                             <td class="border text-xs bg-gray-100 text-gray-700 px-3 py-1 whitespace-nowrap"></td>
                             @foreach ($categoryTotals as $categoryTotal)
-                                <td class="border text-xs bg-gray-100 text-gray-700 px-3 py-1">{{ $categoryTotal }}</td>
+                                <td class="border text-xs bg-gray-100 text-gray-700 px-3 py-1">
+                                    {{ number_format($categoryTotal, 2) }}</td>
                             @endforeach
-                            <td class="border text-xs bg-gray-100 text-gray-700 px-3 py-1">{{ $grandTotal }}</td>
+                            <td class="border text-xs bg-gray-100 text-gray-700 px-3 py-1">
+                                {{ number_format($grandTotal, 2) }}</td>
                         </tr>
                     </tbody>
                 </table>

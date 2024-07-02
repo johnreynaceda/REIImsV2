@@ -6,6 +6,7 @@ use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseCategoryTransaction;
 use App\Models\Shop\Product;
+use App\Models\TransactionLog;
 use App\Models\User;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
@@ -50,6 +51,11 @@ class ExpenseTransactionList extends Component implements HasForms, HasTable
                             'note' => $data['note'],
                             'date_of_transaction' => $data['date_of_transaction'],
 
+                        ]);
+
+                        TransactionLog::create([
+                            'expense_id' => $expense->id,
+                            'user_name' => auth()->user()->name,
                         ]);
 
                          foreach($data['category'] as $category){

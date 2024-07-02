@@ -8,6 +8,7 @@ use App\Models\PaymentTransaction;
 use App\Models\SaleCategory;
 use App\Models\StudentInformation;
 use App\Models\StudentTransaction;
+use App\Models\TransactionLog;
 use Carbon\Carbon;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Repeater;
@@ -56,6 +57,10 @@ class SaleTransactionList extends Component implements HasForms, HasTable
                             'or_number' => $data['or_number'],
                             'total_amount' => $total,
                             'active_semester' => $department == 'SHS' ? ActiveSemester::first()->active : '1st Semester'
+                        ]);
+                        TransactionLog::create([
+                            'student_transaction_id' => $payment->id,
+                            'user_name' => auth()->user()->name,
                         ]);
 
                          foreach ($data['payments'] as $key => $value) {
