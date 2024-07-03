@@ -114,12 +114,12 @@
                                                 $tuition += $total;
                                                 break;
                                             case 'Miscellaneous':
-                                                $discount =
-                                                    ($item->school_fee->amount * (float) ($misc_sub ?? 0)) / 100;
-                                                $total =
-                                                    ($department == 'K-10'
-                                                        ? $item->school_fee->amount - $discount
-                                                        : $item->school_fee->amount / 2) - $discount;
+                                                $feeAmount =
+                                                    $department == 'K-10'
+                                                        ? $item->school_fee->amount
+                                                        : $item->school_fee->amount / 2;
+                                                $discount = ($feeAmount * (float) ($misc_sub ?? 0)) / 100;
+                                                $total = $feeAmount - $discount;
                                                 $misc += $total;
                                                 break;
                                             case 'Medical/Dental':
