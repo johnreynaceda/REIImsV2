@@ -1,23 +1,30 @@
 <div x-data="{ enroll: $wire.entangle('enroll_modal') }">
-    <div>
-        <div class="h-20 w-20 bg-orange-500 rounded-full">
-            <img src="{{ asset('images/student.png') }}" class="h-20" alt="">
-        </div>
-        <div class="mt-2 border-b-2 border-orange-500 pb-3">
-            <h1 class="uppercase font-bold text-xl text-gray-700">
-                {{ $enrollee->studentInformation->lastname . ', ' . $enrollee->studentInformation->firstname . ' ' . ($enrollee->studentInformation->middlename == null ? '' : $enrollee->studentInformation->middlename[0] . '.') }}
-            </h1>
-            <div class="flex space-x-1 items-end">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4 text-gray-600"
-                    fill="currentColor">
-                    <path
-                        d="M17.0839 15.812C19.6827 13.0691 19.6379 8.73845 16.9497 6.05025C14.2161 3.31658 9.78392 3.31658 7.05025 6.05025C4.36205 8.73845 4.31734 13.0691 6.91612 15.812C7.97763 14.1228 9.8577 13 12 13C14.1423 13 16.0224 14.1228 17.0839 15.812ZM12 23.7279L5.63604 17.364C2.12132 13.8492 2.12132 8.15076 5.63604 4.63604C9.15076 1.12132 14.8492 1.12132 18.364 4.63604C21.8787 8.15076 21.8787 13.8492 18.364 17.364L12 23.7279ZM12 12C10.3431 12 9 10.6569 9 9C9 7.34315 10.3431 6 12 6C13.6569 6 15 7.34315 15 9C15 10.6569 13.6569 12 12 12Z">
-                    </path>
-                </svg>
-                <h1 class="leading-3 uppercase text-gray-600 text-sm">
-                    {{ $enrollee->studentInformation->studentAddress->barangay . ', ' . $enrollee->studentInformation->studentAddress->city . ', ' . $enrollee->studentInformation->studentAddress->province }}
-                </h1>
+    <div class="flex justify-between items-end border-b-2 border-orange-500">
+        <div>
+            <div class="h-20 w-20 bg-orange-500 rounded-full">
+                <img src="{{ asset('images/student.png') }}" class="h-20" alt="">
             </div>
+            <div class="mt-2  pb-3">
+                <h1 class="uppercase font-bold text-xl text-gray-700">
+                    {{ $enrollee->studentInformation->lastname . ', ' . $enrollee->studentInformation->firstname . ' ' . ($enrollee->studentInformation->middlename == null ? '' : $enrollee->studentInformation->middlename[0] . '.') }}
+                </h1>
+                <div class="flex space-x-1 items-end">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4 text-gray-600"
+                        fill="currentColor">
+                        <path
+                            d="M17.0839 15.812C19.6827 13.0691 19.6379 8.73845 16.9497 6.05025C14.2161 3.31658 9.78392 3.31658 7.05025 6.05025C4.36205 8.73845 4.31734 13.0691 6.91612 15.812C7.97763 14.1228 9.8577 13 12 13C14.1423 13 16.0224 14.1228 17.0839 15.812ZM12 23.7279L5.63604 17.364C2.12132 13.8492 2.12132 8.15076 5.63604 4.63604C9.15076 1.12132 14.8492 1.12132 18.364 4.63604C21.8787 8.15076 21.8787 13.8492 18.364 17.364L12 23.7279ZM12 12C10.3431 12 9 10.6569 9 9C9 7.34315 10.3431 6 12 6C13.6569 6 15 7.34315 15 9C15 10.6569 13.6569 12 12 12Z">
+                        </path>
+                    </svg>
+                    <h1 class="leading-3 uppercase text-gray-600 text-sm">
+                        {{ $enrollee->studentInformation->studentAddress->barangay . ', ' . $enrollee->studentInformation->studentAddress->city . ', ' . $enrollee->studentInformation->studentAddress->province }}
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col space-y-1 text-gray-700 items-center">
+            <h1 class="text-sm font-medium underline">From Private(77.7778%)</h1>
+            <h1 class="text-sm font-medium underline">From Public(97.2222%)</span>
+                <h1 class="text-sm font-medium underline">From StateU(97.2222%)</span>
         </div>
     </div>
     <div class="mt-5 grid grid-cols-2 gap-5">

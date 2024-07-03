@@ -35,7 +35,7 @@ class StatementAccount extends Component implements HasForms, HasTable
     use InteractsWithForms;
     public $student_id;
 
-
+    public $records;
     public $payments = [];
     PUBLIC $department;
     public $payment_modal = false;
@@ -65,6 +65,7 @@ class StatementAccount extends Component implements HasForms, HasTable
 
     public function mount(){
         $this->semester = ActiveSemester::first()->active;
+
     }
 
     public function table(Table $table): Table
@@ -159,6 +160,8 @@ class StatementAccount extends Component implements HasForms, HasTable
         $this->department = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->department;
         $this->grade_level_id = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->grade_level_id;
 
+
+
         if ($this->department == 'K-10') {
 
         }else{
@@ -181,15 +184,29 @@ class StatementAccount extends Component implements HasForms, HasTable
 
     public function render()
     {
+
+        if ($this->department) {
+            if ($this->department == 'K-10') {
+                $this->records = StudentTransaction::whereHas('studentPayment', function($payment){
+                    $payment->where('active_sem', '1st Semester')->where('student_id', $this->student_id);
+                })->get();
+            }else{
+                if ($this->semester == '1st Semester') {
+                    $this->records = StudentTransaction::whereHas('studentPayment', function($payment){
+                        $payment->where('active_sem', '1st Semester')->where('student_id', $this->student_id);
+                    })->get();
+                   }else{
+                    $this->records = StudentTransaction::whereHas('studentPayment', function($payment){
+                        $payment->where('active_sem', '2nd Semester')->where('student_id', $this->student_id);
+                    })->get();
+                   }
+            }
+        }
         $this->payment_terms = PaymentTerms::where('is_active', true)->first()->terms;
         return view('livewire.admin.statement-account',[
-            'dues' => StudentPayment::where('student_id', $this->student_id)->where('active_sem', ActiveSemester::first()->active)->first(),
+            'dues' => $this->department == 'SHS' ? StudentPayment::where('student_id', $this->student_id)->where('active_sem', ActiveSemester::first()->active)->first() : StudentPayment::where('student_id', $this->student_id)->where('active_sem', '1st Semester')->first(),
             'student' => Student::where('id', $this->student_id)->first(),
-            'records' => StudentTransaction::when($this->student_id, function($student){
-                $student->whereHas('studentPayment', function($record){
-                    $record->where('student_id', $this->student_id)->where('active_sem', $this->semester);
-                })->orWhere('student_information_id', Student::where('id', $this->student_id)->first()->student_information_id);
-            })->get(),
+
         ]);
     }
 }

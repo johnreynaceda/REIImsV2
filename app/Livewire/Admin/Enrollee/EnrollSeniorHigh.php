@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Enrollee;
 
+use App\Models\PaymentTerms;
 use App\Models\PaymentTransaction;
 use App\Models\Post;
 use App\Models\SaleCategory;
@@ -50,11 +51,17 @@ class EnrollSeniorHigh extends Component implements HasForms
 
     public $total_tuition, $total_misc, $total_books;
 
+    public $discount;
+    public $payment_terms;
+
+    public $default_payments ;
     public $remaining_cash = 0;
     public $cash_change = 0;
 
     public function mount(){
         $this->enrollee_id = request('id');
+        $student_info = Enrollee::where('id', $this->enrollee_id)->first()->studentInformation;
+        $this->strand_id = $student_info->student->strand_id;
         $this->student_id  = Enrollee::where('id', $this->enrollee_id)->first()->student_information_id;
         $this->lrn = Enrollee::where('id', $this->enrollee_id)->first()->studentInformation->educationalInformation->lrn;
         $this->grade_level = Enrollee::where('id', $this->enrollee_id)->first()->studentInformation->educationalInformation->grade_level_id;
@@ -64,9 +71,13 @@ class EnrollSeniorHigh extends Component implements HasForms
 
     public function render()
     {
-        $this->remaining_cash = (float)$this->cash_receive - ($this->tuition + $this->misc + $this->developmental + $this->enrollment + $this->medical + $this->school_id + $this->books);
+        $this->payment_terms = PaymentTerms::where('is_active', true)->first()->terms;
+        $this->remaining_cash = (float)$this->cash_receive - ((float)$this->tuition + (float)$this->misc + (float)$this->developmental + (float)$this->enrollment + (float)$this->medical + (float)$this->school_id + (float)$this->books);
         $this->cash_change = (float)$this->cash_receive - $this->total_payment;
-        $this->payments = GradeLevelFee::where('grade_level_id', $this->grade_level)->get()->take(7);
+        $this->payments = GradeLevelFee::where('grade_level_id', $this->grade_level)->whereHas('school_fee', function($record){
+            $record->whereNotIn('name', ['Tuition', 'Miscellaneous']);
+        })->get()->take(5);
+        $this->default_payments = GradeLevelFee::where('grade_level_id', $this->grade_level)->get()->take(7);
         return view('livewire.admin.enrollee.enroll-senior-high',[
             'enrollee' => Enrollee::where('id', $this->enrollee_id)->first(),
             'levels' => GradeLevel::all(),
@@ -158,7 +169,8 @@ class EnrollSeniorHigh extends Component implements HasForms
                'total_tuition' => $this->total_tuition - $this->tuition,
                'total_misc' => $this->total_misc - $this->misc,
                'total_book' => $this->books,
-               'active_sem' => '2nd  Semester',
+               'active_sem' => '2nd Semester',
+
             ]);
 
             $student_transaction = StudentTransaction::create([

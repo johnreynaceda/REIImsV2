@@ -585,11 +585,21 @@
                                     $grand_total = 0;
                                     $grade_level = $student->studentInformation->educationalInformation->gradeLevel->id;
                                     $tui_applied = $student->studentPayments
-                                        ->where('active_sem', \App\Models\ActiveSemester::first()->active)
+                                        ->where(
+                                            'active_sem',
+                                            $department == 'SHS'
+                                                ? \App\Models\ActiveSemester::first()->active
+                                                : '1st Semester',
+                                        )
                                         ->first()->applied_tuition_subd;
                                     $tui_subd = $tui_applied != null ? $tui_applied : 0;
                                     $misc_applied = $student->studentPayments
-                                        ->where('active_sem', \App\Models\ActiveSemester::first()->active)
+                                        ->where(
+                                            'active_sem',
+                                            $department == 'SHS'
+                                                ? \App\Models\ActiveSemester::first()->active
+                                                : '1st Semester',
+                                        )
                                         ->first()->applied_misc_subd;
                                     $misc_subd = $misc_applied != null ? $misc_applied : 0;
 

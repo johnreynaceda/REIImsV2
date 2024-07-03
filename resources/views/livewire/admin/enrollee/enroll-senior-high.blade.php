@@ -70,8 +70,14 @@
         <div>
             <div>
                 <div class=" grid grid-cols-3 gap-5 rounded-b-xl p-2 py-3">
-                    <x-input label="Tuition Subsidy" placeholder="" suffix="%" wire:model.live="tuition_sub" />
-                    <x-input label="Miscellaneous Subsidy" placeholder="" suffix="%" wire:model.live="misc_sub" />
+                    <x-input label="Tuition Discount" placeholder="" suffix="%" wire:model.live="tuition_sub" />
+                    <x-input label="Miscellaneous Discount" placeholder="" suffix="%" wire:model.live="misc_sub" />
+                    <x-native-select label="Discount" wire:model.live="discount">
+                        <option>Select an Option</option>
+                        <option>JHS-ESC</option>
+                        <option>SHS-VP</option>
+                        <option>Rockfort Scholarhip</option>
+                    </x-native-select>
                 </div>
                 <div class="bg-gray-200 p-2 rounded-t-xl flex space-x-2 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5 text-gray-500"
@@ -92,7 +98,7 @@
                         $school_id = 0;
                     @endphp
 
-                    @foreach ($payments as $item)
+                    @foreach ($default_payments as $item)
                         <li class="flex text-sm justify-between border-b items-center">
                             <span>{{ $item->school_fee->name ?? '' }}</span>
                             <span>
@@ -102,7 +108,11 @@
                                         switch ($item->school_fee->name) {
                                             case 'Tuition':
                                                 $discount =
-                                                    ($item->school_fee->amount * (float) ($tuition_sub ?? 0)) / 100;
+                                                    (($department == 'K-10'
+                                                        ? $item->school_fee->amount
+                                                        : $item->school_fee->amount / 2) *
+                                                        (float) ($tuition_sub ?? 0)) /
+                                                    100;
                                                 $total =
                                                     ($department == 'K-10'
                                                         ? $item->school_fee->amount
@@ -110,26 +120,20 @@
                                                 $tuition += $total;
                                                 break;
                                             case 'Miscellaneous':
-                                                $discount =
-                                                    ($item->school_fee->amount * (float) ($misc_sub ?? 0)) / 100;
-                                                $total =
-                                                    ($department == 'K-10'
-                                                        ? $item->school_fee->amount - $discount
-                                                        : $item->school_fee->amount / 2) - $discount;
+                                                $feeAmount =
+                                                    $department == 'K-10'
+                                                        ? $item->school_fee->amount
+                                                        : $item->school_fee->amount / 2;
+                                                $discount = ($feeAmount * (float) ($misc_sub ?? 0)) / 100;
+                                                $total = $feeAmount - $discount;
                                                 $misc += $total;
                                                 break;
                                             case 'Medical/Dental':
-                                                $total =
-                                                    $department == 'K-10'
-                                                        ? $item->school_fee->amount
-                                                        : $item->school_fee->amount / 2;
+                                                $total = 0;
                                                 $dental += $total;
                                                 break;
                                             case 'School ID':
-                                                $total =
-                                                    $department == 'K-10'
-                                                        ? $item->school_fee->amount
-                                                        : $item->school_fee->amount / 2;
+                                                $total = 0;
                                                 $school_id += $total;
                                                 break;
                                             default:
@@ -179,19 +183,13 @@
                                             case 'Miscellaneous':
                                                 $discount =
                                                     ($item->school_fee->amount * (float) ($tuition_sub ?? 0)) / 100;
-                                                $total = ($item->school_fee->amount - $discount) / 10;
+                                                $total = ($item->school_fee->amount - $discount) / $payment_terms;
                                                 break;
                                             case 'Medical/Dental':
-                                                $total =
-                                                    $department == 'SHS'
-                                                        ? $item->school_fee->amount / 2
-                                                        : $item->school_fee->amount;
+                                                $total = 0;
                                                 break;
                                             case 'School ID':
-                                                $total =
-                                                    $department == 'SHS'
-                                                        ? $item->school_fee->amount / 2
-                                                        : $item->school_fee->amount;
+                                                $total = 0;
                                                 break;
                                             default:
                                                 $total = $item->school_fee->amount;
