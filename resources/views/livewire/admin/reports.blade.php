@@ -7,20 +7,22 @@
             <option>Expenses</option>
         </x-native-select>
     </div>
-    <div class="mt-4 border-t pt-4 flex justify-between items-end">
-        <div class="flex space-x-2 ">
-            <div class="w-64">
-                <x-datetime-picker label="Date From" wire:model.live="date_from" without-time without-timezone />
+    @if ($selected_report != 'Student Records')
+        <div class="mt-4 border-t pt-4 flex justify-between items-end">
+            <div class="flex space-x-2 ">
+                <div class="w-64">
+                    <x-datetime-picker label="Date From" wire:model.live="date_from" without-time without-timezone />
+                </div>
+                <div class="w-64">
+                    <x-datetime-picker label="Date To" wire:model.live="date_to" without-time without-timezone />
+                </div>
             </div>
-            <div class="w-64">
-                <x-datetime-picker label="Date To" wire:model.live="date_to" without-time without-timezone />
+            <div class="flex space-x-2">
+                <x-button dark label="Print Report" @click="printOut($refs.printContainer.outerHTML);" icon="printer" />
+                <x-button positive label="Export Report" icon="printer" />
             </div>
         </div>
-        <div class="flex space-x-2">
-            <x-button dark label="Print Report" @click="printOut($refs.printContainer.outerHTML);" icon="printer" />
-            <x-button positive label="Export Report" icon="printer" />
-        </div>
-    </div>
+    @endif
     <div class="mt-10 mx-auto">
         @if ($selected_report == 'Income')
             <div class="overflow-x-auto">
@@ -182,6 +184,16 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        @endif
+    </div>
+    <div class="mt-10 mx-auto">
+        @if ($selected_report == 'Student Records')
+            <div class="">
+                <div class="flex justify-end">
+                    <x-button label="Export Record" positive icon="document-text" wire:click="exportRecord"
+                        spinner="exportRecord" />
+                </div>
             </div>
         @endif
     </div>

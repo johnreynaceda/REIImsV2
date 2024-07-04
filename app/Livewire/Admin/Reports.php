@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Exports\StudentExport;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseCategoryTransaction;
@@ -9,6 +10,7 @@ use App\Models\PaymentTransaction;
 use App\Models\SaleCategory;
 use App\Models\StudentTransaction;
 use Livewire\Component;
+use Maatwebsite\Excel\Excel;
 
 class Reports extends Component
 {
@@ -68,5 +70,11 @@ class Reports extends Component
                 return $data;
                 break;
         }
+
+
+
+    }
+    public function exportRecord(){
+        return \Maatwebsite\Excel\Facades\Excel::download(new StudentExport, 'students_record.xlsx');
     }
 }
