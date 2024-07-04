@@ -43,6 +43,8 @@ class StatementAccount extends Component implements HasForms, HasTable
 
     public $file;
 
+    public $due_date;
+
     public $payment_terms;
 
     public $semester;

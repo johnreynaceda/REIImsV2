@@ -59,7 +59,7 @@
                             </div>
                             <div class="flex space-x-1">
                                 <span>SECTION :</span>
-                                <h1 class="flex-1 text-center border-b uppercase">chadwick</span>
+                                <h1 class="flex-1 text-center border-b uppercase"></span>
                             </div>
                         </div>
                     </div>
@@ -368,8 +368,8 @@
 
                         </table>
                         <div class="mt-5 font-sans grid grid-cols-2 gap-5">
-                            <x-datetime-picker label="Appointment Date" placeholder="Appointment Date"
-                                wire:model.defer="normalPicker" />
+                            <x-datetime-picker label="Due Date" without-timezone without-time
+                                wire:model.live="due_date" />
                             <div></div>
                             <x-button label="PRINT SOA" icon="printer"
                                 @click="printOut($refs.printContainer.outerHTML);" slate class="font-semibold" />
@@ -574,7 +574,7 @@
                             </div>
                             <div class="flex space-x-1">
                                 <span>SECTION :</span>
-                                <h1 class="flex-1 text-center border-b uppercase">chadwick</span>
+                                <h1 class="flex-1 text-center border-b uppercase"></span>
                             </div>
                         </div>
                     </div>
@@ -1003,11 +1003,14 @@
                         </table>
                         <div class="mt-2">
                             <p class="text-[0.5rem] ">Kindly settle your account for the month <span
-                                    class="font-bold uppercase text-red-600">{{ $month_selected ?? '' }}</span> on
-                                or before <span class="font-bold text-red-600 uppercase">{{ $due_date ?? '' }}</span>
-                            </p>
-                            <p class="font-bold  text-[0.5rem] italic">Please disregard this notice if payment
-                                has been made.
+                                    class="font-bold uppercase text-red-600">{{ \Carbon\Carbon::parse($due_date)->format('F') ?? '' }}</span>
+                                on
+                                or before <span
+                                    class="font-bold text-red-600 uppercase">{{ \Carbon\Carbon::parse($due_date)->format('m-d-y') ?? '' }}</span>
+
+                                <span class="font-bold  text-[0.5rem] italic">Please disregard this notice if payment
+                                    has been made.
+                                </span>
                             </p>
                             <p class="text-[0.5rem] ">Thank you and Good Bless.</p>
                         </div>
