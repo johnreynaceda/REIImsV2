@@ -111,19 +111,19 @@
         <div class="grid grid-cols-4 gap-5 border-l border-r border-b p-6  w-full">
             <div>
                 <h1 class="uppercase text-xs">Province</h1>
-                <h1 class="uppercase text-md">{{ $this->firstname ?? 'Null' }}</h1>
+                <h1 class="uppercase text-md">{{ $this->add_province ?? 'Null' }}</h1>
             </div>
             <div>
                 <h1 class="uppercase text-xs">City/Municipality</h1>
-                <h1 class="uppercase text-md">{{ $this->middlename ?? 'Null' }}</h1>
+                <h1 class="uppercase text-md">{{ $this->add_city ?? 'Null' }}</h1>
             </div>
             <div>
                 <h1 class="uppercase text-xs">Barangay</h1>
-                <h1 class="uppercase text-md">{{ $this->lastname ?? 'Null' }}</h1>
+                <h1 class="uppercase text-md">{{ $this->add_barangay ?? 'Null' }}</h1>
             </div>
             <div>
                 <h1 class="uppercase text-xs">Street</h1>
-                <h1 class="uppercase text-md">{{ $this->suffix ?? 'Null' }}</h1>
+                <h1 class="uppercase text-md">{{ $this->add_street ?? 'Null' }}</h1>
             </div>
 
         </div>

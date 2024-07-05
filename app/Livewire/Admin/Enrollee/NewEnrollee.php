@@ -57,6 +57,7 @@ class NewEnrollee extends Component implements HasForms
   //address
   public $province_id, $city_id, $barangay_id, $street;
 
+  public $add_province, $add_city, $add_barangay, $add_street;
 
   public $no_middlename = false;
 
@@ -185,6 +186,28 @@ class NewEnrollee extends Component implements HasForms
 
     }
 
+    public function updatedProvinceId(){
+        $this->add_province = PhilippineProvince::where('province_code', $this->province_id)->first()->province_description;
+
+    }
+
+    public function updatedCityId(){
+        $this->add_city     = PhilippineCity::where(
+            'city_municipality_code',
+            $this->city_id
+          )->first()->city_municipality_description;
+
+    }
+
+    public function updatedBarangayId(){
+        $this->add_barangay = PhilippineBarangay::where('barangay_code', $this->barangay_id)->first()->barangay_description;
+
+    }
+
+    public function updatedStreet(){
+        $this->add_street  = $this->street;
+    }
+
     public function updatedNoMiddlename(){
         if ($this->no_middlename == true) {
             $this->middlename = '';
@@ -279,6 +302,7 @@ class NewEnrollee extends Component implements HasForms
 
     public function render()
     {
+
         return view('livewire.admin.enrollee.new-enrollee');
 
     }
