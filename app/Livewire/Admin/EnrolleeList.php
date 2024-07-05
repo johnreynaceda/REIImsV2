@@ -37,6 +37,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class EnrolleeList extends Component implements HasForms, HasTable
@@ -69,7 +70,13 @@ class EnrolleeList extends Component implements HasForms, HasTable
             ->columns([
                 TextColumn::make('studentInformation.firstname')->label('FULLNAME')->formatStateUsing(
                     fn ($record) => strtoupper($record->studentInformation->lastname. ', ' .$record->studentInformation->firstname. ' ' . ($record->studentInformation->middlename == null ? '' : $record->studentInformation->middlename[0].'.'))
-                )->size('md'),
+                )->size('md')->searchable(query: function (Builder $query, string $search): Builder {
+                    return $query->whereHas('studentInformation', function ($k) use ($search){
+                        return $k->where('firstname', 'like', "%{$search}%")
+                        ->orWhere('lastname', 'like', "%{$search}%");
+                    });
+
+                }),
                 TextColumn::make('studentInformation.gender')->label('GENDER')->size('md'),
                 TextColumn::make('studentInformation.educationalInformation.gradeLevel.name')->label('GRADE LEVEL')->size('md')->searchable(),
                 TextColumn::make('studentInformation.birthdate')->date()->label('BIRTHDATE')->size('md'),
