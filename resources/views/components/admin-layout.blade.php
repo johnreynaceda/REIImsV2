@@ -57,7 +57,7 @@
         <div class="flex flex-col flex-1 w-0 overflow-hidden">
 
             <main class="relative flex-1 overflow-y-auto focus:outline-none">
-                <header class=" border-b bg-white z-10 border-gray-300 sticky top-0 ">
+                <header class=" border-b bg-white z-20 relative border-gray-300 sticky top-0 ">
                     <div class=" mx-auto flex w-full justify-between items-center py-4 2xl:max-w-7xl">
                         <div>
 
