@@ -40,7 +40,7 @@
                         <ul class="pr-32 xl:flex hidden space-x-4 items-center h-full">
                             <li
                                 class="cursor-pointer h-full flex items-center text-sm text-gray-600 hover:text-orange-500 font-medium">
-                                <a href="javascript:void(0)"> Dashboard</a>
+                                <a href="{{ route('business-office.dashboard') }}"> Dashboard</a>
                             </li>
                             <li
                                 class="cursor-pointer h-full flex items-center text-sm text-gray-600 hover:text-orange-500 font-medium">
