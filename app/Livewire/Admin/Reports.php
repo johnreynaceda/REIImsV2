@@ -6,8 +6,10 @@ use App\Exports\StudentExport;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseCategoryTransaction;
+use App\Models\GradeLevel;
 use App\Models\PaymentTransaction;
 use App\Models\SaleCategory;
+use App\Models\Student;
 use App\Models\StudentTransaction;
 use Livewire\Component;
 use Maatwebsite\Excel\Excel;
@@ -16,19 +18,29 @@ class Reports extends Component
 {
     public $selected_report;
     public $date_from, $date_to;
+
+    public $grade_level_id;
     public $categories = [];
     PUBLIC $expense_categories = [];
     public function render()
     {
         return view('livewire.admin.reports',[
             'report' => $this->generatedQuery(),
+            'grade_levels' => GradeLevel::all(),
         ]);
     }
 
     public function generatedQuery(){
         switch ($this->selected_report) {
             case 'Student Records':
-                return[];
+
+                $data = Student::when($this->grade_level_id, function($record){
+                    $record->whereHas('studentInformation.educationalInformation', function($educ) {
+                        $educ->where('grade_level_id', $this->grade_level_id);
+                    });
+                })->get();
+
+                return $data;
                 break;
 
             case 'Income':
@@ -49,6 +61,7 @@ class Reports extends Component
 
                 return $data;
                 break;
+
 
             default:
 

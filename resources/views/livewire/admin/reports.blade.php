@@ -190,9 +190,63 @@
     <div class="mt-10 mx-auto">
         @if ($selected_report == 'Student Records')
             <div class="">
-                <div class="flex justify-end">
+
+                <div class="flex justify-between items-end">
+                    <div class="w-64">
+                        <x-native-select label="Grade Level" wire:model.live="grade_level_id">
+                            <option>Select an Option</option>
+
+                            @foreach ($grade_levels as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+
+                        </x-native-select>
+                    </div>
                     <x-button label="Export Record" positive icon="document-text" wire:click="exportRecord"
                         spinner="exportRecord" />
+                </div>
+                <div class="mt-10">
+                    <table id="example" class="table-auto mt-3" style="width:100%">
+                        <thead class="font-normal">
+                            <tr>
+                                <th class="border-2  text-left px-2 text-sm font-bold text-gray-700 py-2"></th>
+                                <th class="border-2  text-left px-2 text-sm font-bold text-gray-700 py-2">FULLNAME</th>
+                                <th class="border-2  text-left px-2 text-sm font-bold text-gray-700 py-2">
+                                    BIRTHDATE
+                                </th>
+
+
+                                <th class="border-2  text-left px-2 text-sm font-bold text-gray-700 py-2">
+                                    GRADE LEVEL
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="">
+                            @php
+                                $i = 1;
+                            @endphp
+                            @foreach ($report as $student)
+                                <tr>
+                                    <td class="border-2  text-gray-700  px-3 py-1">
+                                        {{ $i++ }}
+                                    </td>
+                                    <td class="border-2  text-gray-700 uppercase  px-3 py-1">
+                                        {{ $student->studentInformation->lastname . ' ' . $student->studentInformation->firstname . ' ' . ($student->studentInformation->middlename_is_null == true ? '' : $student->studentInformation->middlename[0] . '.') }}
+                                    </td>
+
+                                    <td class="border-2  text-gray-700  px-3 py-1">
+                                        {{ \Carbon\Carbon::parse($student->studentInformation->birthdate)->format('F d, Y') }}
+                                    </td>
+
+
+                                    <td class="border-2  text-gray-700  px-3 uppercase py-1">
+                                        {{ $student->studentInformation->educationalInformation->gradeLevel->name }}
+                                    </td>
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         @endif
