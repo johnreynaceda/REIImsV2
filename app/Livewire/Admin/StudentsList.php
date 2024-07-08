@@ -3,13 +3,17 @@
 namespace App\Livewire\Admin;
 
 use App\Models\EducationalInformation;
+use App\Models\Enrollee;
 use App\Models\GradeLevel;
 use App\Models\MedicalInformation;
+use App\Models\PaymentTransaction;
 use App\Models\Shop\Product;
 use App\Models\Student;
 use App\Models\StudentAddress;
 use App\Models\StudentGuardian;
 use App\Models\StudentInformation;
+use App\Models\StudentPayment;
+use App\Models\StudentTransaction;
 use Carbon\Carbon;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -119,7 +123,28 @@ class StudentsList extends Component implements HasForms, HasTable
                             $this->record_modal = true;
                         }
                     ),
-                    DeleteAction::make(),
+                    DeleteAction::make()->action(
+                        function($record){
+
+                            $student_payment = StudentPayment::where('student_id', $record->id)->first();
+                            $student_trans = StudentTransaction::where('student_payment_id', $student_payment->id)->first();
+                            $payment_trans = PaymentTransaction::where('student_transaction_id', $student_trans->id)->get();
+
+                            foreach ($payment_trans as $key => $value) {
+                                $value->delete();
+                            }
+
+
+                            $student_trans->delete();
+                            $student_payment->delete();
+
+                            Enrollee::where('student_information_id', $record->studentInformation->id)->first()->update([
+                                'status' => 0,
+                            ]);
+                            $record->delete();
+
+                        }
+                    ),
                 ]),
             ])
             ->bulkActions([
