@@ -144,12 +144,13 @@
                         <h1 class="text-sm">National Highway, Brgy. San Pablo, Tacurong City S.K</h1>
                     </div>
                 </div>
-                <table id="example" class="table-auto  mt-5" style="width:100%">
+                <table id="example" class="table-auto mt-5" style="width:100%">
                     <thead class="font-normal">
                         <tr>
                             <th class="border text-center border-gray-600 w-64 px-2 font-bold">GRADE LEVEL</th>
                             <th class="border text-center border-gray-600 px-2 font-bold py-2">NEW</th>
                             <th class="border text-center border-gray-600 px-2 font-bold py-2">OLD</th>
+                            <th class="border text-center border-gray-600 px-2 font-bold py-2">TOTAL</th>
                         </tr>
                         <tr>
                             <th class="border text-center border-gray-600 w-64 px-2 font-bold py-2"></th>
@@ -165,6 +166,7 @@
                                     <div>OVERALL</div>
                                 </div>
                             </th>
+                            <th class="border text-center border-gray-600 w-64 px-2 font-bold py-2"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -264,6 +266,12 @@
                                         </div>
                                     </div>
                                 </td>
+                                <td class="border text-gray-700 text-center border-gray-600">
+                                    @php
+                                        $overall_total = $new_overall + $old_overall;
+                                    @endphp
+                                    {{ $overall_total }}
+                                </td>
                             </tr>
                         @endforeach
                         <tr>
@@ -291,9 +299,16 @@
                                     </div>
                                 </div>
                             </td>
+                            <td class="border text-gray-700 text-center border-gray-600">
+                                @php
+                                    $grand_total = $total_new_overall + $total_old_overall;
+                                @endphp
+                                {{ $grand_total }}
+                            </td>
                         </tr>
                     </tbody>
                 </table>
+
             </div>
         </div>
         <!-- End Card Section -->
