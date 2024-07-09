@@ -47,7 +47,7 @@
                 </td>
                 <td class="uppercase">
                     {{ strtoupper($address->street == 'NA' ? '' : $address->street) }},
-                    BRGY. {{ strtoupper($address->barangay) }} {{ strtoupper($address->city) }}
+                    BRGY. {{ strtoupper($address->barangay) }}, {{ strtoupper($address->city) }},
                     {{ strtoupper($address->province) }}
                 </td>
             </tr>
