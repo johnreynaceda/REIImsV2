@@ -51,11 +51,30 @@
                                 <td class="border text-xs text-gray-700 px-3 py-1 whitespace-nowrap">
                                     {{ $item->or_number }}</td>
                                 <td class="border text-xs text-gray-700 uppercase px-3 py-1 whitespace-nowrap">
-                                    {{ $item->studentInformation->lastname }},
-                                    {{ $item->studentInformation->firstname }}{{ $item->studentInformation->middlename ? ' ' . $item->studentInformation->middlename[0] . '.' : '' }}
+
+                                    @php
+                                        if (
+                                            \App\Models\StudentInformation::where(
+                                                'id',
+                                                $item->student_information_id,
+                                            )->count() > 0
+                                        ) {
+                                            $fullname =
+                                                $item->studentInformation->lastname .
+                                                ', ' .
+                                                $item->studentInformation->firstname .
+                                                ' ' .
+                                                ($item->studentInformation->middlename_is_null == true
+                                                    ? ''
+                                                    : $item->studentInformation->middlename[0] . '.');
+                                        } else {
+                                            $fullname = '';
+                                        }
+                                    @endphp
+                                    {{ $fullname }}
                                 </td>
                                 <td class="border text-xs text-gray-700 px-3 py-1 whitespace-nowrap">
-                                    {{ $item->studentInformation->educationalInformation->gradeLevel->name }}
+                                    {{ $item->studentInformation->educationalInformation->gradeLevel->name ?? '' }}
                                 </td>
                                 @php
                                     $studentTotal = 0;
