@@ -31,7 +31,7 @@
 
                     <thead class="">
                         <tr>
-                            <td colspan="" class="border text-left font-bold px-1 text-xs text-gray-700 py-2 ">
+                            <td colspan="2" class=" text-left font-bold px-1 text-xs text-gray-700 py-2 ">
                                 {{ \Carbon\Carbon::parse($date_from)->format('m-d-Y') }}</td>
                         </tr>
                         <tr>
@@ -136,7 +136,7 @@
                 <table id="example" x-ref="printContainer" class="min-w-full mt-5" style="width:100%">
                     <thead class="">
                         <tr>
-                            <td colspan="" class="border text-left font-bold px-1 text-xs text-gray-700 py-2 ">
+                            <td colspan="2" class=" text-left font-bold px-1 text-xs text-gray-700 py-2 ">
                                 {{ \Carbon\Carbon::parse($date_from)->format('m-d-Y') }}</td>
                         </tr>
                         <tr>
