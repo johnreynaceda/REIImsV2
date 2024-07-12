@@ -26,8 +26,14 @@
     <div class="mt-10 mx-auto">
         @if ($selected_report == 'Income')
             <div class="overflow-x-auto">
+
                 <table id="example" x-ref="printContainer" class="min-w-full mt-5" style="width:100%">
+
                     <thead class="">
+                        <tr>
+                            <td colspan="" class="border text-left font-bold px-1 text-xs text-gray-700 py-2 ">
+                                {{ \Carbon\Carbon::parse($date_from)->format('m-d-Y') }}</td>
+                        </tr>
                         <tr>
                             <th class="border text-left px-1 text-xs text-gray-700 py-2 whitespace-nowrap">OR NO.</th>
                             <th class="border text-left px-1 text-xs text-gray-700 py-2">NAME</th>
@@ -129,6 +135,10 @@
             <div class="overflow-x-auto">
                 <table id="example" x-ref="printContainer" class="min-w-full mt-5" style="width:100%">
                     <thead class="">
+                        <tr>
+                            <td colspan="" class="border text-left font-bold px-1 text-xs text-gray-700 py-2 ">
+                                {{ \Carbon\Carbon::parse($date_from)->format('m-d-Y') }}</td>
+                        </tr>
                         <tr>
                             <th class="border text-left px-1 text-xs text-gray-700 py-2 whitespace-nowrap">VOUCHER NO.
                             </th>
