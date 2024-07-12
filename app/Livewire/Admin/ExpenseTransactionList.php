@@ -96,6 +96,7 @@ class ExpenseTransactionList extends Component implements HasForms, HasTable
                 TextColumn::make('voucher_number')->label('VOUCHER NUMBER')->searchable(),
                 TextColumn::make('name')->label('NAME')->searchable(),
                 TextColumn::make('note')->label('NOTE')->searchable(),
+                TextColumn::make('date_of_transaction')->date()->label('DOT')->searchable(),
                 TextColumn::make('total_payment')->label('TOTAL AMOUNT')->searchable()->formatStateUsing(
                     fn($record) => '₱'.number_format($record->total_payment,2)),
             ])
