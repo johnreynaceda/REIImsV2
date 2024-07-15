@@ -68,11 +68,7 @@
                                             $fullname =
                                                 $item->studentInformation->lastname .
                                                 ', ' .
-                                                $item->studentInformation->firstname .
-                                                ' ' .
-                                                ($item->studentInformation->middlename_is_null == true
-                                                    ? ''
-                                                    : $item->studentInformation->middlename[0] . '.');
+                                                $item->studentInformation->firstname;
                                         } else {
                                             $fullname = '';
                                         }
