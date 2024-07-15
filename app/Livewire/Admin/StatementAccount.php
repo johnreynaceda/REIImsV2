@@ -108,7 +108,7 @@ class StatementAccount extends Component implements HasForms, HasTable
             ->schema([
                Select::make('student_id')->live()->label('SELECT STUDENT')->searchable()->options(Student::get()->mapWithKeys(
                 function($record){
-                    return [$record->id => strtoupper($record->studentInformation->lastname.', ' . $record->studentInformation->firstname . ' '. ($record->studentInformation->middlename_is_null == true ? '' : $record->studentInformation->middlename[0].'. '))];
+                    return [$record->id => strtoupper($record->studentInformation->lastname.', ' . $record->studentInformation->firstname )];
                 }
                ))
             ]);
