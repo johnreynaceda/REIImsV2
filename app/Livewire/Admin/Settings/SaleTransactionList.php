@@ -79,7 +79,7 @@ class SaleTransactionList extends Component implements HasForms, HasTable
                    Fieldset::make('...')->schema([
                     Select::make('student_id')->label('STUDENT NAME')->required()->searchable()->options(
                         StudentInformation::all()->mapWithKeys(function($record){
-                            return [$record->id => strtoupper($record->lastname.', ' . $record->firstname . ' '. ($record->middlename_is_null == true ? '' : $record->middlename[0].'. '))];
+                            return [$record->id => strtoupper($record->lastname.', ' . $record->firstname)];
                         })
                     ),
                     TextInput::make('or_number')->label('OR number')->numeric()->required()
@@ -101,7 +101,7 @@ class SaleTransactionList extends Component implements HasForms, HasTable
                     function($record){
                         if ($record->student_payment_id != null) {
                             $name = $record->studentPayment->student->studentInformation;
-                            return strtoupper($name->lastname.', '. $name->firstname);
+                            return strtoupper($name->lastname.', '. $name->firstname.' '. ($name->middlename_is_null == true ? '' : $name->middlename[0].'.'));
                         }else{
                             return strtoupper(($record->studentInformation->lastname ?? '').', '.($record->studentInformation->firstname ?? ''));
                         }
