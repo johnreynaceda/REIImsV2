@@ -101,7 +101,7 @@ class SaleTransactionList extends Component implements HasForms, HasTable
                     function($record){
                         if ($record->student_payment_id != null) {
                             $name = $record->studentPayment->student->studentInformation;
-                            return strtoupper($name->lastname.', '. $name->firstname.' '. ($name->middlename_is_null == true ? '' : $name->middlename[0].'.'));
+                            return strtoupper($name->lastname.', '. $name->firstname);
                         }else{
                             return strtoupper(($record->studentInformation->lastname ?? '').', '.($record->studentInformation->firstname ?? ''));
                         }
