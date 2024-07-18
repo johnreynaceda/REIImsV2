@@ -31,7 +31,7 @@
                     <div class="flex space-x-2 w-full justify-center ">
                         <img src="{{ asset('images/soa-bg.jpg') }}" class="h-14" alt="">
                     </div>
-                    <h1 class="mt-3 text-center font-bold font-poppins text-gray-800">STATEMENT OF ACCOUNT</h1>
+                    <h1 class="mt-3 text-center font-bold font-poppins text-gray-800">BILLING INVOICE</h1>
                     <h1 class="mt-3 text-right font-medium text-sm font-poppins text-gray-800 ">Date:
                         {{ now()->format('F d, Y') }}
                     </h1>
@@ -546,7 +546,7 @@
                     <div class="div flex flex-col justify-center items-center">
                         <img src="{{ asset('images/soa-bg.jpg') }}" class=" h-14" c alt="">
                     </div>
-                    <h1 class="mt-2 text-center font-bold text-sm font-poppins text-gray-800">STATEMENT OF ACCOUNT</h1>
+                    <h1 class="mt-2 text-center font-bold text-sm font-poppins text-gray-800">BILLING INVOICE</h1>
                     <h1 class="mt-2 text-right font-medium text-xs font-poppins text-gray-800 ">Date:
                         {{ now()->format('F d, Y') }}
                     </h1>

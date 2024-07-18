@@ -1,4 +1,4 @@
-@section('title', 'Statement of Account ')
+@section('title', 'BILLING INVOICE')
 <x-admin-layout>
     <div>
         <livewire:admin.statement-account />
