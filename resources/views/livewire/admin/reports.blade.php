@@ -227,11 +227,16 @@
 
                         </x-native-select>
                     </div>
-                    <x-button label="Export Record" positive icon="document-text" wire:click="exportRecord"
-                        spinner="exportRecord" />
+                    <div class="flex space-x-3 items-center">
+                        <x-button dark label="Print Report" @click="printOut($refs.printContainer.outerHTML);"
+                            icon="printer" />
+                        <x-button label="Export Record" positive icon="document-text" wire:click="exportRecord"
+                            spinner="exportRecord" />
+                    </div>
                 </div>
                 <div class="mt-10">
-                    <table id="example" class="table-auto mt-3" style="width:100%">
+                    <table id="example" x-ref="printContainer" class="table-auto mt-3" style="width:100%">
+
                         <thead class="font-normal">
                             <tr>
                                 <th class="border-2  text-left px-2 text-sm font-bold text-gray-700 py-2"></th>
