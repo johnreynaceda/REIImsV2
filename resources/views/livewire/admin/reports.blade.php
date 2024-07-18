@@ -256,7 +256,7 @@
                                         {{ $i++ }}
                                     </td>
                                     <td class="border-2  text-gray-700 uppercase  px-3 py-1">
-                                        {{ $student->studentInformation->lastname . ' ' . $student->studentInformation->firstname . ' ' . ($student->studentInformation->middlename_is_null == true ? '' : $student->studentInformation->middlename[0] . '.') }}
+                                        {{ $student->studentInformation->lastname . ' ' . $student->studentInformation->firstname . ' ' . ($student->studentInformation->middlename == null ? '' : $student->studentInformation->middlename[0] . '.') }}
                                     </td>
 
                                     <td class="border-2  text-gray-700  px-3 py-1">
