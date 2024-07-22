@@ -30,7 +30,7 @@
                 <td class="uppercase">{{ $student->studentInformation->educationalInformation->lrn }}</td>
                 <td class="uppercase">{{ strtoupper($student->studentInformation->firstname) }}</td>
                 <td class="uppercase">
-                    {{ strtoupper($student->studentInformation->middlename_is_null ? '' : $student->studentInformation->middlename[0] . '.') }}
+                    {{ strtoupper($student->studentInformation->middlename == null ? '' : $student->studentInformation->middlename[0] . '.') }}
                 </td>
                 <td class="uppercase">{{ strtoupper($student->studentInformation->lastname) }}</td>
                 <td class="uppercase">
