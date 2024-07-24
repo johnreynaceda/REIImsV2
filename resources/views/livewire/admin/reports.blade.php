@@ -244,8 +244,12 @@
                                 <th class="border-2  text-left px-2 text-sm font-bold text-gray-700 py-2">
                                     BIRTHDATE
                                 </th>
-
-
+                                <th class="border-2  text-left px-2 text-sm font-bold text-gray-700 py-2">
+                                    GUARDIAN
+                                </th>
+                                <th class="border-2  text-left px-2 text-sm font-bold text-gray-700 py-2">
+                                    CONTACT NO.
+                                </th>
                                 <th class="border-2  text-left px-2 text-sm font-bold text-gray-700 py-2">
                                     GRADE LEVEL
                                 </th>
@@ -256,6 +260,21 @@
                                 $i = 1;
                             @endphp
                             @foreach ($report as $student)
+                                @php
+                                    $father = \App\Models\StudentGuardian::where(
+                                        'student_information_id',
+                                        $student->student_information_id,
+                                    )
+                                        ->where('relationship', 'Father')
+                                        ->first();
+                                    $mother = \App\Models\StudentGuardian::where(
+                                        'student_information_id',
+                                        $student->student_information_id,
+                                    )
+                                        ->where('relationship', 'Mother')
+                                        ->first();
+
+                                @endphp
                                 <tr>
                                     <td class="border-2  text-gray-700  px-3 py-1">
                                         {{ $i++ }}
@@ -267,8 +286,15 @@
                                     <td class="border-2  text-gray-700  px-3 py-1">
                                         {{ \Carbon\Carbon::parse($student->studentInformation->birthdate)->format('F d, Y') }}
                                     </td>
+                                    <td class="border-2  text-gray-700  px-3 py-1">
 
-
+                                        {{ ($father->firstname == 'NA' ? '' : $father->firstname) . ' ' . ($father->lastname == 'NA' ? '' : $father->lastname) }}
+                                        /
+                                        {{ $mother->firstname . ' ' . $mother->lastname }}
+                                    </td>
+                                    <td class="border-2  text-gray-700  px-3 py-1">
+                                        {{ $father->contact_number }} / {{ $mother->contact_number }}
+                                    </td>
                                     <td class="border-2  text-gray-700  px-3 uppercase py-1">
                                         {{ $student->studentInformation->educationalInformation->gradeLevel->name }}
                                     </td>
