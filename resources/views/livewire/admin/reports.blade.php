@@ -1,11 +1,16 @@
 <div x-data>
-    <div class="w-64">
-        <x-native-select label="Select Report" wire:model.live="selected_report">
-            <option>Select an option</option>
-            <option>Student Records</option>
-            <option>Income</option>
-            <option>Expenses</option>
-        </x-native-select>
+    <div class="div flex space-x-3 items-end">
+        <div class="w-64">
+            <x-native-select label="Select Report" wire:model.live="selected_report">
+                <option>Select an option</option>
+                <option>Student Records</option>
+                <option>Income</option>
+                <option>Expenses</option>
+            </x-native-select>
+
+        </div>
+        <x-button.circle icon="refresh" spinner />
+
     </div>
     @if ($selected_report != 'Student Records')
         <div class="mt-4 border-t pt-4 flex justify-between items-end">
