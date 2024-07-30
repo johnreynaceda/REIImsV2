@@ -19,6 +19,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\Reactive;
 use Livewire\Component;
 use WireUi\Traits\Actions;
 
@@ -26,14 +27,16 @@ class AddPayment extends Component implements HasForms
 {
     use InteractsWithForms;
     use Actions;
-    public $student;
+
+    #[Reactive]
+    public $student_id;
 
     public $payment_modal = false;
 
 
-    public function mount($student)
+    public function mount($student_id)
     {
-        $this->student = $student;
+        $this->student_id = $student_id;
     }
 
     public $or_number, $cash_receive = 0;
@@ -60,15 +63,15 @@ class AddPayment extends Component implements HasForms
     }
 
     public function proceedPayment($total){
-        $payment = StudentPayment::where('student_id', $this->student)->first();
-
-        $department = Student::where('id', $this->student)->first()->studentInformation->educationalInformation->gradeLevel->department;
+        dd($this->student_id);
+        $payment = StudentPayment::where('student_id', $this->student_id)->first();
+         $department = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->department;
 
 
 
         $transaction = StudentTransaction::create([
             'student_payment_id' => $payment->id,
-            'student_information_id' => Student::where('id', $this->student)->first()->student_information_id,
+            'student_information_id' => Student::where('id', $this->student_id)->first()->student_information_id,
             'transaction_number' => 'TR'. Carbon::parse(now())->format('Ymd'). '000'. StudentTransaction::count() + 1,
             'or_number' => $this->or_number,
             'total_amount' => $this->cash_receive,
