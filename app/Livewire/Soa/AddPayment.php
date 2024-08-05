@@ -61,9 +61,8 @@ class AddPayment extends Component implements HasForms
             ]);
 
     }
-
     public function proceedPayment($total){
-        dd($this->student_id);
+
         $payment = StudentPayment::where('student_id', $this->student_id)->first();
          $department = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->department;
 
