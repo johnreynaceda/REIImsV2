@@ -61,7 +61,7 @@ class SectionList extends Component implements HasForms, HasTable
                 ActionGroup::make([
                     EditAction::make('edit')->label('Edit')->color('success')->form([
                         TextInput::make('name')->required(),
-                       Select::make('grade_level')->options(GradeLevel::all()->pluck('name', 'id')),
+                       Select::make('grade_level_id')->label('Grade Level')->options(GradeLevel::all()->pluck('name', 'id')),
                     ])->modalWidth('2xl'),
                     DeleteAction::make('delete'),
                 ])
