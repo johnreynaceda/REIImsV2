@@ -155,8 +155,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" title="#"
-                                    class="inline-flex items-center w-full p-2 pl-3 text-sm font-medium text-gray-500 rounded-lg hover:text-orange-500 group hover:border hover:border-orange-500 hover:bg-gray-50">
+                                <a href="{{ route('admin.sections') }}" title="#"
+                                    class="{{ request()->routeIs('admin.sections') ? 'bg-orange-500/80 text-white scale-95' : '' }}  inline-flex items-center w-full px-4 py-2 mt-1 text-sm font-medium text-gray-600 transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-orange-500/80 hover:scale-95 hover:text-white">
                                     <span class="inline-flex items-center w-full">
                                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                             fill="currentColor" aria-hidden="true">

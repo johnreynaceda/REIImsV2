@@ -189,9 +189,12 @@ class StatementAccount extends Component implements HasForms, HasTable
 
         if ($this->department) {
             if ($this->department == 'K-10') {
-                $this->records = StudentTransaction::whereHas('studentPayment', function($payment){
+                $this->records = StudentTransaction::where('student_information_id', Student::where('id', $this->student_id)->first()->student_information_id)->orWhereHas('studentPayment', function($payment){
                     $payment->where('active_sem', '1st Semester')->where('student_id', $this->student_id);
                 })->get();
+                // whereHas('studentPayment', function($payment){
+                //     $payment->where('active_sem', '1st Semester')->where('student_id', $this->student_id);
+                // })->
             }else{
                 if ($this->semester == '1st Semester') {
                     $this->records = StudentTransaction::whereHas('studentPayment', function($payment){

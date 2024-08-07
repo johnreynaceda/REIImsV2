@@ -59,7 +59,8 @@
                             </div>
                             <div class="flex space-x-1">
                                 <span>SECTION :</span>
-                                <h1 class="flex-1 text-center border-b uppercase"></span>
+                                <h1 class="flex-1 text-center border-b uppercase">
+                                    {{ $student->studentSections->first()->section->name ?? '' }}</span>
                             </div>
                         </div>
                     </div>
@@ -574,7 +575,8 @@
                             </div>
                             <div class="flex space-x-1">
                                 <span>SECTION :</span>
-                                <h1 class="flex-1 text-center border-b uppercase"></span>
+                                <h1 class="flex-1 text-center border-b uppercase">
+                                    {{ $student->studentSections->first()->section->name ?? '' }}</span>
                             </div>
                         </div>
                     </div>

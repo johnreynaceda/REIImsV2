@@ -18,4 +18,8 @@ class GradeLevel extends Model
     public function educationalInformation(){
         return $this->belongsTo(EducationalInformation::class);
     }
+
+    public function sections(){
+        return $this->hasMany(Section::class);
+    }
 }

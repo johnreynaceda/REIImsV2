@@ -124,6 +124,13 @@ Route::prefix('administrator')->middleware('check_session')->group(
             return view('admin.subsidies');
         })->name('admin.subsidies');
 
+        Route::get('/sections', function() {
+            return view('admin.sections');
+        })->name('admin.sections');
+        Route::get('/sections/{id}', function() {
+            return view('admin.section-manage');
+        })->name('admin.sections.manage');
+
         //SOA
         Route::get('/SOA', function() {
             return view('admin.soa');
