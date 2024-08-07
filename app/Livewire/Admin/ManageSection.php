@@ -49,7 +49,7 @@ class ManageSection extends Component implements HasForms, HasTable
                         // Retrieve the grade level ID from the section
                         $gradeLevelId = Section::where('id', $this->section_id)->first()->grade_level_id;
 
-                        $already_in_section = StudentSection::where('section_id', $this->section_id)->pluck('student_id')->toArray();
+                        $already_in_section = StudentSection::all()->pluck('student_id')->toArray();
 
                         // Fetch the students matching the criteria
                         $students = Student::whereNotIn('id', $already_in_section)->whereHas('studentInformation', function ($info) use ($gradeLevelId) {
