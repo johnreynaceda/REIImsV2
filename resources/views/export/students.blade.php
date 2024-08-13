@@ -8,6 +8,7 @@
             <th>LASTNAME</th>
             <th>SUFFIX</th>
             <th>GRADE/YEAR</th>
+            <th>SECTION</th>
             <th>PARENT/GUARDIAN</th>
             <th>PHONE NO.</th>
             <th>ADDRESS</th>
@@ -38,6 +39,11 @@
                 </td>
                 <td class="uppercase">
                     {{ strtoupper($student->studentInformation->educationalInformation->gradeLevel->name) }}</td>
+                <td class="uppercase">
+                    @php
+                        $section = \App\Models\StudentSection::where('student_id', $student->id)->first();
+                    @endphp
+                    {{ strtoupper($section->section->name ?? '') }}</td>
                 <td class="uppercase">
 
                     {{ strtoupper($data->firstname . ' ' . $data->lastname) }}
