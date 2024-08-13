@@ -2,10 +2,16 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\ActiveSemester;
+use App\Models\PaymentTerms;
 use App\Models\Student;
+use App\Models\StudentPayment;
 use App\Models\StudentSection;
+use App\Models\StudentTransaction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ViewField;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\Action;
@@ -26,8 +32,19 @@ class ManageSection extends Component implements HasForms, HasTable
     use InteractsWithTable;
     use InteractsWithForms;
 
+    public $dues;
     public $section_id;
     public $section_name;
+
+    public $student;
+
+    public $student_id;
+    public $department;
+    public $payment_terms;
+
+    public $semester;
+    public $grade_level_id;
+    public $due_date;
 
     public function table(Table $table): Table
     {
@@ -75,6 +92,16 @@ class ManageSection extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
+                Action::make('print_billind')->color('success')->label('Print SOA')->button()->icon('heroicon-o-printer')->form(function($record){
+                    $this->student_id = $record->student_id;
+                    $count = StudentPayment::where('student_id', Student::where('id', $this->student_id)->first()->id)->where('active_sem', ActiveSemester::first()->active)->first();
+        $this->department = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->department;
+        $this->grade_level_id = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->grade_level_id;
+                    return [
+
+                        ViewField::make('rating')->view('filament.form.print-button'),
+                    ];
+                })->modalHeading('PRINT BILLING STATEMENT')->modalSubmitAction(false),
                 Action::make('change')->label('Change Section')->icon('heroicon-c-arrow-right-end-on-rectangle')->action(
                     function($record, $data){
                         $record->update([
@@ -103,6 +130,31 @@ class ManageSection extends Component implements HasForms, HasTable
     }
     public function render()
     {
+
+        if ($this->department) {
+            if ($this->department == 'K-10') {
+                $this->records = StudentTransaction::where('student_information_id', Student::where('id', $this->student_id)->first()->student_information_id)->orWhereHas('studentPayment', function($payment){
+                    $payment->where('active_sem', '1st Semester')->where('student_id', $this->student_id);
+                })->get();
+                // whereHas('studentPayment', function($payment){
+                //     $payment->where('active_sem', '1st Semester')->where('student_id', $this->student_id);
+                // })->
+            }else{
+                if ($this->semester == '1st Semester') {
+                    $this->records = StudentTransaction::whereHas('studentPayment', function($payment){
+                        $payment->where('active_sem', '1st Semester')->where('student_id', $this->student_id);
+                    })->get();
+                   }else{
+                    $this->records = StudentTransaction::whereHas('studentPayment', function($payment){
+                        $payment->where('active_sem', '2nd Semester')->where('student_id', $this->student_id);
+                    })->get();
+                   }
+            }
+        }
+        $this->payment_terms = PaymentTerms::where('is_active', true)->first()->terms;
+
+        $this->dues = $this->department == 'SHS' ? StudentPayment::where('student_id', $this->student_id)->where('active_sem', ActiveSemester::first()->active)->first() : StudentPayment::where('student_id', $this->student_id)->where('active_sem', '1st Semester')->first();
+       $this->student =  Student::where('id', $this->student_id)->first();
         return view('livewire.admin.manage-section');
     }
 }

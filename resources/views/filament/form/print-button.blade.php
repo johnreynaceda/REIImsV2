@@ -14,24 +14,17 @@
         $soa_handbook = 0;
         // $soa;
     @endphp
-    <div class="flex space-x-2 items-center text-gray-600">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-            class="icon icon-tabler icons-tabler-outline icon-tabler-home-edit">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M9 21v-6a2 2 0 0 1 2 -2h2c.645 0 1.218 .305 1.584 .78" />
-            <path d="M20 11l-8 -8l-9 9h2v7a2 2 0 0 0 2 2h4" />
-            <path d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z" />
-        </svg>
-        <h1 class="text-2xl uppercase font-semibold">{{ $section_name }}</h1>
+
+    <div class="mb-5 w-72">
+        <x-datetime-picker wire:model.live="due_date" label="Due Date" without-time without-timezone />
     </div>
-    <div class="mt-5">
-        {{ $this->table }}
-    </div>
-    @if ($student_id)
-        <div class="hidden">
-            <div x-ref="printContainer">
-                @if ($student_id)
+    <x-button label="PRINT" @click="printOut($refs.printContainer.outerHTML);" dark class="font-semibold" icon="printer" />
+
+
+    <div class="border-t mt-5">
+        <div x-ref="printContainer">
+            @if ($this->student_id)
+                @if ($this->student_id)
                     <div class=" w-6/12 rounded-xl  p-5">
                         <div class="div flex flex-col justify-center items-center">
                             <img src="{{ asset('images/soa-bg.jpg') }}" class=" h-14" c alt="">
@@ -44,15 +37,15 @@
                             <div class="flex space-x-1">
                                 <span>NAME :</span>
                                 <h1 class="flex-1 text-center text-sm font-bold border-b uppercase">
-                                    @if ($student->studentInformation->middlename_is_null == true)
-                                        {{ $student->studentInformation->lastname }},
-                                        {{ $student->studentInformation->firstname }}
-                                        {{ $student->studentInformation->suffix }}
+                                    @if ($this->student->studentInformation->middlename_is_null == true)
+                                        {{ $this->student->studentInformation->lastname }},
+                                        {{ $this->student->studentInformation->firstname }}
+                                        {{ $this->student->studentInformation->suffix }}
                                     @else
-                                        {{ $student->studentInformation->lastname }},
-                                        {{ $student->studentInformation->firstname }}
-                                        {{ $student->studentInformation->middlename[0] }}.
-                                        {{ $student->studentInformation->suffix }}
+                                        {{ $this->student->studentInformation->lastname }},
+                                        {{ $this->student->studentInformation->firstname }}
+                                        {{ $this->student->studentInformation->middlename[0] }}.
+                                        {{ $this->student->studentInformation->suffix }}
                                     @endif
                                 </h1>
                             </div>
@@ -60,12 +53,12 @@
                                 <div class="flex space-x-1">
                                     <span>GRADE :</span>
                                     <h1 class="flex-1 text-center border-b uppercase">
-                                        {{ $student->studentInformation->educationalInformation->gradeLevel->name }}</span>
+                                        {{ $this->student->studentInformation->educationalInformation->gradeLevel->name }}</span>
                                 </div>
                                 <div class="flex space-x-1">
                                     <span>SECTION :</span>
                                     <h1 class="flex-1 text-center border-b uppercase">
-                                        {{ $student->studentSections->first()->section->name ?? '' }}</span>
+                                        {{ $this->student->studentSections->first()->section->name ?? '' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -75,20 +68,20 @@
                                     @php
                                         $grand_total = 0;
                                         $grade_level =
-                                            $student->studentInformation->educationalInformation->gradeLevel->id;
-                                        $tui_applied = $student->studentPayments
+                                            $this->student->studentInformation->educationalInformation->gradeLevel->id;
+                                        $tui_applied = $this->student->studentPayments
                                             ->where(
                                                 'active_sem',
-                                                $department == 'SHS'
+                                                $this->department == 'SHS'
                                                     ? \App\Models\ActiveSemester::first()->active
                                                     : '1st Semester',
                                             )
                                             ->first()->applied_tuition_subd;
                                         $tui_subd = $tui_applied != null ? $tui_applied : 0;
-                                        $misc_applied = $student->studentPayments
+                                        $misc_applied = $this->student->studentPayments
                                             ->where(
                                                 'active_sem',
-                                                $department == 'SHS'
+                                                $this->department == 'SHS'
                                                     ? \App\Models\ActiveSemester::first()->active
                                                     : '1st Semester',
                                             )
@@ -105,7 +98,7 @@
                                                         $discount =
                                                             ($value->school_fee->amount * (float) $tui_subd) / 100;
                                                         $total =
-                                                            $department == 'SHS'
+                                                            $this->department == 'SHS'
                                                                 ? ($value->school_fee->amount - $discount) / 2
                                                                 : $value->school_fee->amount - $discount;
                                                         $soa_tuition = $total;
@@ -114,7 +107,7 @@
                                                         $discount =
                                                             ($value->school_fee->amount * (float) $misc_subd) / 100;
                                                         $total =
-                                                            $department == 'SHS'
+                                                            $this->department == 'SHS'
                                                                 ? ($value->school_fee->amount - $discount) / 2
                                                                 : $value->school_fee->amount - $discount;
                                                         $soa_misc = $total;
@@ -122,14 +115,14 @@
 
                                                     case 'Medical/Dental':
                                                         $total =
-                                                            $department == 'SHS'
+                                                            $this->department == 'SHS'
                                                                 ? $value->school_fee->amount / 2
                                                                 : $value->school_fee->amount;
                                                         $soa_dental = $total;
                                                         break;
                                                     case 'School ID':
                                                         $total =
-                                                            $department == 'SHS'
+                                                            $this->department == 'SHS'
                                                                 ? $value->school_fee->amount / 2
                                                                 : $value->school_fee->amount;
                                                         $soa_id = $total;
@@ -200,7 +193,7 @@
                                             @php
                                                 $tuition = \App\Models\StudentTransaction::where(
                                                     'student_payment_id',
-                                                    $dues->id,
+                                                    $this->dues->id,
                                                 )
                                                     ->pluck('id')
                                                     ->toArray();
@@ -215,16 +208,18 @@
                                                     ->count();
 
                                                 $total_tuition =
-                                                    $department == 'SHS'
-                                                        ? $dues->total_tuition / ($payment_terms / 2 - $total_counter)
-                                                        : $dues->total_tuition / ($payment_terms - $total_counter);
+                                                    $this->department == 'SHS'
+                                                        ? $this->dues->total_tuition /
+                                                            ($this->payment_terms / 2 - $total_counter)
+                                                        : $this->dues->total_tuition /
+                                                            ($this->payment_terms - $total_counter);
                                             @endphp
 
                                             &#8369;{{ number_format($total_tuition, 2) }}
                                         </td>
                                         <td
                                             class="border text-gray-700 text-xs font-medium text-center border-gray-700 px-3 ">
-                                            &#8369;{{ number_format($dues->total_tuition, 2) }}
+                                            &#8369;{{ number_format($this->dues->total_tuition, 2) }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -241,7 +236,7 @@
                                             @php
                                                 $misc = \App\Models\StudentTransaction::where(
                                                     'student_payment_id',
-                                                    $dues->id,
+                                                    $this->dues->id,
                                                 )
                                                     ->pluck('id')
                                                     ->toArray();
@@ -254,18 +249,20 @@
                                                         $category->where('name', 'like', 'Miscellaneous');
                                                     })
                                                     ->count();
-                                                // $total_misc = $dues->total_misc / (10 - $total_misc);
+                                                // $total_misc = $this->dues->total_misc / (10 - $total_misc);
                                                 $total_misc =
-                                                    $department == 'SHS'
-                                                        ? $dues->total_misc / ($payment_terms / 2 - $total_misc)
-                                                        : $dues->total_misc / ($payment_terms - $total_misc);
+                                                    $this->department == 'SHS'
+                                                        ? $this->dues->total_misc /
+                                                            ($this->payment_terms / 2 - $total_misc)
+                                                        : $this->dues->total_misc /
+                                                            ($this->payment_terms - $total_misc);
                                             @endphp
 
                                             &#8369;{{ number_format($total_misc, 2) }}
                                         </td>
                                         <td
                                             class="border text-gray-700 text-xs font-medium text-center border-gray-700 px-3 ">
-                                            &#8369;{{ number_format($dues->total_misc, 2) }}
+                                            &#8369;{{ number_format($this->dues->total_misc, 2) }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -346,7 +343,7 @@
                                             @php
                                                 $books = \App\Models\StudentTransaction::where(
                                                     'student_payment_id',
-                                                    $dues->id,
+                                                    $this->dues->id,
                                                 )
                                                     ->pluck('id')
                                                     ->toArray();
@@ -361,13 +358,13 @@
                                                     })
                                                     ->count();
 
-                                                if ($dues->book_fee_updated == false) {
+                                                if ($this->dues->book_fee_updated == false) {
                                                     $total_books = 500;
                                                 } else {
                                                     $total_books =
-                                                        $dues->total_book == 1000
+                                                        $this->dues->total_book == 1000
                                                             ? 0
-                                                            : $dues->total_book / (6 - $total_books);
+                                                            : $this->dues->total_book / (6 - $total_books);
                                                 }
                                             @endphp
 
@@ -375,10 +372,10 @@
                                         </td>
                                         <td
                                             class="border text-gray-700 text-xs font-medium text-center border-gray-700 px-3 ">
-                                            @if ($dues->book_fee_updated == false)
+                                            @if ($this->dues->book_fee_updated == false)
                                                 &#8369;0.00
                                             @else
-                                                &#8369;{{ number_format($dues->total_book, 2) }}
+                                                &#8369;{{ number_format($this->dues->total_book, 2) }}
                                             @endif
                                         </td>
                                     </tr>
@@ -427,7 +424,7 @@
                                             &#8369;{{ number_format($total_tuition + $total_misc + $total_books, 2) }}
                                         </td>
                                         <td class="border text-xs font-semibold text-center border-gray-700 px-3 ">
-                                            &#8369;{{ number_format($dues->total_payables + $handbook + $pe, 2) }}
+                                            &#8369;{{ number_format($this->dues->total_payables + $handbook + $pe, 2) }}
 
                                         </td>
 
@@ -440,10 +437,10 @@
                             </table>
                             <div class="mt-2">
                                 <p class="text-[0.5rem] ">Kindly settle your account for the month <span
-                                        class="font-bold uppercase text-red-600">{{ \Carbon\Carbon::parse($due_date)->format('F') ?? '' }}</span>
+                                        class="font-bold uppercase text-red-600">{{ \Carbon\Carbon::parse($this->due_date)->format('F') ?? '' }}</span>
                                     on
                                     or before <span
-                                        class="font-bold text-red-600 uppercase">{{ \Carbon\Carbon::parse($due_date)->format('m-d-y') ?? '' }}</span>
+                                        class="font-bold text-red-600 uppercase">{{ \Carbon\Carbon::parse($this->due_date)->format('m-d-y') ?? '' }}</span>
 
                                     <span class="font-bold  text-[0.5rem] italic">Please disregard this notice if
                                         payment
@@ -456,7 +453,7 @@
                         </div>
                     </div>
                 @endif
-            </div>
+            @endif
         </div>
-    @endif
+    </div>
 </div>

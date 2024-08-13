@@ -934,12 +934,12 @@
                                                 ->count();
 
                                             if ($dues->book_fee_updated == false) {
-                                                $total_books = 0;
+                                                $total_books = 500;
                                             } else {
                                                 $total_books =
                                                     $dues->total_book == 1000
                                                         ? 0
-                                                        : $dues->total_book / (5 - $total_books);
+                                                        : $dues->total_book / (6 - $total_books);
                                             }
                                         @endphp
 
@@ -947,14 +947,18 @@
                                     </td>
                                     <td
                                         class="border text-gray-700 text-xs font-medium text-center border-gray-700 px-3 ">
-                                        &#8369;{{ number_format($dues->total_book, 2) }}
+                                        @if ($dues->book_fee_updated == false)
+                                            &#8369;0.00
+                                        @else
+                                            &#8369;{{ number_format($dues->total_book, 2) }}
+                                        @endif
                                     </td>
                                 </tr>
                                 <tr>
                                     <td
                                         class="border text-xs text-gray-700 font-semibold text-left  border-gray-700 px-3 ">
                                         P.E UNIFORM <span
-                                            class="text-[0.5rem]">(&#8369;{{ number_format($soa_pe, 2) }})</span>
+                                            class="text-[0.5rem]">(&#8369;{{ number_format($pe, 2) }})</span>
                                     </td>
                                     <td
                                         class="border text-xs text-gray-700 font-medium text-center border-gray-700 px-3 ">
@@ -963,46 +967,15 @@
                                     <td
                                         class="border text-xs text-gray-700 font-medium text-center border-gray-700 px-3 ">
 
-                                        @php
 
-                                            $counts = \App\Models\StudentTransaction::where(
-                                                'student_payment_id',
-                                                \App\Models\StudentPayment::where(
-                                                    'student_id',
-                                                    $this->student_id,
-                                                )->first()->id,
-                                            )
-                                                ->whereHas('paymentTransactions', function ($record) {
-                                                    $record->whereHas('saleCategory', function ($sale) {
-                                                        $sale->where('name', 'like', 'P.E Uniform');
-                                                    });
-                                                })
-                                                ->count();
-
-                                            if ($counts > 0) {
-                                                $pe = 0;
-                                            } else {
-                                                $pe = \App\Models\SchoolFee::where('name', 'P.E Uniform')
-                                                    ->whereHas('grade_level_fees', function ($record) {
-                                                        $record->where(
-                                                            'grade_level_id',
-                                                            \App\Models\Student::where('id', $this->student_id)->first()
-                                                                ->studentInformation->educationalInformation
-                                                                ->grade_level_id,
-                                                        );
-                                                    })
-                                                    ->first()->amount;
-                                            }
-
-                                        @endphp
-                                        {{ $pe == 0 ? '-' : '₱' . number_format($pe, 2) }}
+                                        &#8369;{{ number_format($pe, 2) }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td
                                         class="border text-xs text-gray-700 font-semibold text-left  border-gray-700 px-3 ">
                                         STUDENT HAND BOOK <span
-                                            class="text-[0.5rem]">(&#8369;{{ number_format($soa_handbook, 2) }})</span>
+                                            class="text-[0.5rem]">(&#8369;{{ number_format($handbook, 2) }})</span>
                                     </td>
                                     <td
                                         class="border text-xs text-gray-700 font-medium text-center border-gray-700 px-3 ">
@@ -1011,39 +984,8 @@
                                     <td
                                         class="border text-xs text-gray-700 font-medium text-center border-gray-700 px-3 ">
 
-                                        @php
 
-                                            $count = \App\Models\StudentTransaction::where(
-                                                'student_payment_id',
-                                                \App\Models\StudentPayment::where(
-                                                    'student_id',
-                                                    $this->student_id,
-                                                )->first()->id,
-                                            )
-                                                ->whereHas('paymentTransactions', function ($record) {
-                                                    $record->whereHas('saleCategory', function ($sale) {
-                                                        $sale->where('name', 'like', 'Handbook');
-                                                    });
-                                                })
-                                                ->count();
-
-                                            if ($count > 0) {
-                                                $handbook = 0;
-                                            } else {
-                                                $handbook = \App\Models\SchoolFee::where('name', 'Handbook')
-                                                    ->whereHas('grade_level_fees', function ($record) {
-                                                        $record->where(
-                                                            'grade_level_id',
-                                                            \App\Models\Student::where('id', $this->student_id)->first()
-                                                                ->studentInformation->educationalInformation
-                                                                ->grade_level_id,
-                                                        );
-                                                    })
-                                                    ->first()->amount;
-                                            }
-
-                                        @endphp
-                                        {{ $handbook == 0 ? '-' : '₱' . number_format($handbook, 2) }}
+                                        &#8369;{{ number_format($handbook, 2) }}
 
                                     </td>
                                 </tr>
