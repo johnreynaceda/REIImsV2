@@ -6,6 +6,7 @@ use App\Models\ActiveSemester;
 use App\Models\PaymentTransaction;
 use App\Models\Post;
 use App\Models\SaleCategory;
+use App\Models\SchoolFee;
 use App\Models\Student;
 use App\Models\StudentPayment;
 use App\Models\StudentTransaction;
@@ -31,17 +32,33 @@ class AddPayment extends Component implements HasForms
     #[Reactive]
     public $student_id;
 
+    public $total_book_with_discount = 0;
+
+    public $book_fully_paid = false;
+
     public $payment_modal = false;
 
 
     public function mount($student_id)
     {
         $this->student_id = $student_id;
+
+        $payment = StudentPayment::where('student_id', $this->student_id)->first();
+        $this->total_book_with_discount = $payment->total_book;
     }
 
     public $or_number, $cash_receive = 0;
 
     public $payments = [];
+
+    public function updatedBookFullyPaid(){
+        $payment = StudentPayment::where('student_id', $this->student_id)->first();
+        if ($this->book_fully_paid == true) {
+            $this->total_book_with_discount = $payment->total_book - ($payment->total_book * 0.15);
+        }else{
+            $this->total_book_with_discount = $payment->total_book;
+        }
+    }
 
 
     public function form(Form $form): Form
@@ -63,8 +80,18 @@ class AddPayment extends Component implements HasForms
     }
     public function proceedPayment($total){
 
+        $this->validate([
+            'payments' => 'required',
+        ]);
+
         $payment = StudentPayment::where('student_id', $this->student_id)->first();
          $department = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->department;
+
+         $gradelevel = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->id;
+
+         $book_amount = $payment->total_book - ((float)$payment->total_book * 0.15);
+
+         $total_discount = (float)$payment->total_book * 0.15;
 
 
 
@@ -98,12 +125,12 @@ class AddPayment extends Component implements HasForms
             if ($payment->book_fee_updated == false) {
                 $payment->update([
                     'total_book' => $payment->total_book + $value['amount'],
-                    // 'total_payables' => $payment->total_payables - $value['amount'],
+                    'total_payables' => $payment->total_payables - $value['amount'],
                    ]);
             }else{
                 $payment->update([
-                    'total_book' => $payment->total_book - $value['amount'],
-                    'total_payables' => $payment->total_payables - $value['amount'],
+                    'total_book' => $this->book_fully_paid == true ? $payment->total_book - ($value['amount'] + $total_discount) : $payment->total_book - $value['amount'],
+                    'total_payables' => $this->book_fully_paid == true ? $payment->total_payables - ($value['amount'] + $total_discount) : $payment->total_payables - $value['amount'],
                    ]);
             }
            }else{
@@ -143,6 +170,7 @@ class AddPayment extends Component implements HasForms
 
     public function render()
     {
+
         return view('livewire.soa.add-payment');
     }
 }

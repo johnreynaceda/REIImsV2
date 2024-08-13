@@ -105,6 +105,15 @@ Route::prefix('administrator')->middleware('check_session')->group(
         Route::get('/enrollee/add', function() {
             return view('admin.enrollee-add');
         })->name('admin.enrollee-add');
+
+        Route::get('/school-fee/other-payments', function() {
+            return view('admin.other-payments');
+        })->name('admin.other-payments');
+
+        Route::get('/other-payments/{id}', function() {
+            return view('admin.other-payment-students');
+        })->name('admin.other-payment-students');
+
         Route::get('/enrollee/{id}', function() {
             return view('admin.enrollee.enroll');
         })->name('admin.enrollee.enroll');

@@ -158,6 +158,9 @@ class StatementAccount extends Component implements HasForms, HasTable
     }
 
     public function updatedStudentId(){
+       if ($this->student_id == null) {
+        return redirect()->route('admin.soa');
+       }else{
         $count = StudentPayment::where('student_id', Student::where('id', $this->student_id)->first()->id)->where('active_sem', ActiveSemester::first()->active)->first();
         $this->department = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->department;
         $this->grade_level_id = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->grade_level_id;
@@ -179,6 +182,7 @@ class StatementAccount extends Component implements HasForms, HasTable
 
             }
         }
+       }
 
 
     }

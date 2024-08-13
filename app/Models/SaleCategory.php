@@ -13,4 +13,8 @@ class SaleCategory extends Model
     public function paymentTransactions(){
         return $this->hasMany(PaymentTransaction::class);
     }
+
+    public function otherPayments(){
+        return $this->hasMany(OtherPayment::class);
+    }
 }

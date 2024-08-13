@@ -240,12 +240,12 @@
                                                 ->count();
 
                                             if ($dues->book_fee_updated == false) {
-                                                $total_books = 0;
+                                                $total_books = 500;
                                             } else {
                                                 $total_books =
                                                     $dues->total_book == 1000
                                                         ? 0
-                                                        : $dues->total_book / (5 - $total_books);
+                                                        : $dues->total_book / (6 - $total_books);
                                             }
                                         @endphp
 
@@ -253,7 +253,11 @@
                                     </td>
                                     <td
                                         class="border text-gray-700 text-sm font-medium text-center border-gray-700 px-3 ">
-                                        &#8369;{{ number_format($dues->total_book, 2) }}
+                                        @if ($dues->book_fee_updated == false)
+                                            &#8369;0.00
+                                        @else
+                                            &#8369;{{ number_format($dues->total_book, 2) }}
+                                        @endif
                                     </td>
                                 </tr>
                                 <tr>
@@ -266,43 +270,104 @@
                                     </td>
                                     <td
                                         class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3 ">
-
                                         @php
-
-                                            $counts = \App\Models\StudentTransaction::where(
-                                                'student_payment_id',
-                                                \App\Models\StudentPayment::where(
-                                                    'student_id',
-                                                    $this->student_id,
-                                                )->first()->id,
-                                            )
-                                                ->whereHas('paymentTransactions', function ($record) {
-                                                    $record->whereHas('saleCategory', function ($sale) {
-                                                        $sale->where('name', 'like', 'P.E Uniform');
-                                                    });
+                                            $amount = \App\Models\OtherPayment::whereHas('saleCategory', function (
+                                                $query,
+                                            ) {
+                                                $query->where('name', 'LIKE', '%' . 'P.E' . '%');
+                                            })
+                                                ->whereHas('otherPaymentStudents', function ($students) use (
+                                                    $student_id,
+                                                ) {
+                                                    $students->where('student_id', $student_id);
                                                 })
-                                                ->count();
+                                                ->first();
+                                            // dd($amount);
 
-                                            if ($counts > 0) {
-                                                $pe = 0;
-                                            } else {
-                                                $pe = \App\Models\SchoolFee::where('name', 'P.E Uniform')
-                                                    ->whereHas('grade_level_fees', function ($record) {
-                                                        $record->where(
-                                                            'grade_level_id',
-                                                            \App\Models\Student::where('id', $this->student_id)->first()
-                                                                ->studentInformation->educationalInformation
-                                                                ->grade_level_id,
-                                                        );
+                                            if ($amount) {
+                                                $is_paid = \App\Models\PaymentTransaction::where(
+                                                    'sale_category_id',
+                                                    $amount->sale_category_id,
+                                                )
+                                                    ->whereHas('studentTransaction', function ($query) use (
+                                                        $student_id,
+                                                    ) {
+                                                        $student_info_id = \App\Models\Student::where(
+                                                            'id',
+                                                            $student_id,
+                                                        )->first()->student_information_id;
+                                                        $query->where('student_information_id', $student_info_id);
                                                     })
-                                                    ->first()->amount;
+                                                    ->get();
+
+                                                if ($is_paid->count() > 0) {
+                                                    $pe = 0;
+                                                } else {
+                                                    $pe = $amount->amount;
+                                                }
+                                            } else {
+                                                $pe = 0;
                                             }
 
                                         @endphp
-                                        {{ $pe == 0 ? '-' : '₱' . number_format($pe, 2) }}
+
+                                        &#8369;{{ number_format($pe, 2) }}
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td class="border text-sm text-gray-700 font-bold text-left  border-gray-700 px-3 ">
+                                        HANDBOOK
+                                    </td>
+                                    <td
+                                        class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3 ">
+                                        -
+                                    </td>
+                                    <td
+                                        class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3 ">
+                                        @php
+                                            $amount = \App\Models\OtherPayment::whereHas('saleCategory', function (
+                                                $query,
+                                            ) {
+                                                $query->where('name', 'LIKE', '%' . 'HANDBOOK' . '%');
+                                            })
+                                                ->whereHas('otherPaymentStudents', function ($students) use (
+                                                    $student_id,
+                                                ) {
+                                                    $students->where('student_id', $student_id);
+                                                })
+                                                ->first();
+
+                                            if ($amount) {
+                                                $is_paid = \App\Models\PaymentTransaction::where(
+                                                    'sale_category_id',
+                                                    $amount->sale_category_id,
+                                                )
+                                                    ->whereHas('studentTransaction', function ($query) use (
+                                                        $student_id,
+                                                    ) {
+                                                        $student_info_id = \App\Models\Student::where(
+                                                            'id',
+                                                            $student_id,
+                                                        )->first()->student_information_id;
+                                                        $query->where('student_information_id', $student_info_id);
+                                                    })
+                                                    ->get();
+
+                                                if ($is_paid->count() > 0) {
+                                                    $handbook = 0;
+                                                } else {
+                                                    $handbook = $amount->amount;
+                                                }
+                                            } else {
+                                                $handbook = 0;
+                                            }
+
+                                        @endphp
+
+                                        &#8369;{{ number_format($handbook, 2) }}
+                                    </td>
+                                </tr>
+                                {{-- <tr>
                                     <td class="border text-sm text-gray-700 font-bold text-left  border-gray-700 px-3 ">
                                         STUDENT HAND BOOK
                                     </td>
@@ -348,7 +413,7 @@
                                         {{ $handbook == 0 ? '-' : '₱' . number_format($handbook, 2) }}
 
                                     </td>
-                                </tr>
+                                </tr> --}}
                                 <tr>
                                     <td class="border text-gray-700 font-bold text-left  border-gray-700 px-3 ">
                                         TOTAL
@@ -358,7 +423,7 @@
                                     </td>
                                     <td class="border text-red-600 font-semibold text-center border-gray-700 px-3 ">
                                         &#8369;{{ number_format($dues->total_payables + $handbook + $pe, 2) }}
-
+                                        {{-- &#8369;{{ number_format($dues->total_payables, 2) }} --}}
                                     </td>
 
                                 </tr>

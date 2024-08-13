@@ -86,6 +86,7 @@ class SchoolFeeList extends Component implements HasForms, HasTable
                     ];
                 }
             ),
+            Action::make('other')->label('Other Payment')->color('success')->icon('heroicon-o-document-text')->url(fn() => route('admin.other-payments'))->openUrlInNewTab()
         ], position: HeaderActionsPosition::Bottom)
             ->columns([
                 TextColumn::make('name')->label('NAME')->searchable()->formatStateUsing(
