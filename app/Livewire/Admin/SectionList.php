@@ -40,7 +40,7 @@ class SectionList extends Component implements HasForms, HasTable
                             'grade_level_id' => $data['grade_level'],
                         ]);
                     }
-                )->form([
+                )->visible(auth()->user()->role_id == 1)->form([
                    TextInput::make('name')->required(),
                    Select::make('grade_level')->options(GradeLevel::all()->pluck('name', 'id')),
                 ])->modalWidth('2xl'),
@@ -56,7 +56,7 @@ class SectionList extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-                Action::make('view')->label('View Students')->button()->icon('heroicon-o-eye')->url(fn (Section $record): string => route('admin.sections.manage', $record))
+                Action::make('view')->label('View Students')->button()->icon('heroicon-o-eye')->url(fn (Section $record): string => route(auth()->user()->role_id == 1 ? 'admin.sections.manage' : 'business-office.sections.manage', $record))
                 ->openUrlInNewTab(),
                 ActionGroup::make([
                     EditAction::make('edit')->label('Edit')->color('success')->form([
@@ -64,7 +64,7 @@ class SectionList extends Component implements HasForms, HasTable
                        Select::make('grade_level_id')->label('Grade Level')->options(GradeLevel::all()->pluck('name', 'id')),
                     ])->modalWidth('2xl'),
                     DeleteAction::make('delete'),
-                ])
+                ])->visible(auth()->user()->role_id == 1)
             ])
             ->bulkActions([
                 // ...

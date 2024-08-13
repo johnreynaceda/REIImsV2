@@ -116,8 +116,8 @@ class ManageSection extends Component implements HasForms, HasTable
                              return Section::where('grade_level_id', $gradeLevelId)->pluck('name', 'id');
                         }
                     )
-                ])->modalWidth('xl'),
-                DeleteAction::make('delete'),
+                ])->modalWidth('xl')->visible(auth()->user()->role_id == 1),
+                DeleteAction::make('delete')->visible(auth()->user()->role_id == 1),
             ])
             ->bulkActions([
                 // ...

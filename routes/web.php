@@ -60,6 +60,13 @@ Route::prefix('business-office')->middleware(['auth', 'verified'])->group(
         Route::get('/reports', function(){
             return view('business-office.reports');
         })->name('business-office.reports');
+        Route::get('/sections', function(){
+            return view('business-office.sections');
+        })->name('business-office.sections');
+
+        Route::get('/sections/{id}', function() {
+            return view('business-office.section-manage');
+        })->name('business-office.sections.manage');
 
     }
 );

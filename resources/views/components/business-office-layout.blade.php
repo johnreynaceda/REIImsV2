@@ -56,6 +56,10 @@
                             </li>
                             <li
                                 class="cursor-pointer h-full flex items-center text-sm text-gray-600 hover:text-orange-500 font-medium">
+                                <a href="{{ route('business-office.sections') }}"> Sections</a>
+                            </li>
+                            <li
+                                class="cursor-pointer h-full flex items-center text-sm text-gray-600 hover:text-orange-500 font-medium">
                                 <div @click.away="open = false" class="relative lg:mx-auto" x-data="{ open: false }">
                                     <button @click="open = !open"
                                         class="flex flex-row items-end w-full  py-2 mt-2 focus:outline-none focus:text-orange-500  md:inline md:mt-0 focus:shadow-outline">
