@@ -439,7 +439,7 @@
 
                             </table>
                             <div class="mt-2">
-                                <p class="text-[0.5rem] ">Kindly settle your account for the month <span
+                                <p class="text-[0.5rem] ">Kindly settle your account for the month of<span
                                         class="font-bold uppercase text-red-600">{{ \Carbon\Carbon::parse($due_date)->format('F') ?? '' }}</span>
                                     on
                                     or before <span
