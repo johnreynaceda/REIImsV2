@@ -436,16 +436,17 @@
 
                             </table>
                             <div class="mt-2">
-                                <p class="text-[0.5rem] ">Kindly settle your account for the month <span
+                                <p class="text-[0.5rem] ">Kindly settle your account for the month of <span
                                         class="font-bold uppercase text-red-600">{{ \Carbon\Carbon::parse($this->due_date)->format('F') ?? '' }}</span>
                                     on
                                     or before <span
-                                        class="font-bold text-red-600 uppercase">{{ \Carbon\Carbon::parse($this->due_date)->format('m-d-y') ?? '' }}</span>
+                                        class="font-bold text-red-600 uppercase">{{ \Carbon\Carbon::parse($this->due_date)->format('F d, Y') ?? '' }}.</span>
 
-                                    <span class="font-bold  text-[0.5rem] italic">Please disregard this notice if
-                                        payment
-                                        has been made.
-                                    </span>
+
+                                </p>
+                                <p class="font-bold  text-[0.5rem] italic">Please disregard this notice if
+                                    payment
+                                    has been made.
                                 </p>
                                 <p class="text-[0.5rem] ">Thank you and Good Bless.</p>
                             </div>
