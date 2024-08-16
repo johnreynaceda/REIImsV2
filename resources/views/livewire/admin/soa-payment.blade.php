@@ -1,18 +1,14 @@
 <div>
-    <x-button label="Add Payment" dark wire:click="$set('payment_modal', true)" />
+    <x-button label="Add Payment" slate wire:click="$set('payment_modal', true)" rounded class="font-semibold"
+        icon="cash" />
 
-    <x-modal wire:model.defer="payment_modal" align="center">
-        <x-card title="Consent Terms">
+    <x-modal wire:model.defer="payment_modal" z-index="40" align="center" max-width="2xl">
+        <x-card title="PAYMENT TRANSACTION">
             <div>
                 {{ $this->form }}
             </div>
 
-            <x-slot name="footer">
-                <div class="flex justify-end gap-x-4">
-                    <x-button flat label="Cancel" x-on:click="close" />
-                    <x-button primary label="I Agree" />
-                </div>
-            </x-slot>
+
         </x-card>
     </x-modal>
 </div>
