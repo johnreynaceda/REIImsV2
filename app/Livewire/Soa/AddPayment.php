@@ -68,8 +68,7 @@ class AddPayment extends Component implements HasForms
                 Repeater::make('payments')->label('')->createItemButtonLabel('Add Payment')->live()
                 ->schema([
                     Select::make('category')->searchable()
-                        ->options(SaleCategory::all()->pluck('name', 'id'))
-                        ->required(),
+                        ->options(SaleCategory::all()->pluck('name', 'id')),
                     TextInput::make('amount')->numeric(),
                 ])
                 ->columns(2),
