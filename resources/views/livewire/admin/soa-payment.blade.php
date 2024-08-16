@@ -1,7 +1,7 @@
 <div>
     <x-button label="Add Payment" dark wire:click="$set('payment_modal', true)" />
 
-    <x-modal wire:model.defer="payment_modal">
+    <x-modal wire:model.defer="payment_modal" align="center">
         <x-card title="Consent Terms">
             <div>
                 {{ $this->form }}
