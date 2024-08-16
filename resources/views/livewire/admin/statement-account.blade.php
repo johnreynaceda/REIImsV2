@@ -20,7 +20,8 @@
         </div>
         <div>
             @if ($student_id)
-                <livewire:soa.add-payment :student_id="$student_id" />
+                {{-- <livewire:soa.add-payment :student_id="$student_id" /> --}}
+                <livewire:admin.soa-payment />
             @endif
         </div>
     </div>
