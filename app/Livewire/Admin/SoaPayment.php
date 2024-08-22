@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\ActiveSemester;
 use App\Models\PaymentTransaction;
 use App\Models\SaleCategory;
 use App\Models\Student;
