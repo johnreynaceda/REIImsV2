@@ -127,7 +127,7 @@ class SoaPayment extends Component implements HasForms
             if ($payment->book_fee_updated == false) {
                 $payment->update([
                     'total_book' => $payment->total_book + $value['amount'],
-                    'total_payables' => $payment->total_payables - $value['amount'],
+                    'total_payables' => $payment->total_payables ,
                    ]);
             }else{
                 $payment->update([

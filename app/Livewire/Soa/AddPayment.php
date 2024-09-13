@@ -84,6 +84,9 @@ class AddPayment extends Component implements HasForms
         ]);
 
         $payment = StudentPayment::where('student_id', $this->student_id)->first();
+
+        dd($payment->book_fee_updated == false);
+
          $department = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->department;
 
          $gradelevel = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->id;
@@ -121,10 +124,10 @@ class AddPayment extends Component implements HasForms
                 'total_payables' => $payment->total_payables - $value['amount'],
                ]);
            }elseif (SaleCategory::where('id', $value['category'])->first()->name == 'Books') {
-            if ($payment->book_fee_updated == false) {
+            if ($payment->book_fee_updated == 0) {
                 $payment->update([
                     'total_book' => $payment->total_book + $value['amount'],
-                    'total_payables' => $payment->total_payables - $value['amount'],
+                    'total_payables' => $payment->total_payables,
                    ]);
             }else{
                 $payment->update([
