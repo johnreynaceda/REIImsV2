@@ -10,6 +10,7 @@ use App\Models\GradeLevel;
 use App\Models\PaymentTransaction;
 use App\Models\SaleCategory;
 use App\Models\Student;
+use App\Models\StudentPayment;
 use App\Models\StudentTransaction;
 use Livewire\Component;
 use Maatwebsite\Excel\Excel;
@@ -89,5 +90,15 @@ class Reports extends Component
     }
     public function exportRecord(){
         return \Maatwebsite\Excel\Facades\Excel::download(new StudentExport, 'students_record.xlsx');
+    }
+
+    public function fixedSoa(){
+            $query = StudentPayment::all();
+
+            foreach ($query as $key => $value) {
+                $value->update([
+                    'total_payables' => $value->total_tuition + $value->total_misc,
+                ]);
+            }
     }
 }
