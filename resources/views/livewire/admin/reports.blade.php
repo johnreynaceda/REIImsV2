@@ -1,5 +1,5 @@
 <div x-data>
-    <x-button label="fix total SOA" wire:click="fixedSoa" />
+    {{-- <x-button label="fix total SOA" wire:click="fixedSoa" /> --}}
     <div class="div flex space-x-3 items-end">
         <div class="w-64">
             <x-native-select label="Select Report" wire:model.live="selected_report">
