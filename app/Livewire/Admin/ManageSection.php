@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Exports\StudentSectionExport;
 use App\Models\ActiveSemester;
 use App\Models\PaymentTerms;
 use App\Models\Student;
@@ -26,6 +27,7 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use App\Models\Section;
 use Livewire\Component;
+use Maatwebsite\Excel\Excel;
 
 class ManageSection extends Component implements HasForms, HasTable
 {
@@ -127,6 +129,10 @@ class ManageSection extends Component implements HasForms, HasTable
     public function mount(){
         $this->section_id = request('id');
         $this->section_name = Section::where('id', $this->section_id)->first()->name;
+    }
+
+    public function printSection(){
+       return \Maatwebsite\Excel\Facades\Excel::download(new StudentSectionExport($this->section_id), $this->section_name.'.xlsx');
     }
     public function render()
     {
