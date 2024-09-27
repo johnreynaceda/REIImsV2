@@ -60,22 +60,13 @@
                             <th class="border text-left text-sm px-3  text-gray-700 py-2">GRADE LEVEL</th>
 
                             <th class="border text-left text-sm px-3  text-gray-700 py-2">SECTION</th>
-                            <th class="border text-left text-sm px-3  text-gray-700 py-2">PERMIT STATUS</th>
+                            <th class="border text-left text-sm px-3  text-gray-700 py-2">PAYMENT STATUS</th>
                         </tr>
                     </thead>
                     <tbody class="">
                         @foreach ($permits as $student)
                             <tr>
-                                @php
-                                    $payment = \App\Models\StudentPayment::where('student_id', $student->id)->first();
 
-                                    $transaction = \App\Models\StudentTransaction::where(
-                                        'student_payment_id',
-                                        $payment->id,
-                                    )
-                                        ->whereMonth('created_at', $month)
-                                        ->get();
-                                @endphp
                                 <td class="border text-sm  text-gray-700 px-3 py-1 whitespace-nowrap">
                                     {{ $student->studentInformation->lastname . ', ' . $student->studentInformation->firstname . ' ' . ($student->studentInformation->middlename == null ? '' : $student->studentInformation->middlename[0] . '.') }}
                                 </td>
@@ -84,32 +75,17 @@
                                 <td class="border text-sm  text-gray-700 px-3 py-1 whitespace-nowrap">
                                     {{ $student->studentSections->first()->section->name ?? '' }}</td>
                                 <td class="border text-sm  text-gray-700 px-3 py-1 whitespace-nowrap">
-
-
                                     @php
-                                        $has_permit = false;
-
-                                        // Iterate through the transactions and check for the required payment categories
-                                        foreach ($transaction as $item) {
-                                            // Fetch payments associated with this transaction and filter by sale categories
-                                            $pay = \App\Models\PaymentTransaction::where(
-                                                'student_transaction_id',
-                                                $item->id,
-                                            )
-                                                ->whereIn('sale_category_id', [1, 2])
-                                                ->get();
-
-                                            // Check if any payments match the criteria
-                                            if ($pay->isNotEmpty()) {
-                                                $has_permit = true;
-                                                break; // Stop once we find a valid payment
-                                            }
-                                        }
+                                        $is_paid = false;
+                                        $payment = \App\Models\StudentPayment::where(
+                                            'student_id',
+                                            $student->id,
+                                        )->first();
                                     @endphp
-
-                                    {{-- Display permit status based on whether a valid payment was found --}}
-                                    {{ $has_permit ? 'PAID' : 'UNPAID' }}
-                                    {{-- {{ $transaction->count() }} --}}
+                                    @if ($payment->total_payables > 0)
+                                    @else
+                                        <span class="text-green-500 font-semibold">PAID</span>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
