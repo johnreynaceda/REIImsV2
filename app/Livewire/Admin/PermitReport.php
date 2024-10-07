@@ -24,6 +24,7 @@ class PermitReport extends Component
     }
 
     public function generatedReport(){
+      if ($this->month) {
         return Student::when($this->grade_level, function($record){
             $record->whereHas('studentInformation.educationalInformation', function($educ) {
                 $educ->where('grade_level_id', $this->grade_level);
@@ -33,5 +34,7 @@ class PermitReport extends Component
                 $r->where('section_id', $this->section);
             });
         })->get();
+      }
+      return [];
     }
 }

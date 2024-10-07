@@ -20,14 +20,14 @@
                         $total += (float) $item['amount'];
                     }
                 @endphp
-                TOTAL: &#8369;{{ number_format($total, 2) }}
+                TOTAL: &#8369;{{ number_format((float) $total, 2) }}
 
             </span>
             <h1 class="text-sm font-medium">
                 @php
-                    $change = (float) $this->cash_receive - $total;
+                    $change = (float) $this->cash_receive - (float) $total;
                 @endphp
-                Change: &#8369;{{ number_format($change, 2) }}
+                Change: &#8369;{{ number_format((float) $change, 2) }}
             </h1>
         </div>
         <x-button label="Proceed Payment" spinner="proceedPayment" wire:click="payment({{ $total }})"

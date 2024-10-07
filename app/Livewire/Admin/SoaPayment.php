@@ -41,13 +41,20 @@ class SoaPayment extends Component implements HasForms
     public $book_fully_paid = false;
 
     public $payment_modal = false;
+
+    public $student_name;
+    public $student;
     public $payments = [];
+
+    public $receipt_modal = false;
 
 
     public function mount($student_id)
     {
         $this->student_id = $student_id;
-
+        $student = Student::find($this->student_id);
+        $this->student = $student;
+        $this->student_name = $student->studentInformation->lastname. ', '. $student->studentInformation->firstname. ' '. ($student->studentInformation->middlename == null ? '' : $student->studentInformation->middlename[0].'.');
         $payment = StudentPayment::where('student_id', $this->student_id)->first();
         $this->total_book_with_discount = $payment->total_book;
     }
@@ -85,6 +92,8 @@ class SoaPayment extends Component implements HasForms
         $this->validate([
             'payments' => 'required',
         ]);
+
+        
 
         $payment = StudentPayment::where('student_id', $this->student_id)->first();
          $department = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->department;
@@ -148,7 +157,8 @@ class SoaPayment extends Component implements HasForms
         );
 
         $this->payment_modal = false;
-        return redirect()->route('admin.soa');
+        $this->receipt_modal = true;
+        // return redirect()->route('admin.soa');
     }
 
 

@@ -140,7 +140,7 @@
         </div>
         <div class="mt-10 mx-auto">
             @if ($selected_report == 'Expenses')
-                <div class="mt-4 border-t pt-4 flex justify-between items-end">
+                {{-- <div class="mt-4 border-t pt-4 flex justify-between items-end">
                     <div class="flex space-x-2 ">
                         <div class="w-64">
                             <x-datetime-picker label="Date From" wire:model.live="date_from" without-time
@@ -156,7 +156,7 @@
                             icon="printer" />
                         <x-button positive label="Export Report" icon="printer" />
                     </div>
-                </div>
+                </div> --}}
                 <div class="overflow-x-auto">
                     <table id="example" x-ref="printContainer" class="min-w-full mt-5" style="width:100%">
                         <thead class="">
