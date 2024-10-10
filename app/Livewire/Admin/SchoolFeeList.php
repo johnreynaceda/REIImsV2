@@ -109,25 +109,36 @@ class SchoolFeeList extends Component implements HasForms, HasTable
                 EditAction::make('edit')->label('Edit')->color('success')->action(
                     function($record,$data){
                         $grade_level = [];
+                        $strand = null;
 
                         if ($record->name == 'Books') {
                            foreach ($record->grade_level_fees as $key => $value) {
                             $grade_level[] = $value->grade_level_id;
+                            $strand = $value->strand_id;
                         }
 
-                        $students = StudentPayment::whereHas('student', function($s) use ($grade_level){
-                            $s->whereHas('studentInformation', function($i) use ($grade_level){
+                        $students = StudentPayment::whereHas('student', function($s) use ($grade_level, $strand){
+                            $s->where('strand_id', $strand)->whereHas('studentInformation', function($i) use ($grade_level){
                                 $i->whereHas('educationalInformation', function($e) use ($grade_level){
                                     $e->whereIn('grade_level_id', $grade_level);
                                 });
                             });
                         })->get();
+                        
 
+                      
+
+                      
                         foreach ($students as $key => $value)  {
+                            $original_sum_books = PaymentTransaction::where('sale_category_id', 7)->whereHas('studentTransaction', function($payment) use ($value){
+                                $payment->where('student_payment_id', $value->id);
+                            })->get()->sum('paid_amount');
+
+
                           $value->update([
-                            'total_book' => ($data['amount'] - $value->total_book),
+                            'total_book' => ($data['amount'] - $original_sum_books),
                             'book_fee_updated' => true,
-                            'total_payables' => $value->total_payables + ($data['amount'] - $value->total_book),
+                            'total_payables' => ($value->total_tuition + $value->total_misc) + ($data['amount'] - $original_sum_books),
                           ]);
                           $record->update([
                             'amount' => $data['amount'],
