@@ -246,7 +246,8 @@
                                                 $total_books =
                                                     $dues->total_book == 1000
                                                         ? 0
-                                                        : $dues->total_book / (6 - $total_books);
+                                                        : $dues->total_book /
+                                                            (($department == 'SHS' ? 4 : 6) - $total_books);
                                             }
                                         @endphp
 
