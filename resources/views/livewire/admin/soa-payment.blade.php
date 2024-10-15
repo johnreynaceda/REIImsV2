@@ -27,7 +27,7 @@
                 class="flex max-w-2xl flex-col gap-4 overflow-hidden rounded-2xl border border-slate-300 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                 <!-- Dialog Header -->
                 <div
-                    class="flex items-center justify-between border-b border-slate-300 bg-slate-100/60 px-4 py-1 dark:border-slate-700 dark:bg-slate-900/20">
+                    class="flex items-center justify-between border-b border-slate-300 bg-slate-100/60 px-4  dark:border-slate-700 dark:bg-slate-900/20">
                     <div class="flex items-center justify-center rounded-full bg-green-600/20 text-green-600 p-1">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-6"
                             aria-hidden="true">
@@ -72,7 +72,6 @@
                                 </thead>
                                 <tbody class="">
                                     @php
-                                        $default = 8;
                                         $sortedPayments = collect($payments)
                                             ->map(function ($item) {
                                                 $item['amount'] = (float) $item['amount']; // Ensure 'amount' is a float
@@ -80,137 +79,274 @@
                                             })
                                             ->sortBy('category')
                                             ->values();
-                                        $count = $sortedPayments->count();
-                                        $remainingRows = $default - $count; // Calculate how many rows are left to fill
+
                                         $totalAmount = $sortedPayments->sum('amount'); // Calculate total amount
+                                        $otherAmount = $sortedPayments
+                                            ->whereNotIn('category', [1, 2, 7])
+                                            ->sum('amount'); // Calculate total amount of other categories
+
+                                        // Get names of other categories from the nested structure
+                                        $otherCategories = $sortedPayments
+                                            ->whereNotIn('category', [1, 2, 7])
+                                            ->pluck('category'); // Get names of other categories
+
+                                        $othernames = \App\Models\SaleCategory::whereIn('id', $otherCategories)
+                                            ->pluck('name')
+                                            ->implode(',');
                                     @endphp
 
-                                    @foreach ($sortedPayments as $item)
+                                    @foreach ([1, 2, 7] as $category)
+                                        @php
+                                            $item = $sortedPayments->firstWhere('category', $category);
+                                        @endphp
+                                        @if ($item)
+                                            <tr>
+                                                <td
+                                                    class="text-gray-700 uppercase border text-transparent text-left border-gray-600 px-3 ">
+                                                    sdsdsd
+                                                </td>
+                                                <td class="text-gray-700 text-right border border-gray-600 px-3 ">
+                                                    {{ number_format($item['amount'], 2) }}
+                                                </td>
+                                            </tr>
+                                        @else
+                                            <tr>
+                                                <td
+                                                    class="text-gray-700 uppercase border text-transparent text-left border-gray-600 px-3 ">
+                                                    &nbsp;
+                                                </td>
+                                                <td class="text-gray-700 text-right border border-gray-600 px-3 ">
+                                                    &nbsp;
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+
+                                    <tr>
+                                        <td
+                                            class="text-gray-700 uppercase border text-transparent text-left border-gray-600 px-3 ">
+                                            &nbsp;
+                                        </td>
+                                        <td class="text-gray-700 text-right border border-gray-600 px-3 ">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+
+                                    @foreach ($sortedPayments->whereNotIn('category', [1, 2, 7]) as $item)
                                         <tr>
                                             <td
-                                                class="text-gray-700 uppercase  text-transparent text-left border-gray-600 px-3 py-1">
-                                                sdsdsd
+                                                class="text-gray-700 uppercase border  text-right border-gray-600 px-3 ">
+                                                @php
+                                                    $name = '';
+                                                    if ($item['category'] != null) {
+                                                        $name = \App\Models\SaleCategory::where(
+                                                            'id',
+                                                            $item['category'],
+                                                        )->first();
+                                                    }
+                                                @endphp
+                                                {{ $name->name ?? '' }}
+
                                             </td>
-                                            <td class="text-gray-700 text-right border-gray-600 px-3 py-1">
-                                                {{ number_format($item['amount'], 2) }}
+                                            <td class="text-gray-700 text-right border border-gray-600 px-3 ">
+                                                {{ $item['amount'] }}
                                             </td>
                                         </tr>
                                     @endforeach
 
-                                    @if ($remainingRows > 0)
-                                        @for ($i = 0; $i < $remainingRows; $i++)
-                                            <tr>
-                                                <td
-                                                    class="text-gray-700 uppercase text-transparent text-left border-gray-600 px-3 py-1">
-                                                    <!-- Empty row -->
-                                                </td>
-                                                <td class="text-gray-700 text-right border-gray-600 px-3 py-1">
-                                                    <!-- Empty row -->
-                                                </td>
-                                            </tr>
-                                        @endfor
-                                    @endif
-
                                     <tr>
                                         <td
-                                            class="text-gray-700 font-bold text-transparent text-left border-gray-600 px-3 py-1">
+                                            class="text-gray-700 font-bold text-transparent text-left border-gray-600 px-3 ">
                                             Total
                                         </td>
-                                        <td class="text-gray-700 font-bold text-right border-gray-600 px-3 py-1">
+                                        <td class="text-gray-700 font-bold text-right border-gray-600 px-3 ">
                                             {{ number_format($totalAmount, 2) }}
                                         </td>
                                     </tr>
-
-
                                 </tbody>
                             </table>
-                        </div>
-
-                        <div class="hidden">
-                            <div x-ref="printContainer" class="w-6/12">
-                                <div class="flex justify-end ">
-                                    <span>{{ now()->format('m-d') }}</span>
-                                    <span class="ml-10">{{ now()->format('y') }}</span>
-                                </div>
-                                <div class="grid grid-cols-4 w-full">
-                                    <div class="col-span-2 text-left ">{{ $student_name }}</div>
-                                    <div class=""></div>
-                                    <div class="">
-                                        {{ str_replace('Grade', '', $student->studentInformation->educationalInformation->gradeLevel->name) }}
-                                    </div>
-                                </div>
-                                <table id="example" class="table-auto" style="width:100%">
-                                    <thead class="font-normal">
-                                        <tr>
-                                            <th class="text-center text-xs text-transparent border-gray-600 ">CATEGORY
-                                            </th>
-
-                                            <th class="text-center text-xs text-transparent border-gray-600 ">AMOUNT
-                                            </th>
 
 
-                                        </tr>
-                                    </thead>
-                                    <tbody class="">
+                            {{-- <table id="example" class="table-auto w-full">
+                                <thead class="font-normal">
+                                    <tr>
+                                        <th class="text-center text-xs text-transparent border-gray-600">CATEGORY</th>
+                                        <th class="text-center text-xs text-transparent border-gray-600">AMOUNT</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $sortedPayments = collect($payments)
+                                            ->map(fn($item) => ['amount' => (float) $item['amount']] + $item) // Ensure 'amount' is a float
+                                            ->sortBy('category') // Sort payments by 'category'
+                                            ->values();
+                                    @endphp
+
+                                    @foreach ([1, 2, 7] as $category)
                                         @php
-                                            $default = 8;
-                                            $sortedPayments = collect($payments)
-                                                ->map(function ($item) {
-                                                    $item['amount'] = (float) $item['amount']; // Ensure 'amount' is a float
-                                                    return $item;
-                                                })
-                                                ->sortBy('category')
-                                                ->values();
-                                            $count = $sortedPayments->count();
-                                            $remainingRows = $default - $count; // Calculate how many rows are left to fill
-                                            $totalAmount = $sortedPayments->sum('amount'); // Calculate total amount
+                                            $item = $sortedPayments->firstWhere('category', $category);
                                         @endphp
-
-                                        @foreach ($sortedPayments as $item)
+                                        @if ($item)
                                             <tr>
                                                 <td
-                                                    class="text-gray-700 uppercase  text-transparent text-left border-gray-600 px-3 py-1">
-                                                    sdsdsd
+                                                    class="text-gray-700 uppercase border text-left border-gray-600 px-3 ">
+                                                    {{ $item['category'] }}
                                                 </td>
-                                                <td class="text-gray-700 text-right border-gray-600 px-3 py-1">
+                                                <td class="text-gray-700 text-right border border-gray-600 px-3 ">
                                                     {{ number_format($item['amount'], 2) }}
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @else
+                                            <tr>
+                                                <td
+                                                    class="text-gray-700 uppercase border text-left border-gray-600 px-3 ">
+                                                    &nbsp;
+                                                </td>
+                                                <td class="text-gray-700 text-right border border-gray-600 px-3 ">
+                                                    &nbsp;
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
 
-                                        @if ($remainingRows > 0)
-                                            @for ($i = 0; $i < $remainingRows; $i++)
+
+                                    <tr>
+                                        <td class="text-gray-700 font-bold text-left border-gray-600 px-3 ">
+                                            Total
+                                        </td>
+                                        <td class="text-gray-700 font-bold text-right border-gray-600 px-3 ">
+                                            {{ number_format($sortedPayments->whereIn('category', [1, 2, 7])->sum('amount'), 2) }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table> --}}
+
+
+                        </div>
+
+                        <div class="hidden">
+                            <div x-ref="printContainer" class="w-8/12 mt-8">
+                                <div class="flex justify-end mr-[2.90rem]">
+                                    <span>{{ now()->format('m-d') }}</span>
+                                    <span class="ml-10">{{ now()->format('y') }}</span>
+                                </div>
+                                <div class="grid grid-cols-4 mt-3 w-full">
+                                    <div class="col-span-2 text-left ">{{ $student_name }}</div>
+                                    <div class="text-transparent">xsdsdsd</div>
+                                    <div class="text-right mr-5 uppercase">
+                                        {{ str_replace('Grade', '', $student->studentInformation->educationalInformation->gradeLevel->name) }}
+                                    </div>
+                                </div>
+                                <div class="mr-[2.40rem] h-72 relative">
+                                    <table id="example" class="table-auto " style="width:100%">
+                                        <thead class="font-normal">
+                                            <tr>
+                                                <th class="text-center text-xs text-transparent border-gray-600 ">
+                                                    CATEGORY
+                                                </th>
+
+                                                <th class="text-center text-xs text-transparent border-gray-600 ">AMOUNT
+                                                </th>
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody class="">
+                                            @php
+                                                $sortedPayments = collect($payments)
+                                                    ->map(function ($item) {
+                                                        $item['amount'] = (float) $item['amount']; // Ensure 'amount' is a float
+                                                        return $item;
+                                                    })
+                                                    ->sortBy('category')
+                                                    ->values();
+
+                                                $totalAmount = $sortedPayments->sum('amount'); // Calculate total amount
+                                                $otherAmount = $sortedPayments
+                                                    ->whereNotIn('category', [1, 2, 7])
+                                                    ->sum('amount'); // Calculate total amount of other categories
+
+                                                // Get names of other categories from the nested structure
+                                                $otherCategories = $sortedPayments
+                                                    ->whereNotIn('category', [1, 2, 7])
+                                                    ->pluck('category'); // Get names of other categories
+
+                                                $othernames = \App\Models\SaleCategory::whereIn('id', $otherCategories)
+                                                    ->pluck('name')
+                                                    ->implode(',');
+                                            @endphp
+
+                                            @foreach ([1, 2, 7] as $category)
+                                                @php
+                                                    $item = $sortedPayments->firstWhere('category', $category);
+                                                @endphp
+                                                @if ($item)
+                                                    <tr>
+                                                        <td
+                                                            class="text-gray-700 uppercase  text-transparent text-left border-gray-600 px-3 ">
+                                                            sdsdsd
+                                                        </td>
+                                                        <td class="text-gray-700 text-right  border-gray-600 px-3 ">
+                                                            {{ number_format($item['amount'], 2) }}
+                                                        </td>
+                                                    </tr>
+                                                @else
+                                                    <tr>
+                                                        <td
+                                                            class="text-gray-700 uppercase  text-transparent text-left border-gray-600 px-3 ">
+                                                            &nbsp;
+                                                        </td>
+                                                        <td class="text-gray-700 text-right  border-gray-600 px-3 ">
+                                                            &nbsp;
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+
+                                            <tr>
+                                                <td
+                                                    class="text-gray-700 uppercase  text-transparent text-left border-gray-600 px-3 ">
+                                                    &nbsp;
+                                                </td>
+                                                <td class="text-gray-700 text-right  border-gray-600 px-3 ">
+                                                    &nbsp;
+                                                </td>
+                                            </tr>
+
+                                            @foreach ($sortedPayments->whereNotIn('category', [1, 2, 7]) as $item)
                                                 <tr>
                                                     <td
-                                                        class="text-gray-700 uppercase text-transparent text-left border-gray-600 px-3 py-1">
-                                                        <!-- Empty row -->
+                                                        class="text-gray-700 uppercase   text-right border-gray-600 px-3 ">
+                                                        @php
+                                                            $name = '';
+                                                            if ($item['category'] != null) {
+                                                                $name = \App\Models\SaleCategory::where(
+                                                                    'id',
+                                                                    $item['category'],
+                                                                )->first();
+                                                            }
+                                                        @endphp
+                                                        {{ $name->name ?? '' }}
+
                                                     </td>
-                                                    <td class="text-gray-700 text-right border-gray-600 px-3 py-1">
-                                                        <!-- Empty row -->
+                                                    <td class="text-gray-700 text-right  border-gray-600 px-3 ">
+                                                        {{ $item['amount'] }}
                                                     </td>
                                                 </tr>
-                                            @endfor
-                                        @endif
+                                            @endforeach
 
-                                        <tr>
-                                            <td
-                                                class="text-gray-700 font-bold text-transparent text-left border-gray-600 px-3 py-1">
-                                                Total
-                                            </td>
-                                            <td class="text-gray-700 font-bold text-right border-gray-600 px-3 py-1">
-                                                {{ number_format($totalAmount, 2) }}
-                                            </td>
-                                        </tr>
-
-
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                    <div class="absolute bottom-[4.5rem] right-6">
+                                        <span> {{ number_format($totalAmount, 2) }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- Dialog Footer -->
                         <div class="flex items-center justify-center border-slate-300 p-4 dark:border-slate-700">
                             <button type="button" @click="printOut($refs.printContainer.outerHTML);"
-                                class="w-full cursor-pointer whitespace-nowrap rounded-2xl bg-orange-600 px-4 py-1 text-center text-sm font-semibold tracking-wide text-white transition hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 active:opacity-100 active:outline-offset-0">
+                                class="w-full cursor-pointer whitespace-nowrap rounded-2xl bg-orange-600 px-4  text-center text-sm font-semibold tracking-wide text-white transition hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 active:opacity-100 active:outline-offset-0">
                                 <span>Print Receipt</span>
                             </button>
                         </div>
