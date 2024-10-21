@@ -226,9 +226,7 @@
                                     <td
                                         class="border text-gray-700 text-sm font-medium text-center border-gray-700 px-3 ">
 
-
                                         @php
-                                            // Fetching book-related transactions
                                             $books = \App\Models\StudentTransaction::where(
                                                 'student_payment_id',
                                                 $dues->id,
@@ -236,8 +234,7 @@
                                                 ->pluck('id')
                                                 ->toArray();
 
-                                            // Counting how many book payments have been made
-                                            $total_books_paid = \App\Models\PaymentTransaction::whereIn(
+                                            $total_books = \App\Models\PaymentTransaction::whereIn(
                                                 'student_transaction_id',
                                                 $books,
                                             )
@@ -247,29 +244,24 @@
                                                 })
                                                 ->count();
 
-                                            // Handling the book fee calculation
                                             if ($dues->book_fee_updated == false) {
-                                                // Default book fee if not updated
                                                 $total_books = 500;
                                             } else {
-                                                // Check to prevent division by zero
-                                                $books_term = ($department == 'SHS' ? 4 : 6) - $total_books_paid;
-                                                $total_books = $books_term > 0 ? $dues->total_book / $books_term : 0;
+                                                $total_books =
+                                                    $dues->total_book == 1000
+                                                        ? 0
+                                                        : $dues->total_book / (6 - $total_books);
                                             }
                                         @endphp
 
-                                        @if ($total_books == 0)
-                                            -
-                                        @else
-                                            &#8369;{{ number_format($total_books, 2) }}
-                                        @endif
+                                        &#8369;{{ number_format($total_books, 2) }}
                                     </td>
                                     <td
                                         class="border text-gray-700 text-sm font-medium text-center border-gray-700 px-3 ">
                                         @if ($dues->book_fee_updated == false)
                                             &#8369;0.00
                                         @else
-                                            &#8369;{{ number_format($dues->total_books, 2) }}
+                                            &#8369;{{ number_format($dues->total_book, 2) }}
                                         @endif
                                     </td>
                                 </tr>
