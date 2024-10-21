@@ -12,6 +12,7 @@
         $bookssss = 0;
         $soa_pe = 0;
         $soa_handbook = 0;
+        $total_books = 0;
         // $soa;
     @endphp
     <div class="flex justify-between items-end">
@@ -130,13 +131,14 @@
 
 
                                         @php
+                                            // Calculate Miscellaneous
                                             $misc = \App\Models\StudentTransaction::where(
                                                 'student_payment_id',
                                                 $dues->id,
                                             )
                                                 ->pluck('id')
                                                 ->toArray();
-                                            $total_misc = \App\Models\PaymentTransaction::whereIn(
+                                            $total_misc_count = \App\Models\PaymentTransaction::whereIn(
                                                 'student_transaction_id',
                                                 $misc,
                                             )
@@ -145,11 +147,14 @@
                                                     $category->where('name', 'like', 'Miscellaneous');
                                                 })
                                                 ->count();
-                                            // $total_misc = $dues->total_misc / (10 - $total_misc);
-                                            $total_misc =
+
+                                            // Handle division by zero
+                                            $misc_term =
                                                 $department == 'SHS'
-                                                    ? $dues->total_misc / ($payment_terms / 2 - $total_misc)
-                                                    : $dues->total_misc / ($payment_terms - $total_misc);
+                                                    ? $payment_terms / 2 - $total_misc_count
+                                                    : $payment_terms - $total_misc_count;
+                                            $total_misc = $misc_term > 0 ? $dues->total_misc / $misc_term : 0;
+
                                         @endphp
 
                                         &#8369;{{ number_format($total_misc, 2) }}
@@ -223,6 +228,7 @@
 
 
                                         @php
+                                            // Fetching book-related transactions
                                             $books = \App\Models\StudentTransaction::where(
                                                 'student_payment_id',
                                                 $dues->id,
@@ -230,7 +236,8 @@
                                                 ->pluck('id')
                                                 ->toArray();
 
-                                            $total_books = \App\Models\PaymentTransaction::whereIn(
+                                            // Counting how many book payments have been made
+                                            $total_books_paid = \App\Models\PaymentTransaction::whereIn(
                                                 'student_transaction_id',
                                                 $books,
                                             )
@@ -240,25 +247,29 @@
                                                 })
                                                 ->count();
 
+                                            // Handling the book fee calculation
                                             if ($dues->book_fee_updated == false) {
+                                                // Default book fee if not updated
                                                 $total_books = 500;
                                             } else {
-                                                $total_books =
-                                                    $dues->total_book == 1000
-                                                        ? 0
-                                                        : $dues->total_book /
-                                                            (($department == 'SHS' ? 4 : 6) - $total_books);
+                                                // Check to prevent division by zero
+                                                $books_term = ($department == 'SHS' ? 4 : 6) - $total_books_paid;
+                                                $total_books = $books_term > 0 ? $dues->total_book / $books_term : 0;
                                             }
                                         @endphp
 
-                                        &#8369;{{ number_format($total_books, 2) }}
+                                        @if ($total_books == 0)
+                                            -
+                                        @else
+                                            &#8369;{{ number_format($total_books, 2) }}
+                                        @endif
                                     </td>
                                     <td
                                         class="border text-gray-700 text-sm font-medium text-center border-gray-700 px-3 ">
                                         @if ($dues->book_fee_updated == false)
                                             &#8369;0.00
                                         @else
-                                            &#8369;{{ number_format($dues->total_book, 2) }}
+                                            -
                                         @endif
                                     </td>
                                 </tr>
@@ -369,53 +380,7 @@
                                         &#8369;{{ number_format($handbook, 2) }}
                                     </td>
                                 </tr>
-                                {{-- <tr>
-                                    <td class="border text-sm text-gray-700 font-bold text-left  border-gray-700 px-3 ">
-                                        STUDENT HAND BOOK
-                                    </td>
-                                    <td
-                                        class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3 ">
-                                        -
-                                    </td>
-                                    <td
-                                        class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3 ">
 
-                                        @php
-
-                                            $count = \App\Models\StudentTransaction::where(
-                                                'student_payment_id',
-                                                \App\Models\StudentPayment::where(
-                                                    'student_id',
-                                                    $this->student_id,
-                                                )->first()->id,
-                                            )
-                                                ->whereHas('paymentTransactions', function ($record) {
-                                                    $record->whereHas('saleCategory', function ($sale) {
-                                                        $sale->where('name', 'like', 'Handbook');
-                                                    });
-                                                })
-                                                ->count();
-
-                                            if ($count > 0) {
-                                                $handbook = 0;
-                                            } else {
-                                                $handbook = \App\Models\SchoolFee::where('name', 'Handbook')
-                                                    ->whereHas('grade_level_fees', function ($record) {
-                                                        $record->where(
-                                                            'grade_level_id',
-                                                            \App\Models\Student::where('id', $this->student_id)->first()
-                                                                ->studentInformation->educationalInformation
-                                                                ->grade_level_id,
-                                                        );
-                                                    })
-                                                    ->first()->amount;
-                                            }
-
-                                        @endphp
-                                        {{ $handbook == 0 ? '-' : '₱' . number_format($handbook, 2) }}
-
-                                    </td>
-                                </tr> --}}
                                 <tr>
                                     <td class="border text-gray-700 font-bold text-left  border-gray-700 px-3 ">
                                         TOTAL
@@ -425,7 +390,6 @@
                                     </td>
                                     <td class="border text-red-600 font-semibold text-center border-gray-700 px-3 ">
                                         &#8369;{{ number_format($dues->total_payables + $handbook + $pe, 2) }}
-                                        {{-- &#8369;{{ number_format($dues->total_payables, 2) }} --}}
                                     </td>
 
                                 </tr>
