@@ -269,7 +269,7 @@
                                         @if ($dues->book_fee_updated == false)
                                             &#8369;0.00
                                         @else
-                                            -
+                                            &#8369;{{ number_format($dues->total_books, 2) }}
                                         @endif
                                     </td>
                                 </tr>
