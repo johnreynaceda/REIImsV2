@@ -51,7 +51,9 @@ class SoaPayment extends Component implements HasForms
 
     public function mount($student_id)
     {
+      
         $this->student_id = $student_id;
+        
         $student = Student::find($this->student_id);
         $this->student = $student;
         $this->student_name = $student->studentInformation->lastname. ', '. $student->studentInformation->firstname. ' '. ($student->studentInformation->middlename == null ? '' : $student->studentInformation->middlename[0].'.');

@@ -371,7 +371,7 @@
                                                     $total_books =
                                                         $dues->total_book == 1000
                                                             ? 0
-                                                            : $dues->total_book / (6 - $total_books);
+                                                            : $dues->total_book / (5 - $total_books);
                                                 }
                                             @endphp
 
