@@ -276,6 +276,7 @@
                                     <td
                                         class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3">
                                         @php
+                                            // Fetching the 'P.E UNIFORM' amount
                                             $amount = \App\Models\OtherPayment::whereHas('saleCategory', function (
                                                 $query,
                                             ) {
@@ -288,6 +289,7 @@
                                                 })
                                                 ->first();
 
+                                            // Check if an amount is found
                                             if ($amount) {
                                                 $is_paid = \App\Models\PaymentTransaction::where(
                                                     'sale_category_id',
@@ -304,14 +306,16 @@
                                                     })
                                                     ->get();
 
+                                                // If payment exists, set $pe to 0, otherwise use the amount
                                                 $pe = $is_paid->count() > 0 ? 0 : $amount->amount;
                                             } else {
-                                                $pe = 0;
+                                                $pe = 0; // Set default value to 0 if no amount found
                                             }
                                         @endphp
 
-                                        &#8369;{{ number_format($pe, 2) }}
+                                        &#8369;{{ number_format($pe ?? 0, 2) }}
                                     </td>
+
                                 </tr>
 
                                 <tr>
