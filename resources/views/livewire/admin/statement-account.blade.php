@@ -266,15 +266,15 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="border text-sm text-gray-700 font-bold text-left  border-gray-700 px-3 ">
+                                    <td class="border text-sm text-gray-700 font-bold text-left border-gray-700 px-3">
                                         P.E UNIFORM
                                     </td>
                                     <td
-                                        class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3 ">
+                                        class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3">
                                         -
                                     </td>
                                     <td
-                                        class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3 ">
+                                        class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3">
                                         @php
                                             $amount = \App\Models\OtherPayment::whereHas('saleCategory', function (
                                                 $query,
@@ -287,7 +287,6 @@
                                                     $students->where('student_id', $student_id);
                                                 })
                                                 ->first();
-                                            // dd($amount);
 
                                             if ($amount) {
                                                 $is_paid = \App\Models\PaymentTransaction::where(
@@ -305,30 +304,26 @@
                                                     })
                                                     ->get();
 
-                                                if ($is_paid->count() > 0) {
-                                                    $pe = 0;
-                                                } else {
-                                                    $pe = $amount->amount;
-                                                }
+                                                $pe = $is_paid->count() > 0 ? 0 : $amount->amount;
                                             } else {
                                                 $pe = 0;
                                             }
-
                                         @endphp
 
                                         &#8369;{{ number_format($pe, 2) }}
                                     </td>
                                 </tr>
+
                                 <tr>
-                                    <td class="border text-sm text-gray-700 font-bold text-left  border-gray-700 px-3 ">
+                                    <td class="border text-sm text-gray-700 font-bold text-left border-gray-700 px-3">
                                         HANDBOOK
                                     </td>
                                     <td
-                                        class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3 ">
+                                        class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3">
                                         -
                                     </td>
                                     <td
-                                        class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3 ">
+                                        class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3">
                                         @php
                                             $amount = \App\Models\OtherPayment::whereHas('saleCategory', function (
                                                 $query,
@@ -358,15 +353,10 @@
                                                     })
                                                     ->get();
 
-                                                if ($is_paid->count() > 0) {
-                                                    $handbook = 0;
-                                                } else {
-                                                    $handbook = $amount->amount;
-                                                }
+                                                $handbook = $is_paid->count() > 0 ? 0 : $amount->amount;
                                             } else {
                                                 $handbook = 0;
                                             }
-
                                         @endphp
 
                                         &#8369;{{ number_format($handbook, 2) }}
@@ -374,17 +364,22 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="border text-gray-700 font-bold text-left  border-gray-700 px-3 ">
+                                    <td class="border text-gray-700 font-bold text-left border-gray-700 px-3">
                                         TOTAL
                                     </td>
-                                    <td class="border text-gray-700 font-semibold text-center border-gray-700 px-3 ">
-                                        &#8369;{{ number_format($total_tuition + $total_misc + $total_books, 2) }}
+                                    <td class="border text-gray-700 font-semibold text-center border-gray-700 px-3">
+                                        &#8369;{{ number_format(($total_tuition ?? 0) + ($total_misc ?? 0) + ($total_books ?? 0), 2) }}
                                     </td>
-                                    <td class="border text-red-600 font-semibold text-center border-gray-700 px-3 ">
-                                        &#8369;{{ number_format($dues->total_payables + $handbook + $pe, 2) }}
+                                    <td class="border text-red-600 font-semibold text-center border-gray-700 px-3">
+                                        @php
+                                            $total_payables = $dues->total_payables ?? 0;
+                                            $pe = $pe ?? 0;
+                                            $handbook = $handbook ?? 0;
+                                        @endphp
+                                        &#8369;{{ number_format($total_payables + $handbook + $pe, 2) }}
                                     </td>
-
                                 </tr>
+
 
 
 
