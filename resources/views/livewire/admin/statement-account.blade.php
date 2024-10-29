@@ -250,7 +250,7 @@
                                                 $total_books =
                                                     $dues->total_book == 1000
                                                         ? 0
-                                                        : $dues->total_book / (5 - $total_books);
+                                                        : (float) $dues->total_book / (5 - $total_books);
                                             }
                                         @endphp
 
@@ -275,7 +275,7 @@
                                     </td>
                                     <td
                                         class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3">
-                                        {{-- @php
+                                        @php
                                             // Fetching the 'P.E UNIFORM' amount
                                             $amount = \App\Models\OtherPayment::whereHas('saleCategory', function (
                                                 $query,
@@ -313,7 +313,7 @@
                                             }
                                         @endphp
 
-                                        &#8369;{{ number_format($pe ?? 0, 2) }} --}}
+                                        &#8369;{{ number_format($pe ?? 0, 2) }}
                                     </td>
 
                                 </tr>
