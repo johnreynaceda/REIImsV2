@@ -635,7 +635,9 @@
                                         if ($value->school_fee->name) {
                                             switch ($value->school_fee->name) {
                                                 case 'Tuition':
-                                                    $discount = ($value->school_fee->amount * (float) $tui_subd) / 100;
+                                                    $discount = $tui_subd
+                                                        ? ($value->school_fee->amount * (float) $tui_subd) / 100
+                                                        : 0;
                                                     $total =
                                                         $department == 'SHS'
                                                             ? ($value->school_fee->amount - $discount) / 2
@@ -643,7 +645,9 @@
                                                     $soa_tuition = $total;
                                                     break;
                                                 case 'Miscellaneous':
-                                                    $discount = ($value->school_fee->amount * (float) $misc_subd) / 100;
+                                                    $discount = $misc_subd
+                                                        ? ($value->school_fee->amount * (float) $misc_subd) / 100
+                                                        : 0;
                                                     $total =
                                                         $department == 'SHS'
                                                             ? ($value->school_fee->amount - $discount) / 2
@@ -685,7 +689,6 @@
 
                                                 default:
                                                     $total = $value->school_fee->amount;
-                                                    // dd($value->school_fee->name . '-' . $value->school_fee->amount);
                                                     break;
                                             }
                                             $grand_total += $total;
@@ -695,6 +698,7 @@
                                 {{ number_format($grand_total, 2) }}
                             </span>
                         </div>
+
                     </div>
                     <div class="mt-2 text-xs font-poppins">
                         <table id="example" class="table-auto" style="width:100%">
