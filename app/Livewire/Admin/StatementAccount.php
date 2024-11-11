@@ -35,6 +35,9 @@ class StatementAccount extends Component implements HasForms, HasTable
     use InteractsWithForms;
     public $student_id;
 
+    public $receipt_data;
+    public $section;
+
     public $records;
     public $payments = [];
     PUBLIC $department;
@@ -47,7 +50,11 @@ class StatementAccount extends Component implements HasForms, HasTable
 
     public $payment_terms;
 
+    public $student_name;
+
     public $semester;
+
+    public $receipt_modal = false;
 
     // public function send(){
 
@@ -185,6 +192,16 @@ class StatementAccount extends Component implements HasForms, HasTable
        }
 
 
+    }
+
+    public function printReceipt($id){
+        sleep(1);
+        $data = StudentTransaction::where('id', $id)->first();
+        $this->student_name = $data->studentInformation->lastname. ', '. $data->studentInformation->firstname. ' '. ($data->studentInformation->middlename == null ? '' : ($data->studentInformation->middlename[0]. '.'));
+        $this->receipt_data = $data;
+        $this->section = $data->studentPayment->student->studentSections->first()->section->name;
+       
+        $this->receipt_modal = true;
     }
 
 

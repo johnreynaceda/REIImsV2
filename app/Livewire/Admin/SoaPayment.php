@@ -168,7 +168,7 @@ class SoaPayment extends Component implements HasForms
     public function payment($total){
         $this->dialog()->confirm([
 
-            'title'       => 'Are you Sure?',
+            'title' => 'Are you Sure?',
             'icon' => 'warning',
             'description' => 'Proceed Payment',
 

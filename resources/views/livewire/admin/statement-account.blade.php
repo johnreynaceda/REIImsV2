@@ -1,4 +1,4 @@
-<div x-data>
+<div x-data="{ successModalIsOpen: @entangle('receipt_modal') }"">
     @php
         $handbook = 0;
         $pe = 0;
@@ -440,6 +440,9 @@
                                 <th class="border text-left  text-gray-600 px-2 font-semibold  py-1 text-sm">
 
                                 </th>
+                                <th class="border text-left  text-gray-600 px-2 font-semibold  py-1 text-sm">
+
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="">
@@ -454,7 +457,33 @@
                                     <td class="border text-gray-600 text-sm font-medium text-left px-3  ">
                                         &#8369;{{ number_format($item->total_amount, 2) }}</td>
                                     <td class="border text-gray-600 text-sm font-medium text-left px-3  ">
-                                        {{ \Carbon\Carbon::parse($item->created_at)->format('F d, Y') }}</td>
+                                        {{ \Carbon\Carbon::parse($item->created_at)->format('m/d/Y') }}</td>
+                                    <td class="border text-gray-600 text-sm font-medium text-left px-3 py-1  ">
+                                        <button wire:click="printReceipt({{ $item->id }})"
+                                            class="flex text-gray-700 hover:text-green-600 hover:scale-95 text-sm items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                wire:target="printReceipt({{ $item->id }})"
+                                                wire:loading.class="hidden" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round" class="lucide lucide-printer-check">
+                                                <path
+                                                    d="M13.5 22H7a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v.5" />
+                                                <path d="m16 19 2 2 4-4" />
+                                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2" />
+                                                <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
+                                            </svg>
+                                            <svg wire:loading wire:target="printReceipt({{ $item->id }})"
+                                                class="animate animate-spin" width="15" height="15"
+                                                viewBox="0 0 15 15" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M1.84998 7.49998C1.84998 4.66458 4.05979 1.84998 7.49998 1.84998C10.2783 1.84998 11.6515 3.9064 12.2367 5H10.5C10.2239 5 10 5.22386 10 5.5C10 5.77614 10.2239 6 10.5 6H13.5C13.7761 6 14 5.77614 14 5.5V2.5C14 2.22386 13.7761 2 13.5 2C13.2239 2 13 2.22386 13 2.5V4.31318C12.2955 3.07126 10.6659 0.849976 7.49998 0.849976C3.43716 0.849976 0.849976 4.18537 0.849976 7.49998C0.849976 10.8146 3.43716 14.15 7.49998 14.15C9.44382 14.15 11.0622 13.3808 12.2145 12.2084C12.8315 11.5806 13.3133 10.839 13.6418 10.0407C13.7469 9.78536 13.6251 9.49315 13.3698 9.38806C13.1144 9.28296 12.8222 9.40478 12.7171 9.66014C12.4363 10.3425 12.0251 10.9745 11.5013 11.5074C10.5295 12.4963 9.16504 13.15 7.49998 13.15C4.05979 13.15 1.84998 10.3354 1.84998 7.49998Z"
+                                                    fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
+                                                </path>
+                                            </svg>
+
+                                        </button>
+                                    </td>
                                     <td class="border text-gray-600 text-sm font-medium text-left px-3  ">
                                         <button wire:click="view({{ $item->id }})"
                                             class="flex text-yellow-500 hover:text-yellow-600 text-sm items-center">
@@ -1054,4 +1083,271 @@
             </x-slot>
         </x-card>
     </x-modal>
+
+
+
+    <div>
+
+        <div x-cloak x-show="successModalIsOpen" x-transition.opacity.duration.200ms
+            x-trap.inert.noscroll="successModalIsOpen" @keydown.esc.window="successModalIsOpen = false"
+            @click.self="successModalIsOpen = false"
+            class="fixed inset-0 z-30 flex items-end justify-center bg-black/20 p-4 pb-8 backdrop-blur-md sm:items-center lg:p-8"
+            role="dialog" aria-modal="true" aria-labelledby="successModalTitle">
+            <!-- Modal Dialog -->
+            <div x-show="successModalIsOpen"
+                x-transition:enter="transition ease-out duration-200 delay-100 motion-reduce:transition-opacity"
+                x-transition:enter-start="opacity-0 scale-50" x-transition:enter-end="opacity-100 scale-100"
+                class="flex max-w-2xl flex-col gap-4 overflow-hidden rounded-2xl border border-slate-300 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                <!-- Dialog Header -->
+                <div
+                    class="flex items-center justify-between border-b border-slate-300 bg-slate-100/60 px-4  dark:border-slate-700 dark:bg-slate-900/20">
+                    <div class="flex items-center justify-center rounded-full bg-green-600/20 text-green-600 p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                            class="size-6" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <a href="{{ route('admin.soa') }}" aria-label="close modal">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"
+                            stroke="currentColor" fill="none" stroke-width="1.4" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </a>
+                </div>
+                <!-- Dialog Body -->
+                <div class="text-center w-[40rem] px-4">
+                    <div>
+                        <div>
+                            <div class="flex justify-end ">
+                                <span>{{ now()->format('m-d') }}</span>
+                                <span class="ml-10">{{ now()->format('y') }}</span>
+                            </div>
+                            <div class="grid grid-cols-4 w-full">
+                                <div class="col-span-2 text-left ">{{ $student_name }}</div>
+                                <div class=""></div>
+                                <div class="">
+                                    {{ ($receipt_data->studentPayment->student->studentInformation->educationalInformation->gradeLevel->name ?? '') . ' - ' . $section }}
+                                </div>
+                            </div>
+                            <table id="example" class="table-auto" style="width:100%">
+                                <thead class="font-normal">
+                                    <tr>
+                                        <th class="text-center text-xs text-transparent border-gray-600 ">CATEGORY
+                                        </th>
+
+                                        <th class="text-center text-xs text-transparent border-gray-600 ">AMOUNT
+                                        </th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody class="">
+                                    @php
+                                        $payments = \App\Models\PaymentTransaction::where(
+                                            'student_transaction_id',
+                                            $receipt_data->id ?? '',
+                                        )
+                                            ->whereIn('sale_category_id', [1, 2, 7])
+                                            ->get();
+                                    @endphp
+
+                                    @foreach ($payments as $item)
+                                        <tr>
+                                            <td
+                                                class="text-gray-700 uppercase border text-transparent text-left border-gray-600 px-3 ">
+                                                {{ $item->id }}
+                                            </td>
+                                            <td class="text-gray-700 text-right border border-gray-600 px-3 ">
+                                                {{ number_format($item['paid_amount'], 2) }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
+
+
+
+                                    <tr>
+                                        <td
+                                            class="text-gray-700 uppercase border text-transparent text-left border-gray-600 px-3 ">
+                                            &nbsp;
+                                        </td>
+                                        <td class="text-gray-700 text-right border border-gray-600 px-3 ">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    @php
+                                        $other_payments = \App\Models\PaymentTransaction::where(
+                                            'student_transaction_id',
+                                            $receipt_data->id ?? '',
+                                        )
+                                            ->whereNotIn('sale_category_id', [1, 2, 7])
+                                            ->get();
+                                    @endphp
+                                    @foreach ($other_payments->whereNotIn('category', [1, 2, 7]) as $items)
+                                        <tr>
+                                            <td
+                                                class="text-gray-700 uppercase border  text-right border-gray-600 px-3 ">
+                                                @php
+                                                    $name = '';
+                                                    if ($item['category'] != null) {
+                                                        $name = \App\Models\SaleCategory::where(
+                                                            'id',
+                                                            $item['category'],
+                                                        )->first();
+                                                    }
+                                                @endphp
+                                                {{ $name->name ?? '' }}
+
+                                            </td>
+                                            <td class="text-gray-700 text-right border border-gray-600 px-3 ">
+                                                {{ $item['paid_amount'] }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
+                                    <tr>
+                                        <td
+                                            class="text-gray-700 font-bold text-transparent text-left border-gray-600 px-3 ">
+                                            Total
+                                        </td>
+                                        <td class="text-gray-700 font-bold text-right border-gray-600 px-3 ">
+                                            {{ number_format($receipt_data->total_amount ?? 0, 2) }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+
+
+
+                        </div>
+
+                        <div class="hidden">
+                            <div x-ref="printContainer" class="w-8/12 mt-8">
+                                <div class="flex justify-end mr-[2.90rem]">
+                                    <span>{{ now()->format('m-d') }}</span>
+                                    <span class="ml-10">{{ now()->format('y') }}</span>
+                                </div>
+                                <div class="grid grid-cols-5 mt-3 w-full">
+                                    <div class="col-span-2 text-left ">{{ $student_name }}</div>
+                                    <div class="text-transparent">xsdsdsd</div>
+                                    <div class="col-span-2 text-right mr-5 uppercase">
+                                        {{ ($receipt_data->studentPayment->student->studentInformation->educationalInformation->gradeLevel->name ?? '') . ' - ' . $section }}
+                                    </div>
+                                </div>
+                                <div class="mr-[2.40rem] h-72 relative">
+                                    <table id="example" class="table-auto " style="width:100%">
+                                        <thead class="font-normal">
+                                            <tr>
+                                                <th class="text-center text-xs text-transparent border-gray-600 ">
+                                                    CATEGORY
+                                                </th>
+
+                                                <th class="text-center text-xs text-transparent border-gray-600 ">
+                                                    AMOUNT
+                                                </th>
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody class="">
+
+                                            @php
+                                                $payments = \App\Models\PaymentTransaction::where(
+                                                    'student_transaction_id',
+                                                    $receipt_data->id ?? '',
+                                                )
+                                                    ->whereIn('sale_category_id', [1, 2, 7])
+                                                    ->get();
+                                            @endphp
+                                            @forelse ($payments as $item)
+                                                <tr>
+                                                    <td
+                                                        class="text-gray-700 uppercase  text-transparent text-left border-gray-600 px-3 ">
+                                                        sdsdsd
+                                                    </td>
+                                                    <td class="text-gray-700 text-right  border-gray-600 px-3 ">
+                                                        {{ number_format($item->paid_amount, 2) }}
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td
+                                                        class="text-gray-700 uppercase  text-transparent text-left border-gray-600 px-3 ">
+                                                        &nbsp;
+                                                    </td>
+                                                    <td class="text-gray-700 text-right  border-gray-600 px-3 ">
+                                                        &nbsp;
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+
+                                            <tr>
+                                                <td
+                                                    class="text-gray-700 uppercase  text-transparent text-left border-gray-600 px-3 ">
+                                                    &nbsp;
+                                                </td>
+                                                <td class="text-gray-700 text-right  border-gray-600 px-3 ">
+                                                    &nbsp;
+                                                </td>
+                                            </tr>
+
+                                            @php
+                                                $other_payments = \App\Models\PaymentTransaction::where(
+                                                    'student_transaction_id',
+                                                    $receipt_data->id ?? '',
+                                                )
+                                                    ->whereNotIn('sale_category_id', [1, 2, 7])
+                                                    ->get();
+                                            @endphp
+
+                                            @foreach ($other_payments as $item)
+                                                <tr>
+                                                    <td
+                                                        class="text-gray-700 uppercase   text-right border-gray-600 px-3 ">
+                                                        @php
+                                                            $name = '';
+                                                            if ($item['category'] != null) {
+                                                                $name = \App\Models\SaleCategory::where(
+                                                                    'id',
+                                                                    $item['category'],
+                                                                )->first();
+                                                            }
+                                                        @endphp
+                                                        {{ $name->name ?? '' }}
+
+                                                    </td>
+                                                    <td class="text-gray-700 text-right  border-gray-600 px-3 ">
+                                                        {{ $item['paid_amount'] }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+
+                                        </tbody>
+                                    </table>
+                                    <div class="absolute bottom-[4.5rem] right-6">
+                                        <span> {{ number_format($receipt_data->total_amount ?? 0, 2) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Dialog Footer -->
+                        <div class="flex items-center justify-center border-slate-300 p-4 dark:border-slate-700">
+                            <button type="button" @click="printOut($refs.printContainer.outerHTML);"
+                                class="w-full cursor-pointer whitespace-nowrap rounded-2xl bg-orange-600 px-4 py-2  text-center text-sm font-semibold tracking-wide text-white transition hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 active:opacity-100 active:outline-offset-0">
+                                <span>Print Receipt</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
 </div>
