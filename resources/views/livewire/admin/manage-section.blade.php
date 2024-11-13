@@ -366,12 +366,13 @@
                                                 if ($dues->book_fee_updated == false) {
                                                     $total_books = 500;
                                                 } else {
-                                                    // Check if $total_books is non-zero before division
+                                                    // Calculate only if (5 - $total_books) is not zero
+                                                    $divisor = 5 - $total_books;
                                                     $total_books =
                                                         $dues->total_book == 1000
                                                             ? 0
-                                                            : ($total_books > 0
-                                                                ? $dues->total_book / (5 - $total_books)
+                                                            : ($divisor !== 0
+                                                                ? $dues->total_book / $divisor
                                                                 : 0);
                                                 }
                                             @endphp
@@ -387,6 +388,7 @@
                                                 &#8369;{{ number_format($dues->total_book, 2) }}
                                             @endif
                                         </td>
+
 
                                     </tr>
                                     <tr>
