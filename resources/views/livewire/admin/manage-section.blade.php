@@ -345,8 +345,6 @@
 
                                         <td
                                             class="border text-gray-700 text-xs font-medium text-center border-gray-700 px-3 ">
-
-
                                             @php
                                                 $books = \App\Models\StudentTransaction::where(
                                                     'student_payment_id',
@@ -368,15 +366,19 @@
                                                 if ($dues->book_fee_updated == false) {
                                                     $total_books = 500;
                                                 } else {
+                                                    // Check if $total_books is non-zero before division
                                                     $total_books =
                                                         $dues->total_book == 1000
                                                             ? 0
-                                                            : $dues->total_book / (5 - $total_books);
+                                                            : ($total_books > 0
+                                                                ? $dues->total_book / (5 - $total_books)
+                                                                : 0);
                                                 }
                                             @endphp
 
                                             &#8369;{{ number_format($total_books, 2) }}
                                         </td>
+
                                         <td
                                             class="border text-gray-700 text-xs font-medium text-center border-gray-700 px-3 ">
                                             @if ($dues->book_fee_updated == false)
@@ -385,6 +387,7 @@
                                                 &#8369;{{ number_format($dues->total_book, 2) }}
                                             @endif
                                         </td>
+
                                     </tr>
                                     <tr>
                                         <td
