@@ -347,7 +347,7 @@
                                                     ->pluck('id')
                                                     ->toArray();
 
-                                                $total_books = \App\Models\PaymentTransaction::whereIn(
+                                                $paid_books_count = \App\Models\PaymentTransaction::whereIn(
                                                     'student_transaction_id',
                                                     $books,
                                                 )
@@ -357,15 +357,19 @@
                                                     })
                                                     ->count();
 
+                                                // Set total_books based on condition
                                                 if ($this->dues->book_fee_updated == false) {
                                                     $total_books = 500;
                                                 } else {
-                                                    $total_books =
-                                                        $total_books > 0
-                                                            ? ($this->dues->total_book == 1000
+                                                    // Check if denominator will be zero before performing division
+                                                    if ($paid_books_count < 5) {
+                                                        $total_books =
+                                                            $this->dues->total_book == 1000
                                                                 ? 0
-                                                                : $this->dues->total_book / (5 - $total_books))
-                                                            : 0; // Ensures no division by zero
+                                                                : $this->dues->total_book / (5 - $paid_books_count);
+                                                    } else {
+                                                        $total_books = 0; // Handle case when denominator would be zero
+                                                    }
                                                 }
                                             @endphp
 
