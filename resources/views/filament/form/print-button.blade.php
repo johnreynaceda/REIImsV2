@@ -338,10 +338,11 @@
 
                                         <td
                                             class="border text-gray-700 text-xs font-medium text-center border-gray-700 px-3 ">
+
                                             @php
                                                 $books = \App\Models\StudentTransaction::where(
                                                     'student_payment_id',
-                                                    $dues->id,
+                                                    $this->dues->id,
                                                 )
                                                     ->pluck('id')
                                                     ->toArray();
@@ -356,17 +357,15 @@
                                                     })
                                                     ->count();
 
-                                                if ($dues->book_fee_updated == false) {
+                                                if ($this->dues->book_fee_updated == false) {
                                                     $total_books = 500;
                                                 } else {
-                                                    // Calculate only if (5 - $total_books) is not zero
-                                                    $divisor = 5 - $total_books;
                                                     $total_books =
-                                                        $dues->total_book == 1000
-                                                            ? 0
-                                                            : ($divisor !== 0
-                                                                ? $dues->total_book / $divisor
-                                                                : 0);
+                                                        $total_books > 0
+                                                            ? ($this->dues->total_book == 1000
+                                                                ? 0
+                                                                : $this->dues->total_book / (5 - $total_books))
+                                                            : 0; // Ensures no division by zero
                                                 }
                                             @endphp
 
@@ -375,12 +374,13 @@
 
                                         <td
                                             class="border text-gray-700 text-xs font-medium text-center border-gray-700 px-3 ">
-                                            @if ($dues->book_fee_updated == false)
+                                            @if ($this->dues->book_fee_updated == false)
                                                 &#8369;0.00
                                             @else
-                                                &#8369;{{ number_format($dues->total_book, 2) }}
+                                                &#8369;{{ number_format($this->dues->total_book, 2) }}
                                             @endif
                                         </td>
+
                                     </tr>
                                     <tr>
                                         <td
