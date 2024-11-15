@@ -362,11 +362,11 @@
                                                     $total_books = 500;
                                                 } else {
                                                     // Check if denominator will be zero before performing division
-                                                    if ($paid_books_count < 5) {
+                                                    if ($paid_books_count < 6) {
                                                         $total_books =
                                                             $this->dues->total_book == 1000
                                                                 ? 0
-                                                                : $this->dues->total_book / (5 - $paid_books_count);
+                                                                : $this->dues->total_book / (6 - $paid_books_count);
                                                     } else {
                                                         $total_books = 0; // Handle case when denominator would be zero
                                                     }

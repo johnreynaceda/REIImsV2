@@ -250,7 +250,7 @@
                                                 $total_books = 500;
                                             } else {
                                                 // Prevent division by zero
-                                                $divisor = 5 - $paid_books_count;
+                                                $divisor = 6 - $paid_books_count;
                                                 $total_books = $divisor > 0 ? (float) $dues->total_book / $divisor : 0;
                                             }
                                         @endphp
