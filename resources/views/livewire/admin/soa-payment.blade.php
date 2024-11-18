@@ -56,6 +56,7 @@
                                 <div class=""></div>
                                 <div class="">
                                     {{ str_replace('Grade', '', $student->studentInformation->educationalInformation->gradeLevel->name) }}
+                                    - {{ strtoupper($section) }}
                                 </div>
                             </div>
                             <table id="example" class="table-auto" style="width:100%">
@@ -235,6 +236,7 @@
                                     <div class="text-transparent">xsdsdsd</div>
                                     <div class="text-right mr-5 uppercase">
                                         {{ str_replace('Grade', '', $student->studentInformation->educationalInformation->gradeLevel->name) }}
+                                        - {{ strtoupper($section) }}
                                     </div>
                                 </div>
                                 <div class="mr-[2.40rem] h-72 relative">

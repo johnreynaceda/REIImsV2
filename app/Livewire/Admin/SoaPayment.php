@@ -46,6 +46,8 @@ class SoaPayment extends Component implements HasForms
     public $student;
     public $payments = [];
 
+    public $section;
+
     public $receipt_modal = false;
 
 
@@ -106,6 +108,7 @@ class SoaPayment extends Component implements HasForms
 
          $total_discount = (float)$payment->total_book * 0.15;
 
+         $this->section = Student::where('id', $this->student_id)->first()->studentSections->first()->section->name;
 
 
         $transaction = StudentTransaction::create([
