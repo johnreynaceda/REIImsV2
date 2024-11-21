@@ -220,11 +220,12 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="border text-gray-700 text-sm font-bold text-left border-gray-700 px-3 ">
-                                        BOOKS</td>
+                                    <td class="border text-gray-700 text-sm font-bold text-left border-gray-700 px-3">
+                                        BOOKS
+                                    </td>
 
                                     <td
-                                        class="border text-gray-700 text-sm font-medium text-center border-gray-700 px-3 ">
+                                        class="border text-gray-700 text-sm font-medium text-center border-gray-700 px-3">
                                         @php
                                             // Get book transaction IDs for the student
                                             $books = \App\Models\StudentTransaction::where(
@@ -245,13 +246,13 @@
                                                 })
                                                 ->count();
 
-                                            // Set total_books based on book fee status
-                                            if ($dues->book_fee_updated == false) {
+                                            // Determine total_books based on fee update status
+                                            if (!$dues->book_fee_updated) {
                                                 $total_books = 500;
                                             } else {
-                                                // Prevent division by zero
-                                                $divisor = 6 - $paid_books_count;
-                                                $total_books = $divisor > 0 ? (float) $dues->total_book / $divisor : 0;
+                                                // Calculate the divisor and guard against zero
+                                                $divisor = max(6 - $paid_books_count, 1); // Minimum divisor is 1
+                                                $total_books = (float) $dues->total_book / $divisor;
                                             }
                                         @endphp
 
@@ -259,14 +260,15 @@
                                     </td>
 
                                     <td
-                                        class="border text-gray-700 text-sm font-medium text-center border-gray-700 px-3 ">
-                                        @if ($dues->book_fee_updated == false)
+                                        class="border text-gray-700 text-sm font-medium text-center border-gray-700 px-3">
+                                        @if (!$dues->book_fee_updated)
                                             &#8369;0.00
                                         @else
                                             &#8369;{{ number_format($dues->total_book, 2) }}
                                         @endif
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <td class="border text-sm text-gray-700 font-bold text-left border-gray-700 px-3">
                                         P.E UNIFORM
