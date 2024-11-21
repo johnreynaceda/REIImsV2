@@ -901,15 +901,14 @@
                                 </tr>
                                 <tr>
                                     <td
-                                        class="border text-gray-700 text-xs font-semibold text-left border-gray-700 px-3 ">
+                                        class="border text-gray-700 text-xs font-semibold text-left border-gray-700 px-3">
                                         BOOKS <span class="text-[0.5rem]">(&#8369; )</span>
                                     </td>
 
                                     <td
-                                        class="border text-gray-700 text-xs font-medium text-center border-gray-700 px-3 ">
-
-
+                                        class="border text-gray-700 text-xs font-medium text-center border-gray-700 px-3">
                                         @php
+                                            // Get student transaction IDs related to books
                                             $books = \App\Models\StudentTransaction::where(
                                                 'student_payment_id',
                                                 $dues->id,
@@ -917,7 +916,8 @@
                                                 ->pluck('id')
                                                 ->toArray();
 
-                                            $total_books = \App\Models\PaymentTransaction::whereIn(
+                                            // Count paid book transactions
+                                            $paid_books_count = \App\Models\PaymentTransaction::whereIn(
                                                 'student_transaction_id',
                                                 $books,
                                             )
@@ -927,27 +927,28 @@
                                                 })
                                                 ->count();
 
-                                            if ($dues->book_fee_updated == false) {
-                                                $total_books = 500;
+                                            // Calculate total books cost
+                                            if (!$dues->book_fee_updated) {
+                                                $total_books = 500; // Default fee if not updated
                                             } else {
-                                                $total_books =
-                                                    $dues->total_book == 1000
-                                                        ? 0
-                                                        : $dues->total_book / (6 - $total_books);
+                                                $divisor = 6 - $paid_books_count;
+                                                $total_books = $divisor > 0 ? $dues->total_book / $divisor : 0; // Fallback to 0 if division is invalid
                                             }
                                         @endphp
 
                                         &#8369;{{ number_format($total_books, 2) }}
                                     </td>
+
                                     <td
-                                        class="border text-gray-700 text-xs font-medium text-center border-gray-700 px-3 ">
-                                        @if ($dues->book_fee_updated == false)
+                                        class="border text-gray-700 text-xs font-medium text-center border-gray-700 px-3">
+                                        @if (!$dues->book_fee_updated)
                                             &#8369;0.00
                                         @else
                                             &#8369;{{ number_format($dues->total_book, 2) }}
                                         @endif
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <td
                                         class="border text-xs text-gray-700 font-semibold text-left  border-gray-700 px-3 ">
