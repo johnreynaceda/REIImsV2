@@ -56,11 +56,13 @@ class SoaPayment extends Component implements HasForms
       
         $this->student_id = $student_id;
         
-        $student = Student::find($this->student_id);
+        $student = Student::where('id', $this->student_id)->first();
+        
         $this->student = $student;
         $this->student_name = $student->studentInformation->lastname. ', '. $student->studentInformation->firstname. ' '. ($student->studentInformation->middlename == null ? '' : $student->studentInformation->middlename[0].'.');
         $payment = StudentPayment::where('student_id', $this->student_id)->first();
         $this->total_book_with_discount = $payment->total_book;
+        $this->section = Student::where('id', $this->student_id)->first()->studentSections->first()->section->name;
     }
 
 
@@ -108,7 +110,7 @@ class SoaPayment extends Component implements HasForms
 
          $total_discount = (float)$payment->total_book * 0.15;
 
-         $this->section = Student::where('id', $this->student_id)->first()->studentSections->first()->section->name;
+         
 
 
         $transaction = StudentTransaction::create([
