@@ -415,8 +415,8 @@
                     @if ($department === 'SHS')
                         <div class="w-36">
                             <x-native-select label="Select Semester:" wire:model.live="semester">
-                                <option>1st Semester</option>
-                                <option>2nd Semester</option>
+                                <option value="1st Semester">1st Semester</option>
+                                <option value="2nd Semester">2nd Semester</option>
                             </x-native-select>
                         </div>
                     @endif

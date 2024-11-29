@@ -1,9 +1,7 @@
 <div>
-    @if (auth()->user()->role_id == 1)
-        <div class="w-72">
-            {{ $this->form }}
-        </div>
-    @endif
+    <div class="w-72">
+        {{ $this->form }}
+    </div>
     @if ($type == 1)
         <div class="mt-5">
             {{ $this->table }}

@@ -24,6 +24,11 @@
         <div>
             <h1 class="uppercase font-bold text-gray-600">Active Semester</h1>
             <h1 class="text-center text-2xl font-semibold text-orange-500">2ND SEM</h1>
+            <div class="flex flex-col space-y-1 text-gray-700 items-center">
+                <h1 class="text-sm font-medium underline">From Private(77.7778%)</h1>
+                <h1 class="text-sm font-medium underline">From Public(97.2222%)</span>
+                    <h1 class="text-sm font-medium underline">From StateU(97.2222%)</span>
+            </div>
         </div>
     </div>
     <div class="mt-5 grid grid-cols-2 gap-5">
@@ -132,7 +137,15 @@
                                                 $total = 0;
                                                 $dental += $total;
                                                 break;
+                                            case 'Developmental Fee':
+                                                $total = 0;
+                                                $dental += $total;
+                                                break;
                                             case 'School ID':
+                                                $total = 0;
+                                                $school_id += $total;
+                                                break;
+                                            case 'Books':
                                                 $total = 0;
                                                 $school_id += $total;
                                                 break;
@@ -162,7 +175,7 @@
                             d="M3 6H21V18H3V6ZM2 4C1.44772 4 1 4.44772 1 5V19C1 19.5523 1.44772 20 2 20H22C22.5523 20 23 19.5523 23 19V5C23 4.44772 22.5523 4 22 4H2ZM13 8H19V10H13V8ZM18 12H13V14H18V12ZM10.5 10C10.5 11.3807 9.38071 12.5 8 12.5C6.61929 12.5 5.5 11.3807 5.5 10C5.5 8.61929 6.61929 7.5 8 7.5C9.38071 7.5 10.5 8.61929 10.5 10ZM8 13.5C6.067 13.5 4.5 15.067 4.5 17H11.5C11.5 15.067 9.933 13.5 8 13.5Z">
                         </path>
                     </svg>
-                    <h1 class="font-semibold font-poppins text-orange-500">REQUIRED DOWNPAYMENT
+                    <h1 class="font-semibold font-poppins text-orange-500">REQUIRED DOWNPAYMENTS
                     </h1>
                 </div>
 
@@ -179,16 +192,7 @@
                                     if (!empty($item->school_fee->name)) {
                                         $total = 0;
                                         switch ($item->school_fee->name) {
-                                            case 'Tuition':
-                                            case 'Miscellaneous':
-                                                $discount =
-                                                    ($item->school_fee->amount * (float) ($tuition_sub ?? 0)) / 100;
-                                                $total = ($item->school_fee->amount - $discount) / $payment_terms;
-                                                break;
-                                            case 'Medical/Dental':
-                                                $total = 0;
-                                                break;
-                                            case 'School ID':
+                                            case 'Books':
                                                 $total = 0;
                                                 break;
                                             default:

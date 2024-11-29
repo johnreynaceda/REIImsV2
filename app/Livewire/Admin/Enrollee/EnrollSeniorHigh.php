@@ -75,8 +75,8 @@ class EnrollSeniorHigh extends Component implements HasForms
         $this->remaining_cash = (float)$this->cash_receive - ((float)$this->tuition + (float)$this->misc + (float)$this->developmental + (float)$this->enrollment + (float)$this->medical + (float)$this->school_id + (float)$this->books);
         $this->cash_change = (float)$this->cash_receive - $this->total_payment;
         $this->payments = GradeLevelFee::where('grade_level_id', $this->grade_level)->whereHas('school_fee', function($record){
-            $record->whereNotIn('name', ['Tuition', 'Miscellaneous']);
-        })->get()->take(5);
+            $record->whereNotIn('name', ['Tuition', 'Miscellaneous', 'Developmental Fee','Medical/Dental','School ID']);
+        })->get()->take(2);
         $this->default_payments = GradeLevelFee::where('grade_level_id', $this->grade_level)->get()->take(7);
         return view('livewire.admin.enrollee.enroll-senior-high',[
             'enrollee' => Enrollee::where('id', $this->enrollee_id)->first(),

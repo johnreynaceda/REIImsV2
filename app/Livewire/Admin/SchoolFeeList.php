@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\ActiveSemester;
 use App\Models\GradeLevel;
 use App\Models\GradeLevelFee;
 use App\Models\PaymentTransaction;
@@ -117,7 +118,7 @@ class SchoolFeeList extends Component implements HasForms, HasTable
                             $strand = $value->strand_id;
                         }
 
-                        $students = StudentPayment::whereHas('student', function($s) use ($grade_level, $strand){
+                        $students = StudentPayment::where('active_sem', ActiveSemester::first()->active)->whereHas('student', function($s) use ($grade_level, $strand){
                             $s->where('strand_id', $strand)->whereHas('studentInformation', function($i) use ($grade_level){
                                 $i->whereHas('educationalInformation', function($e) use ($grade_level){
                                     $e->whereIn('grade_level_id', $grade_level);
@@ -139,6 +140,7 @@ class SchoolFeeList extends Component implements HasForms, HasTable
                             'total_book' => ($data['amount'] - $original_sum_books),
                             'book_fee_updated' => true,
                             'total_payables' => ($value->total_tuition + $value->total_misc) + ($data['amount'] - $original_sum_books),
+
                           ]);
                           $record->update([
                             'amount' => $data['amount'],

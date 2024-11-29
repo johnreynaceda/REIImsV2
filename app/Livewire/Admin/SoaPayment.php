@@ -57,10 +57,10 @@ class SoaPayment extends Component implements HasForms
         $this->student_id = $student_id;
         
         $student = Student::where('id', $this->student_id)->first();
-        
+        $department = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->department;
         $this->student = $student;
         $this->student_name = $student->studentInformation->lastname. ', '. $student->studentInformation->firstname. ' '. ($student->studentInformation->middlename == null ? '' : $student->studentInformation->middlename[0].'.');
-        $payment = StudentPayment::where('student_id', $this->student_id)->first();
+        $payment = StudentPayment::where('student_id', $this->student_id)->where('active_sem', $department == 'SHS' ? ActiveSemester::first()->active : '1st Semester')->first();
         $this->total_book_with_discount = $payment->total_book;
         $this->section = Student::where('id', $this->student_id)->first()->studentSections->first()->section->name;
     }
@@ -101,7 +101,7 @@ class SoaPayment extends Component implements HasForms
 
         
 
-        $payment = StudentPayment::where('student_id', $this->student_id)->first();
+        $payment = StudentPayment::where('student_id', $this->student_id)->where('active_sem', ActiveSemester::first()->active)->first();
          $department = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->department;
 
          $gradelevel = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->id;
