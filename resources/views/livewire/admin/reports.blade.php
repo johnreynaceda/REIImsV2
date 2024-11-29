@@ -81,13 +81,34 @@
                                                     ', ' .
                                                     $item->studentInformation->firstname;
                                             } else {
-                                                $fullname = '';
+                                                $data = \App\Models\StudentPayment::where(
+                                                    'id',
+                                                    $item->student_payment_id,
+                                                )->first()->student->studentInformation;
+                                                $fullname = $data->lastname . ', ' . $data->firstname;
                                             }
                                         @endphp
                                         {{ $fullname }}
                                     </td>
                                     <td class="border text-xs text-gray-700 px-3 py-1 whitespace-nowrap">
-                                        {{ $item->studentInformation->educationalInformation->gradeLevel->name ?? '' }}
+                                        @php
+                                            if (
+                                                \App\Models\StudentInformation::where(
+                                                    'id',
+                                                    $item->student_information_id,
+                                                )->count() > 0
+                                            ) {
+                                                $grade =
+                                                    $item->studentInformation->educationalInformation->gradeLevel->name;
+                                            } else {
+                                                $data = \App\Models\StudentPayment::where(
+                                                    'id',
+                                                    $item->student_payment_id,
+                                                )->first()->student->studentInformation;
+                                                $grade = $data->educationalInformation->gradeLevel->name;
+                                            }
+                                        @endphp
+                                        {{ $grade }}
                                     </td>
                                     @php
                                         $studentTotal = 0;
