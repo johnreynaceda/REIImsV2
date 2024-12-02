@@ -101,8 +101,16 @@ class SoaPayment extends Component implements HasForms
 
         
 
-        $payment = StudentPayment::where('student_id', $this->student_id)->where('active_sem', ActiveSemester::first()->active)->first();
+       
          $department = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->department;
+        
+        if ($department == 'K-10') {
+            $payment = StudentPayment::where('student_id', $this->student_id)->where('active_sem', '1st Semester')->first();
+        }else{
+            $payment = StudentPayment::where('student_id', $this->student_id)->where('active_sem', ActiveSemester::first()->active)->first();
+        }
+         
+         
 
          $gradelevel = Student::where('id', $this->student_id)->first()->studentInformation->educationalInformation->gradeLevel->id;
 
