@@ -420,10 +420,8 @@
                                                 ) {
                                                     $query->where('name', 'LIKE', '%' . 'HANDBOOK' . '%');
                                                 })
-                                                    ->whereHas('otherPaymentStudents', function ($students) use (
-                                                        $student_id,
-                                                    ) {
-                                                        $students->where('student_id', $student_id);
+                                                    ->whereHas('otherPaymentStudents', function ($students) {
+                                                        $students->where('student_id', $this->student->id);
                                                     })
                                                     ->first();
 
@@ -432,12 +430,10 @@
                                                         'sale_category_id',
                                                         $amount->sale_category_id,
                                                     )
-                                                        ->whereHas('studentTransaction', function ($query) use (
-                                                            $student_id,
-                                                        ) {
+                                                        ->whereHas('studentTransaction', function ($query) {
                                                             $student_info_id = \App\Models\Student::where(
                                                                 'id',
-                                                                $student_id,
+                                                                $this->student->id,
                                                             )->first()->student_information_id;
                                                             $query->where('student_information_id', $student_info_id);
                                                         })
