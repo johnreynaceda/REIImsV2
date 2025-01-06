@@ -405,20 +405,51 @@
                                     </tr>
                                     <tr>
                                         <td
-                                            class="border text-xs text-gray-700 font-semibold text-left  border-gray-700 px-3 ">
-                                            STUDENT HAND BOOK <span
-                                                class="text-[0.5rem]">(&#8369;{{ number_format($handbook, 2) }})</span>
+                                            class="border text-sm text-gray-700 font-bold text-left border-gray-700 px-3">
+                                            HANDBOOK
                                         </td>
                                         <td
-                                            class="border text-xs text-gray-700 font-medium text-center border-gray-700 px-3 ">
+                                            class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3">
                                             -
                                         </td>
                                         <td
-                                            class="border text-xs text-gray-700 font-medium text-center border-gray-700 px-3 ">
+                                            class="border text-sm text-gray-700 font-medium text-center border-gray-700 px-3">
+                                            @php
+                                                $amount = \App\Models\OtherPayment::whereHas('saleCategory', function (
+                                                    $query,
+                                                ) {
+                                                    $query->where('name', 'LIKE', '%' . 'HANDBOOK' . '%');
+                                                })
+                                                    ->whereHas('otherPaymentStudents', function ($students) use (
+                                                        $student_id,
+                                                    ) {
+                                                        $students->where('student_id', $student_id);
+                                                    })
+                                                    ->first();
 
+                                                if ($amount) {
+                                                    $is_paid = \App\Models\PaymentTransaction::where(
+                                                        'sale_category_id',
+                                                        $amount->sale_category_id,
+                                                    )
+                                                        ->whereHas('studentTransaction', function ($query) use (
+                                                            $student_id,
+                                                        ) {
+                                                            $student_info_id = \App\Models\Student::where(
+                                                                'id',
+                                                                $student_id,
+                                                            )->first()->student_information_id;
+                                                            $query->where('student_information_id', $student_info_id);
+                                                        })
+                                                        ->get();
+
+                                                    $handbook = $is_paid->count() > 0 ? 0 : $amount->amount;
+                                                } else {
+                                                    $handbook = 0;
+                                                }
+                                            @endphp
 
                                             &#8369;{{ number_format($handbook, 2) }}
-
                                         </td>
                                     </tr>
                                     <tr>
