@@ -358,24 +358,20 @@
                                                     ->count();
 
                                                 // Set total_books based on condition
-                                                if (!$this->dues->book_fee_updated) {
+                                                if ($this->dues->book_fee_updated == false) {
                                                     $total_books = 500;
                                                 } else {
-                                                    // // Check if denominator will be zero before performing division
-                                                    // if ($paid_books_count < 6) {
-                                                    //     $total_books =
-                                                    //         $this->dues->total_book == 1000
-                                                    //             ? 0
-                                                    //             : $this->dues->total_book / (6 - $paid_books_count);
-                                                    // } else {
-                                                    //     $total_books = 0; // Handle case when denominator would be zero
-                                                    // }
-                                                    $divisor = max(6 - $paid_books_count, 1); // Minimum divisor is 1
-                                                    $total_books = (float) $dues->total_book / $divisor;
+                                                    // Check if denominator will be zero before performing division
+                                                    if ($paid_books_count < 6) {
+                                                        $total_books =
+                                                            $this->dues->total_book == 1000
+                                                                ? 0
+                                                                : $this->dues->total_book / (6 - $paid_books_count);
+                                                    } else {
+                                                        $total_books = 0; // Handle case when denominator would be zero
+                                                    }
                                                 }
                                             @endphp
-
-
 
                                             &#8369;{{ number_format($total_books, 2) }}
                                         </td>
