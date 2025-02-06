@@ -363,11 +363,17 @@
                                                 if (!$this->dues->book_fee_updated) {
                                                     $total_books = 500;
                                                 } else {
-                                                    // Calculate the divisor and guard against zero
-                                                    $divisor = max(6 - $paid_books_count, 1); // Minimum divisor is 1
+                                                    // Ensure we have a valid divisor (prevent division by zero)
+                                                    $divisor = 6 - $paid_books_count;
+
+                                                    if ($divisor <= 0) {
+                                                        $divisor = 1; // Fallback to 1 to prevent division by zero
+                                                    }
+
                                                     $total_books = (float) $this->dues->total_book / $divisor;
                                                 }
                                             @endphp
+
 
                                             &#8369;{{ number_format($total_books, 2) }}
                                         </td>
