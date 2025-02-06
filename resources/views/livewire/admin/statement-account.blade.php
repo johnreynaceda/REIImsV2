@@ -394,13 +394,13 @@
                             </tbody>
 
                         </table>
-                        {{-- <div class="mt-5 font-sans grid grid-cols-2 gap-5 z-20">
+                        <div class="mt-5 font-sans grid grid-cols-2 gap-5 z-20">
                             <x-datetime-picker label="Due Date" without-timezone without-time
                                 wire:model.live="due_date" />
                             <div></div>
                             <x-button label="PRINT SOA" icon="printer"
                                 @click="printOut($refs.printContainer.outerHTML);" slate class="font-semibold" />
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
             </div>
