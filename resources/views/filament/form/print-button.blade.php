@@ -234,13 +234,15 @@
 
 
                                             @php
+                                                // Calculate Miscellaneous
                                                 $misc = \App\Models\StudentTransaction::where(
                                                     'student_payment_id',
                                                     $this->dues->id,
                                                 )
                                                     ->pluck('id')
                                                     ->toArray();
-                                                $total_misc = \App\Models\PaymentTransaction::whereIn(
+
+                                                $total_misc_count = \App\Models\PaymentTransaction::whereIn(
                                                     'student_transaction_id',
                                                     $misc,
                                                 )
@@ -249,13 +251,23 @@
                                                         $category->where('name', 'like', 'Miscellaneous');
                                                     })
                                                     ->count();
-                                                // $total_misc = $this->dues->total_misc / (10 - $total_misc);
-                                                $total_misc =
+
+                                                // Determine the correct payment term
+                                                $misc_term =
                                                     $this->department == 'SHS'
-                                                        ? $this->dues->total_misc /
-                                                            ($this->payment_terms / 2 - $total_misc)
-                                                        : $this->dues->total_misc /
-                                                            ($this->payment_terms - $total_misc);
+                                                        ? $this->payment_terms / 2
+                                                        : $this->payment_terms;
+
+                                                // Check if total misc count is equal to payment terms
+                                                if ($total_misc_count >= $misc_term) {
+                                                    $total_misc = $this->dues->total_misc; // Assign the total amount
+                                                } else {
+                                                    $remaining_terms = $misc_term - $total_misc_count;
+                                                    $total_misc =
+                                                        $remaining_terms > 0
+                                                            ? $this->dues->total_misc / $remaining_terms
+                                                            : 0;
+                                                }
                                             @endphp
 
                                             &#8369;{{ number_format($total_misc, 2) }}
@@ -363,17 +375,11 @@
                                                 if (!$this->dues->book_fee_updated) {
                                                     $total_books = 500;
                                                 } else {
-                                                    // Ensure we have a valid divisor (prevent division by zero)
-                                                    $divisor = 6 - $paid_books_count;
-
-                                                    if ($divisor <= 0) {
-                                                        $divisor = 1; // Fallback to 1 to prevent division by zero
-                                                    }
-
+                                                    // Calculate the divisor and guard against zero
+                                                    $divisor = max(6 - $paid_books_count, 1); // Minimum divisor is 1
                                                     $total_books = (float) $this->dues->total_book / $divisor;
                                                 }
                                             @endphp
-
 
                                             &#8369;{{ number_format($total_books, 2) }}
                                         </td>

@@ -138,6 +138,7 @@
                                             )
                                                 ->pluck('id')
                                                 ->toArray();
+
                                             $total_misc_count = \App\Models\PaymentTransaction::whereIn(
                                                 'student_transaction_id',
                                                 $misc,
@@ -148,14 +149,19 @@
                                                 })
                                                 ->count();
 
-                                            // Handle division by zero
-                                            $misc_term =
-                                                $department == 'SHS'
-                                                    ? $payment_terms / 2 - $total_misc_count
-                                                    : $payment_terms - $total_misc_count;
-                                            $total_misc = $misc_term > 0 ? $dues->total_misc / $misc_term : 0;
+                                            // Determine the correct payment term
+                                            $misc_term = $department == 'SHS' ? $payment_terms / 2 : $payment_terms;
 
+                                            // Check if total misc count is equal to payment terms
+                                            if ($total_misc_count >= $misc_term) {
+                                                $total_misc = $dues->total_misc; // Assign the total amount
+                                            } else {
+                                                $remaining_terms = $misc_term - $total_misc_count;
+                                                $total_misc =
+                                                    $remaining_terms > 0 ? $dues->total_misc / $remaining_terms : 0;
+                                            }
                                         @endphp
+
 
                                         &#8369;{{ number_format($total_misc, 2) }}
                                     </td>
@@ -806,13 +812,15 @@
 
 
                                         @php
+                                            // Calculate Miscellaneous
                                             $misc = \App\Models\StudentTransaction::where(
                                                 'student_payment_id',
                                                 $dues->id,
                                             )
                                                 ->pluck('id')
                                                 ->toArray();
-                                            $total_misc = \App\Models\PaymentTransaction::whereIn(
+
+                                            $total_misc_count = \App\Models\PaymentTransaction::whereIn(
                                                 'student_transaction_id',
                                                 $misc,
                                             )
@@ -821,11 +829,18 @@
                                                     $category->where('name', 'like', 'Miscellaneous');
                                                 })
                                                 ->count();
-                                            // $total_misc = $dues->total_misc / (10 - $total_misc);
-                                            $total_misc =
-                                                $department == 'SHS'
-                                                    ? $dues->total_misc / ($payment_terms / 2 - $total_misc)
-                                                    : $dues->total_misc / ($payment_terms - $total_misc);
+
+                                            // Determine the correct payment term
+                                            $misc_term = $department == 'SHS' ? $payment_terms / 2 : $payment_terms;
+
+                                            // Check if total misc count is equal to payment terms
+                                            if ($total_misc_count >= $misc_term) {
+                                                $total_misc = $dues->total_misc; // Assign the total amount
+                                            } else {
+                                                $remaining_terms = $misc_term - $total_misc_count;
+                                                $total_misc =
+                                                    $remaining_terms > 0 ? $dues->total_misc / $remaining_terms : 0;
+                                            }
                                         @endphp
 
                                         &#8369;{{ number_format($total_misc, 2) }}
