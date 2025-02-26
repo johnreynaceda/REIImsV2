@@ -46,7 +46,7 @@ class Reports extends Component
                 break;
 
             case 'Income':
-                DB::statement("SET SESSION max_execution_time=60000"); // Set max execution time to 60 seconds (MySQL only)
+                // DB::statement("SET SESSION max_execution_time=60000"); // Set max execution time to 60 seconds (MySQL only)
 
                 $recordsQuery = StudentTransaction::select(['id', 'or_number'])
                     ->when($this->date_from && $this->date_to, function ($query) {
