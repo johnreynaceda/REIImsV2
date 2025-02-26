@@ -45,22 +45,29 @@ class Reports extends Component
                 break;
 
             case 'Income':
-                $recordsQuery = StudentTransaction::when($this->date_from && $this->date_to, function($query) {
-                    $query->whereDate('created_at', '>=', $this->date_from)
-                          ->whereDate('created_at', '<=', $this->date_to);
-                });
+                $recordsQuery = StudentTransaction::query();
 
-                if (!$this->date_from && !$this->date_to) {
-                    $recordsQuery->take(5); // Limit to 5 records if date_from and date_to are not selected
-                }
+// Apply date filter if both date_from and date_to are set
+if ($this->date_from && $this->date_to) {
+    $recordsQuery->whereBetween('created_at', [$this->date_from, $this->date_to]);
+} else {
+    $recordsQuery->limit(5); // Limit records when no date range is set
+}
 
-                $data = $recordsQuery->orderBy('or_number', 'ASC')->get();
-                $records = $data->pluck('id');
+// Fetch only the required columns to reduce memory usage
+$data = $recordsQuery->orderBy('or_number', 'ASC')->get(['id', 'or_number']);
 
-                $this->categories = SaleCategory::whereIn('id', PaymentTransaction::whereIn('student_transaction_id', $records)->distinct()
-                                ->pluck('sale_category_id'))->get();
+// Extract IDs directly as an array
+$records = $data->pluck('id')->toArray();
 
-                return $data;
+$this->categories = SaleCategory::whereIn(
+    'id',
+    PaymentTransaction::whereIn('student_transaction_id', $records)
+        ->distinct()
+        ->pluck('sale_category_id')
+)->get();
+
+return $data;
                 break;
 
 
