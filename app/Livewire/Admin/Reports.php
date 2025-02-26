@@ -12,7 +12,6 @@ use App\Models\SaleCategory;
 use App\Models\Student;
 use App\Models\StudentPayment;
 use App\Models\StudentTransaction;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Maatwebsite\Excel\Excel;
 
@@ -46,27 +45,19 @@ class Reports extends Component
                 break;
 
             case 'Income':
-                // DB::statement("SET SESSION max_execution_time=60000"); // Set max execution time to 60 seconds (MySQL only)
+                $recordsQuery = StudentTransaction::when($this->date_from && $this->date_to, function($query) {
+                    $query->whereBetween('created_at', [$this->date_from, $this->date_to]);
+                });
 
-                $recordsQuery = StudentTransaction::select(['id', 'or_number'])
-                    ->when($this->date_from && $this->date_to, function ($query) {
-                        $query->whereBetween('created_at', [$this->date_from, $this->date_to]);
-                    }, function ($query) {
-                        $query->limit(5); // Limit to 5 records if no date range is selected
-                    });
-                
+                if (!$this->date_from && !$this->date_to) {
+                    $recordsQuery->take(5); // Limit to 5 records if date_from and date_to are not selected
+                }
+
                 $data = $recordsQuery->orderBy('or_number', 'ASC')->get();
-                
-                // Extract IDs as an array for optimized queries
-                $records = $data->pluck('id')->toArray();
-                
-                $this->categories = SaleCategory::whereIn(
-                    'id',
-                    PaymentTransaction::whereIn('student_transaction_id', $records)
-                        ->select('sale_category_id')
-                        ->distinct()
-                        ->pluck('sale_category_id')
-                )->get();
+                $records = $data->pluck('id');
+
+                $this->categories = SaleCategory::whereIn('id', PaymentTransaction::whereIn('student_transaction_id', $records)->distinct()
+                                ->pluck('sale_category_id'))->get();
 
                 return $data;
                 break;
