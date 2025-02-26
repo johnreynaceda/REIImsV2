@@ -12,6 +12,7 @@ use App\Models\SaleCategory;
 use App\Models\Student;
 use App\Models\StudentPayment;
 use App\Models\StudentTransaction;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Maatwebsite\Excel\Excel;
 
@@ -45,29 +46,29 @@ class Reports extends Component
                 break;
 
             case 'Income':
-                $recordsQuery = StudentTransaction::query();
+                DB::statement("SET SESSION max_execution_time=60000"); // Set max execution time to 60 seconds (MySQL only)
 
-// Apply date filter if both date_from and date_to are set
-if ($this->date_from && $this->date_to) {
-    $recordsQuery->whereBetween('created_at', [$this->date_from, $this->date_to]);
-} else {
-    $recordsQuery->limit(5); // Limit records when no date range is set
-}
+                $recordsQuery = StudentTransaction::select(['id', 'or_number'])
+                    ->when($this->date_from && $this->date_to, function ($query) {
+                        $query->whereBetween('created_at', [$this->date_from, $this->date_to]);
+                    }, function ($query) {
+                        $query->limit(5); // Limit to 5 records if no date range is selected
+                    });
+                
+                $data = $recordsQuery->orderBy('or_number', 'ASC')->get();
+                
+                // Extract IDs as an array for optimized queries
+                $records = $data->pluck('id')->toArray();
+                
+                $this->categories = SaleCategory::whereIn(
+                    'id',
+                    PaymentTransaction::whereIn('student_transaction_id', $records)
+                        ->select('sale_category_id')
+                        ->distinct()
+                        ->pluck('sale_category_id')
+                )->get();
 
-// Fetch only the required columns to reduce memory usage
-$data = $recordsQuery->orderBy('or_number', 'ASC')->get(['id', 'or_number']);
-
-// Extract IDs directly as an array
-$records = $data->pluck('id')->toArray();
-
-$this->categories = SaleCategory::whereIn(
-    'id',
-    PaymentTransaction::whereIn('student_transaction_id', $records)
-        ->distinct()
-        ->pluck('sale_category_id')
-)->get();
-
-return $data;
+                return $data;
                 break;
 
 
