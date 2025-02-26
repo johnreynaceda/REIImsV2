@@ -8,6 +8,7 @@
                 <option>Income</option>
                 <option>Expenses</option>
                 <option>Permit</option>
+                <option>Monthly Income</option>
             </x-native-select>
 
         </div>
@@ -23,6 +24,8 @@
                 <div class="w-64">
                     <x-datetime-picker label="Date To" wire:model.live="date_to" without-time without-timezone />
                 </div>
+
+
             </div>
             <div class="flex space-x-2">
                 <x-button dark label="Print Report" @click="printOut($refs.printContainer.outerHTML);" icon="printer" />
@@ -363,6 +366,31 @@
         @if ($selected_report == 'Permit')
             <livewire:admin.permit-report />
         @endif
+
+        @if ($selected_report == 'Monthly Income')
+            <div>
+                @php
+                    $grandTotal = 0;
+                @endphp
+
+                @foreach ($income as $item)
+                    @php
+                        $totalPaid = $item->paymentTransactions
+                            ->whereBetween('studentTransaction.created_at', [$date_from, $date_to])
+                            ->sum('paid_amount');
+
+                        $grandTotal += $totalPaid;
+                    @endphp
+
+                    <ul>
+                        <li> {{ $item->name }} - {{ number_format($totalPaid, 2) }} </li>
+                    </ul>
+                @endforeach
+
+                <h1>Grand Total: {{ number_format($grandTotal, 2) }}</h1>
+
+            </div>
+        @endif
     @else
         <div>
             <div class="
@@ -416,4 +444,6 @@
             </div>
         </div>
     @endif
+
+
 </div>
