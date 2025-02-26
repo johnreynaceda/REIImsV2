@@ -46,7 +46,8 @@ class Reports extends Component
 
             case 'Income':
                 $recordsQuery = StudentTransaction::when($this->date_from && $this->date_to, function($query) {
-                    $query->whereBetween('created_at', [$this->date_from, $this->date_to]);
+                    $query->whereBetween('created_at', '>=', boolean: $this->date_from)
+                          ->whereDate('created_at', '<=', $this->date_to);
                 });
 
                 if (!$this->date_from && !$this->date_to) {
