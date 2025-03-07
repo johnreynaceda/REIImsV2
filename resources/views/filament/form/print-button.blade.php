@@ -218,7 +218,6 @@
                                                         }
                                                     @endphp
 
-                                                    &#8369;{{ number_format($total_tuition, 2) }}
 
 
                                                     &#8369;{{ number_format($total_tuition, 2) }}
