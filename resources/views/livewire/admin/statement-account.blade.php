@@ -120,6 +120,53 @@
                                 </td>
                             </tr> --}}
                             <tr>
+                                <td class="border text-gray-700 text-sm font-bold text-left border-gray-700 px-3">
+                                    TUITION FEE
+                                </td>
+
+                                <td class="border text-gray-700 text-sm font-medium text-center border-gray-700 px-3">
+                                    @php
+                                        // Fetch Tuition Transactions
+                                        $tuition = \App\Models\StudentTransaction::where('student_payment_id', $dues->id)
+                                            ->pluck('id')
+                                            ->toArray();
+
+                                        // Count Paid Transactions for Tuition
+                                        $total_counter = \App\Models\PaymentTransaction::whereIn('student_transaction_id', $tuition)
+                                            ->where('paid_amount', '>', 0)
+                                            ->whereHas('saleCategory', function ($category) {
+                                                $category->where('name', 'like', 'tuition');
+                                            })
+                                            ->count();
+
+                                        // Determine Payment Terms Based on Department
+                                        $tuition_term = $department == 'SHS' ? $payment_terms / 2 : $payment_terms;
+
+                                        // Initialize Tuition Amount
+                                        $total_tuition = 0;
+
+                                        // Check if Payment Terms is greater than 0 to avoid division by zero
+                                        if ($tuition_term > 0) {
+                                            $remaining_terms = $tuition_term - $total_counter;
+
+                                            // Only divide if remaining terms are greater than 0
+                                            if ($remaining_terms > 0) {
+                                                $total_tuition = $dues->total_tuition / $remaining_terms;
+                                            } else {
+                                                $total_tuition = 0; // No remaining terms, set to zero
+                                            }
+                                        }
+                                    @endphp
+
+                                    &#8369;{{ number_format($total_tuition, 2) }}
+                                </td>
+
+                                <td class="border text-gray-700 text-sm font-medium text-center border-gray-700 px-3">
+                                    &#8369;{{ number_format($dues->total_tuition, 2) }}
+                                </td>
+                            </tr>
+
+                            <tr>
                                 <td class="border text-gray-700 text-sm font-bold text-left border-gray-700 px-3 ">
                                     MISCELLANEOUS FEE
                                 </td>
@@ -515,7 +562,7 @@
     </div>
 @else
     <div class="
-                                                        mt-5 rounded-2xl py-10 bg-white grid place-content-center">
+                                                                mt-5 rounded-2xl py-10 bg-white grid place-content-center">
         <svg data-name="Layer 1" class="animate-linear-progress" xmlns="http://www.w3.org/2000/svg" width="500" height="500"
             viewBox="0 0 797.5 834.5" xmlns:xlink="http://www.w3.org/1999/xlink">
             <title>void</title>
