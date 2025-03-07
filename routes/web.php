@@ -182,6 +182,9 @@ Route::prefix('administrator')->middleware('check_session')->group(
         Route::get('/reports', function() {
             return view('admin.reports');
         })->name('admin.reports');
+        Route::get('/income-report', function() {
+            return view('admin.income-report');
+        })->name('admin.income-report');
     }
 );
 

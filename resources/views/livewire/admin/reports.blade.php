@@ -17,14 +17,16 @@
     </div>
     @if ($selected_report != 'Permit')
         <div class="mt-4 border-t pt-4 flex justify-between items-end">
-            <div class="flex space-x-2 ">
+            <div class="flex space-x-2 items-end ">
                 <div class="w-64">
                     <x-datetime-picker label="Date From" wire:model.live="date_from" without-time without-timezone />
                 </div>
                 <div class="w-64">
                     <x-datetime-picker label="Date To" wire:model.live="date_to" without-time without-timezone />
                 </div>
-
+                <div>
+                    <x-button label="Monthly" href="{{ route('admin.income-report') }}" />
+                </div>
 
             </div>
             <div class="flex space-x-2">

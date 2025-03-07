@@ -93,6 +93,8 @@ class Reports extends Component
         return \Maatwebsite\Excel\Facades\Excel::download(new StudentExport, 'students_record.xlsx');
     }
 
+    
+
     public function fixedSoa(){
             $query = StudentPayment::all();
 
