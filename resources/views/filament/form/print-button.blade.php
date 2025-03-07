@@ -187,7 +187,7 @@
                                                 <td class="border text-gray-700 text-xs font-medium text-center border-gray-700 px-3 ">
                                                     @php
                                                         // Fetch Tuition Transactions
-                                                        $tuition = \App\Models\StudentTransaction::where('student_payment_id', $dues->id)
+                                                        $tuition = \App\Models\StudentTransaction::where('student_payment_id', $this->dues->id)
                                                             ->pluck('id')
                                                             ->toArray();
 
@@ -200,23 +200,26 @@
                                                             ->count();
 
                                                         // Determine Payment Terms Based on Department
-                                                        $tuition_term = $department == 'SHS' ? $payment_terms / 2 : $payment_terms;
+                                                        $tuition_term = $this->department == 'SHS' ? $this->payment_terms / 2 : $this->payment_terms;
 
                                                         // Initialize Tuition Amount
                                                         $total_tuition = 0;
 
-                                                        // Check if Payment Terms is greater than 0 to avoid division by zero
+                                                        // Check if Tuition Terms is greater than 0 to avoid division by zero
                                                         if ($tuition_term > 0) {
                                                             $remaining_terms = $tuition_term - $total_counter;
 
                                                             // Only divide if remaining terms are greater than 0
                                                             if ($remaining_terms > 0) {
-                                                                $total_tuition = $dues->total_tuition / $remaining_terms;
+                                                                $total_tuition = $this->dues->total_tuition / $remaining_terms;
                                                             } else {
                                                                 $total_tuition = 0; // No remaining terms, set to zero
                                                             }
                                                         }
                                                     @endphp
+
+                                                    &#8369;{{ number_format($total_tuition, 2) }}
+
 
                                                     &#8369;{{ number_format($total_tuition, 2) }}
                                                 </td>
