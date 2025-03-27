@@ -420,6 +420,8 @@
                             @foreach ($pictures as $item)
                                 @php
                                     $name = '';
+                                    $grade_level;
+                                    $section;
 
                                     $transaction = \App\Models\StudentTransaction::where(
                                         'id',
@@ -446,6 +448,15 @@
                                                         'id',
                                                         $transaction->student_information_id,
                                                     )->first()->firstname ?? '');
+                                        $grade_level = $student->educationalInformation->gradeLevel->name ?? '';
+                                        $info_id = $student->id ?? '';
+                                        $info_id = $student->id ?? null;
+
+                                        $sec = $info_id
+                                            ? \App\Models\StudentInformation::where('id', $info_id)->first()?->student
+                                            : null;
+
+                                        $section = $sec?->studentSections?->first()?->section?->name ?? '';
                                     }
                                 @endphp
                                 <tr>
@@ -458,8 +469,10 @@
                                     </td>
 
                                     <td class="border-2  text-gray-700  px-3 py-1">
+                                        {{ $grade_level }}
                                     </td>
                                     <td class="border-2  text-gray-700  px-3 py-1">
+                                        {{ $section }}
                                     </td>
 
 
