@@ -22,22 +22,24 @@ class Reports extends Component
 
     public $grade_level_id;
     public $categories = [];
-    PUBLIC $expense_categories = [];
+    public $expense_categories = [];
     public function render()
     {
-        return view('livewire.admin.reports',[
+        return view('livewire.admin.reports', [
             'report' => $this->generatedQuery(),
             'grade_levels' => GradeLevel::all(),
             'income' => SaleCategory::all(),
+            'pictures' => PaymentTransaction::where('sale_category_id', 13)->get(),
         ]);
     }
 
-    public function generatedQuery(){
+    public function generatedQuery()
+    {
         switch ($this->selected_report) {
             case 'Student Records':
 
-                $data = Student::when($this->grade_level_id, function($record){
-                    $record->whereHas('studentInformation.educationalInformation', function($educ) {
+                $data = Student::when($this->grade_level_id, function ($record) {
+                    $record->whereHas('studentInformation.educationalInformation', function ($educ) {
                         $educ->where('grade_level_id', $this->grade_level_id);
                     });
                 })->get();
@@ -46,9 +48,9 @@ class Reports extends Component
                 break;
 
             case 'Income':
-                $recordsQuery = StudentTransaction::when($this->date_from && $this->date_to, function($query) {
+                $recordsQuery = StudentTransaction::when($this->date_from && $this->date_to, function ($query) {
                     $query->whereDate('created_at', '>=', $this->date_from)
-                          ->whereDate('created_at', '<=', $this->date_to);
+                        ->whereDate('created_at', '<=', $this->date_to);
                 });
 
                 if (!$this->date_from && !$this->date_to) {
@@ -59,7 +61,7 @@ class Reports extends Component
                 $records = $data->pluck('id');
 
                 $this->categories = SaleCategory::whereIn('id', PaymentTransaction::whereIn('student_transaction_id', $records)->distinct()
-                                ->pluck('sale_category_id'))->get();
+                    ->pluck('sale_category_id'))->get();
 
                 return $data;
                 break;
@@ -67,20 +69,20 @@ class Reports extends Component
 
             default:
 
-            $recordsQuery = Expense::when($this->date_from && $this->date_to, function($query) {
-                return $query->whereDate('date_of_transaction', '>=', $this->date_from)
-                             ->whereDate('date_of_transaction', '<=', $this->date_to);
-            });
+                $recordsQuery = Expense::when($this->date_from && $this->date_to, function ($query) {
+                    return $query->whereDate('date_of_transaction', '>=', $this->date_from)
+                        ->whereDate('date_of_transaction', '<=', $this->date_to);
+                });
 
                 if (!$this->date_from && !$this->date_to) {
-                $recordsQuery->take(5); // Limit to 5 records if date_from and date_to are not selected
+                    $recordsQuery->take(5); // Limit to 5 records if date_from and date_to are not selected
                 }
 
                 $data = $recordsQuery->orderBy('voucher_number', 'ASC')->get();
                 $records = $data->pluck('id');
 
                 $this->expense_categories = ExpenseCategory::whereIn('id', ExpenseCategoryTransaction::whereIn('expense_id', $records)->distinct()
-                            ->pluck('expense_category_id'))->get();
+                    ->pluck('expense_category_id'))->get();
 
                 return $data;
                 break;
@@ -89,19 +91,21 @@ class Reports extends Component
 
 
     }
-    public function exportRecord(){
+    public function exportRecord()
+    {
         return \Maatwebsite\Excel\Facades\Excel::download(new StudentExport, 'students_record.xlsx');
     }
 
-    
 
-    public function fixedSoa(){
-            $query = StudentPayment::all();
 
-            foreach ($query as $key => $value) {
-                $value->update([
-                    'total_payables' => $value->total_tuition + $value->total_misc,
-                ]);
-            }
+    public function fixedSoa()
+    {
+        $query = StudentPayment::all();
+
+        foreach ($query as $key => $value) {
+            $value->update([
+                'total_payables' => $value->total_tuition + $value->total_misc,
+            ]);
+        }
     }
 }

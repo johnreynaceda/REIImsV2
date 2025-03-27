@@ -9,6 +9,7 @@
                 <option>Expenses</option>
                 <option>Permit</option>
                 <option>Monthly Income</option>
+                <option>2X2 ID Picture</option>
             </x-native-select>
 
         </div>
@@ -391,6 +392,82 @@
 
                 <h1>Grand Total: {{ number_format($grandTotal, 2) }}</h1>
 
+            </div>
+        @endif
+
+        @if ($selected_report == '2X2 ID Picture')
+            <div x-ref="printContainer">
+                <div class="mt-10">
+                    <table id="example" class="table-auto mt-3" style="width:100%">
+
+                        <thead class="font-normal">
+                            <tr>
+                                <th class="border-2  text-left px-2 text-sm font-bold text-gray-700 py-2"></th>
+                                <th class="border-2  text-left px-2 text-sm font-bold text-gray-700 py-2">FULLNAME
+                                </th>
+                                <th class="border-2  text-left px-2 text-sm font-bold text-gray-700 py-2">
+                                    GRADE LEVEL
+                                </th>
+                                <th class="border-2  text-left px-2 text-sm font-bold text-gray-700 py-2">
+                                    SECTION
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="">
+                            @php
+                                $i = 1;
+                            @endphp
+                            @foreach ($pictures as $item)
+                                @php
+                                    $name = '';
+
+                                    $transaction = \App\Models\StudentTransaction::where(
+                                        'id',
+                                        $item->student_transaction_id,
+                                    )->first();
+
+                                    if ($transaction) {
+                                        $student = $transaction->studentInformation;
+
+                                        if ($transaction->student_payment_id) {
+                                            $students = \App\Models\StudentPayment::where(
+                                                'id',
+                                                $transaction->student_payment_id,
+                                            )->first()?->student?->studentInformation;
+                                        } else {
+                                            $students = null;
+                                        }
+
+                                        $name = $student
+                                            ? $student->lastname . ' ' . $student->firstname
+                                            : ($students
+                                                ? $students->firstname . ' ' . $students->lastname
+                                                : \App\Models\StudentInformation::where(
+                                                        'id',
+                                                        $transaction->student_information_id,
+                                                    )->first()->firstname ?? '');
+                                    }
+                                @endphp
+                                <tr>
+                                    <td class="border-2  text-gray-700  px-3 py-1">
+                                        {{ $i++ }}
+                                    </td>
+                                    <td class="border-2  text-gray-700 uppercase  px-3 py-1">
+
+                                        {{ $name }}
+                                    </td>
+
+                                    <td class="border-2  text-gray-700  px-3 py-1">
+                                    </td>
+                                    <td class="border-2  text-gray-700  px-3 py-1">
+                                    </td>
+
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         @endif
     @else
